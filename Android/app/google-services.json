@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "128575123291",
+    "project_id": "otpstudent-63cad",
+    "storage_bucket": "otpstudent-63cad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128575123291:android:5e32af2aebb1aa5472347e",
+        "android_client_info": {
+          "package_name": "hr.foi.air.otpstudent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVrmIM9mjArDCObRpyW2WyZDnIJWD3tfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
