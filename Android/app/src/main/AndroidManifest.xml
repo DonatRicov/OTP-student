@@ -11,8 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OTPStudent">
+        <!-- Login Activity -->
+        <activity android:name=".LoginActivity" />
+
+        <!-- Main Activity -->
         <activity android:name=".MainActivity" />
 
+        <!-- Register Activity (trenutno LAUNCHER) -->
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
