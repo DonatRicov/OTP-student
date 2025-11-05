@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.Firebase
+import android.widget.TextView
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -28,6 +29,15 @@ class RegisterActivity : AppCompatActivity() {
         val etPass2 = findViewById<EditText>(R.id.etPass2)
         val btn = findViewById<Button>(R.id.btnRegister)
         val progress = findViewById<ProgressBar>(R.id.progress)
+
+        val tvLogin = findViewById<TextView>(R.id.tvGoLogin)
+
+        tvLogin.setOnClickListener {
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         btn.setOnClickListener {
             val email = etEmail.text.toString().trim()
@@ -51,7 +61,7 @@ class RegisterActivity : AppCompatActivity() {
             progress.visibility = View.VISIBLE
             btn.isEnabled = false
 
-            // Firebase Auth – kreiranje korisnika
+            // Firebase Auth - kreiranje korisnika
             auth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener { task ->
                     progress.visibility = View.GONE
