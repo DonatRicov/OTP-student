@@ -36,7 +36,7 @@
                 android:id="@+id/imgLogo"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@mipmap/ic_launcher_round"
+                android:src="@drawable/logo"
                 android:contentDescription="@string/app_name"/>
         </LinearLayout>
 
