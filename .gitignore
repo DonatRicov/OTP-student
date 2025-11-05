@@ -1,0 +1,23 @@
+# Gradle build
+.gradle/
+build/
+*/build/
+!gradle-wrapper.jar
+
+# Local configuration
+local.properties
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+
+# Log files
+*.log
+
+# Generated files
+captures/
+output.json
+
+# Android-specific
+.externalNativeBuild/
+.cxx/
