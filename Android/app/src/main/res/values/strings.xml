@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OTP-Student</string>
+    <string name="show_password">Prikaži lozinku</string>
+    <string name="hide_password">Sakrij lozinku</string>
 </resources>
