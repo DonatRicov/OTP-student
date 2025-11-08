@@ -30,10 +30,8 @@ class LoginActivity : AppCompatActivity() {
         val tvReg    = findViewById<TextView>(R.id.tvGoRegister)
         val progress = findViewById<ProgressBar>(R.id.progress)
 
-        // početno: skrivena lozinka + zatvoreno oko
         setPasswordHidden(etPass, tilPass)
 
-        // klik na end ikonu (oko)
         tilPass.setEndIconOnClickListener {
             isPasswordVisible = !isPasswordVisible
             if (isPasswordVisible) setPasswordVisible(etPass, tilPass)

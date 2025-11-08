@@ -14,7 +14,7 @@
         android:paddingTop="24dp"
         android:paddingBottom="16dp">
 
-        <!-- naslov i logo aplikacije -->
+        <!-- naslov i logo -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

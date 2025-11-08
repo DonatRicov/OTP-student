@@ -34,11 +34,9 @@ class RegisterActivity : AppCompatActivity() {
         val progress = findViewById<ProgressBar>(R.id.progress)
         val tvLogin  = findViewById<TextView>(R.id.tvGoLogin)
 
-        // početno: skriveno + zatvoreno oko
         setHidden(etPass, tilPass)
         setHidden(etPass2, tilPass2)
 
-        // togglovi za oba oka
         tilPass.setEndIconOnClickListener {
             passVisible = !passVisible
             if (passVisible) setVisible(etPass, tilPass) else setHidden(etPass, tilPass)
