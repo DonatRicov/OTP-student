@@ -44,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Ime"
+            app:placeholderText="Unesi ime..."
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -62,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Prezime"
+            app:placeholderText="Unesi prezime..."
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -81,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Fakultet"
+            app:placeholderText="Unesi fakultet..."
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -100,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            app:placeholderText="Unesi studentsku email adresu..."
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -116,15 +120,16 @@
 
         <!-- Lozinka -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPass"
+            style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Lozinka"
-            app:endIconMode="password_toggle"
+            app:placeholderText="Unesi lozinku..."
             app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_visibility_off"
+            app:endIconTint="@color/otp_green"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -134,17 +139,18 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--Potvrda lozinke -->
+        <!-- Potvrda lozinke -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPass2"
+            style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Potvrda lozinke"
-            app:endIconMode="password_toggle"
+            app:placeholderText="Ponovo unesi lozinku..."
             app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_visibility_off"
+            app:endIconTint="@color/otp_green"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -153,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <!-- Gumb -->
         <com.google.android.material.button.MaterialButton
