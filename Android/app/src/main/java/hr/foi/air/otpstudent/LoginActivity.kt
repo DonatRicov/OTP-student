@@ -9,7 +9,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.material.textfield.TextInputLayout
-
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.widget.EditText
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -68,16 +70,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setPasswordVisible(et: EditText, til: TextInputLayout) {
-        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        et.transformationMethod = HideReturnsTransformationMethod.getInstance()
         et.setSelection(et.text?.length ?: 0)
-        til.endIconDrawable = getDrawable(R.drawable.ic_visibility)        // otvoreno oko
+        til.endIconDrawable = getDrawable(R.drawable.ic_visibility)
         til.endIconContentDescription = getString(R.string.hide_password)
     }
 
     private fun setPasswordHidden(et: EditText, til: TextInputLayout) {
-        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        et.transformationMethod = PasswordTransformationMethod.getInstance()
         et.setSelection(et.text?.length ?: 0)
-        til.endIconDrawable = getDrawable(R.drawable.ic_visibility_off)    // zatvoreno oko
+        til.endIconDrawable = getDrawable(R.drawable.ic_visibility_off)
         til.endIconContentDescription = getString(R.string.show_password)
     }
+
 }

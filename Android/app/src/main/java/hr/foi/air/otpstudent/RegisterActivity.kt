@@ -2,7 +2,6 @@ package hr.foi.air.otpstudent
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Patterns
 import android.view.View
 import android.widget.*
@@ -11,6 +10,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.Firebase
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -56,15 +57,9 @@ class RegisterActivity : AppCompatActivity() {
             val pass  = etPass.text.toString()
             val pass2 = etPass2.text.toString()
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                etEmail.error = "Neispravan e-mail"; return@setOnClickListener
-            }
-            if (pass.length < 6) {
-                etPass.error = "Minimalno 6 znakova"; return@setOnClickListener
-            }
-            if (pass != pass2) {
-                etPass2.error = "Lozinke se ne podudaraju"; return@setOnClickListener
-            }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.error = "Neispravan e-mail"; return@setOnClickListener }
+            if (pass.length < 6) { etPass.error = "Minimalno 6 znakova"; return@setOnClickListener }
+            if (pass != pass2) { etPass2.error = "Lozinke se ne podudaraju"; return@setOnClickListener }
 
             progress.visibility = View.VISIBLE
             btn.isEnabled = false
@@ -75,17 +70,20 @@ class RegisterActivity : AppCompatActivity() {
                     btn.isEnabled = true
 
                     if (task.isSuccessful) {
-                        val uid = auth.currentUser!!.uid
+                        val home = Intent(this, MainActivity::class.java).apply {
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        }
+                        startActivity(home)
+
+                        val uid = auth.currentUser?.uid ?: return@addOnCompleteListener
                         val userDoc = mapOf(
                             "email" to email,
                             "createdAt" to com.google.firebase.Timestamp.now()
                         )
                         Firebase.firestore.collection("users").document(uid)
                             .set(userDoc)
-                            .addOnCompleteListener {
-                                Toast.makeText(this, "Registracija uspješna!", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(this, MainActivity::class.java))
-                                finish()
+                            .addOnFailureListener { e ->
+
                             }
                     } else {
                         Toast.makeText(
@@ -95,20 +93,21 @@ class RegisterActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+
         }
     }
 
     private fun setVisible(et: EditText, til: TextInputLayout) {
-        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        et.transformationMethod = HideReturnsTransformationMethod.getInstance()
         et.setSelection(et.text?.length ?: 0)
         til.endIconDrawable = getDrawable(R.drawable.ic_visibility)
         til.endIconContentDescription = getString(R.string.hide_password)
     }
 
     private fun setHidden(et: EditText, til: TextInputLayout) {
-        et.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        et.transformationMethod = PasswordTransformationMethod.getInstance()
         et.setSelection(et.text?.length ?: 0)
         til.endIconDrawable = getDrawable(R.drawable.ic_visibility_off)
         til.endIconContentDescription = getString(R.string.show_password)
-        }
+    }
 }
