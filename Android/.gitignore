@@ -1,0 +1,21 @@
+# Gradle
+/.gradle/
+/build/
+/captures/
+/.externalNativeBuild/
+/.cxx/
+
+# IntelliJ / Android Studio
+/.idea/
+*.iml
+
+# Local configuration
+local.properties
+
+# Logovi, privremene datoteke
+*.log
+*.tmp
+
+# OS specifične datoteke
+.DS_Store
+Thumbs.db
