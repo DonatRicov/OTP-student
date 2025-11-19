@@ -11,6 +11,7 @@
     <string name="news_title">Novosti</string>
     <string name="news_package_title">OTP e-Indeks studentski paket</string>
     <string name="news_button_more">Saznajte više</string>
+    <string name="cd_news_card">Otvori novost</string>
 
 
 </resources>
