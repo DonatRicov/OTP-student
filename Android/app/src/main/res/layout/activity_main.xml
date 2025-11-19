@@ -43,15 +43,6 @@
                     android:scaleType="fitStart"
                     android:contentDescription="@string/cd_app_logo" />
 
-                <ImageButton
-                    android:id="@+id/btnSettings"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    android:contentDescription="@string/cd_settings"
-                    android:src="@drawable/settings_icon"
-                    app:tint="@color/otp_green_dark" />
 
                 <ImageButton
                     android:id="@+id/btnPower"
@@ -142,41 +133,11 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardNews"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/newsPager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp">
-
-                    <ImageView
-                        android:id="@+id/imgNewsBanner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/card2_image"
-                        android:contentDescription="@null" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnNewsMore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="16dp"
-                        android:text="@string/news_button_more"
-                        android:textAllCaps="false"
-                        app:cornerRadius="50dp"
-                        app:backgroundTint="@color/otp_orange" />
-
-                </FrameLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
+                android:layout_height="200dp"
+                android:layout_marginBottom="24dp" />
 
         </LinearLayout>
     </ScrollView>
