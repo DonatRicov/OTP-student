@@ -8,5 +8,9 @@
     <string name="welcome_text">Dobrodošli ime</string>
     <string name="cd_waving_hand">Waving hand</string>
     <string name="btn_set_profile">Postavi profil</string>
+    <string name="news_title">Novosti</string>
+    <string name="news_package_title">OTP e-Indeks studentski paket</string>
+    <string name="news_button_more">Saznajte više</string>
+
 
 </resources>
