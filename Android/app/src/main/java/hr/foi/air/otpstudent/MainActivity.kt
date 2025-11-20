@@ -1,14 +1,11 @@
 package hr.foi.air.otpstudent
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,35 +13,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize Firebase globally if needed (optional here if Login already did it)
         FirebaseApp.initializeApp(this)
-        val user = FirebaseAuth.getInstance().currentUser
-        Log.d("FirebaseTest", "Firebase connected. User: $user")
 
-        val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
+        // SETUP NAVIGATION
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        val nameFromEmail = user?.email
-            ?.substringBefore("@")
-            ?.replaceFirstChar { it.uppercase() }
-            ?: ""
-
-        tvWelcome.text = if (nameFromEmail.isNotEmpty())
-            "Dobrodošli $nameFromEmail!"
-        else
-            "Dobrodošli!"
-
-        setupNewsCarousel()
-    }
-
-    private fun setupNewsCarousel() {
-        val pager = findViewById<ViewPager2>(R.id.newsPager)
-
-        val items = listOf(
-            NewsItem(R.drawable.news_image1, "https://studentski.hr/studenti/financije/otp-e-indeks-najbolji-student-kad-su-financije-u-pitanju-42366"),
-            NewsItem(R.drawable.news_image2, "https://www.otpbanka.hr/gradani/studentski-kredit-za-obrazovanje")
-        )
-
-        pager.adapter = NewsPagerAdapter(items) { url ->
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-        }
+        bottomNav.setupWithNavController(navController)
     }
 }
