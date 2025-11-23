@@ -11,163 +11,114 @@
         android:orientation="vertical"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="16dp">
+        android:paddingTop="32dp"
+        android:paddingBottom="24dp">
+
+        <!-- Logo i ikona i figme i naslov -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Registriraj se!"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/otp_green_dark" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="24dp">
 
             <ImageView
                 android:id="@+id/imgLogo"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/logo"/>
+                android:src="@drawable/otp_student_logo"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                 />
+
+            <ImageView
+                android:id="@+id/imgRegisterIllustration"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_register"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Registriraj se!"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/otp_green_dark" />
+
+
         </LinearLayout>
 
-        <!-- Ime -->
+        <!--e.mail -->
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ime"
-            app:placeholderText="Unesi ime..."
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Prezime -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Prezime"
-            app:placeholderText="Unesi prezime..."
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            android:layout_marginTop="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Fakultet -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fakultet"
-            app:placeholderText="Unesi fakultet..."
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            android:layout_marginTop="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFaculty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Email -->
-        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
             app:placeholderText="Unesi studentsku email adresu..."
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            android:layout_marginTop="10dp">
+            app:boxBackgroundMode="outline">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Lozinka -->
+        <!---->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPass"
             style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="Lozinka"
             app:placeholderText="Unesi lozinku..."
             app:boxBackgroundMode="outline"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_visibility_off"
-            app:endIconTint="@color/otp_green"
-            android:layout_marginTop="10dp">
+            app:endIconTint="@color/otp_green">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Potvrda lozinke -->
+        <!-- Potvrda-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPass2"
             style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="Potvrda lozinke"
-            app:placeholderText="Ponovo unesi lozinku..."
+            app:placeholderText="Potvrdi lozinku..."
             app:boxBackgroundMode="outline"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_visibility_off"
-            app:endIconTint="@color/otp_green"
-            android:layout_marginTop="10dp">
+            app:endIconTint="@color/otp_green">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <!-- Gumb -->
+        <!-- Gumb za tegistraciju -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
-            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="20dp"
             android:text="Registriraj se"
             android:textAllCaps="false"
             android:textSize="16sp"
@@ -181,30 +132,30 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp" />
 
+        <!-- link za na prijavu -->
         <LinearLayout
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
-                android:text="Već imaš račun? " />
+                android:text="Već imaš račun? "
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvGoLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:text="Prijavi se."
                 android:textStyle="bold"
-                android:textColor="@color/otp_orange" />
+                android:textColor="@color/otp_orange"
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>
