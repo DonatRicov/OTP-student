@@ -60,9 +60,12 @@ class LoginActivity : AppCompatActivity() {
                 progress.visibility = View.GONE
                 btnLogin.isEnabled = true
                 if (t.isSuccessful) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } else {
+                    val intent = Intent(this, LoginSuccessActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                    startActivity(intent)
+                }
+                else {
                     Toast.makeText(this, t.exception?.localizedMessage ?: "Prijava nije uspjela", Toast.LENGTH_LONG).show()
                 }
             }
