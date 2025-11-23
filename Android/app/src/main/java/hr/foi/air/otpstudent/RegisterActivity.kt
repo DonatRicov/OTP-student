@@ -70,10 +70,10 @@ class RegisterActivity : AppCompatActivity() {
                     btn.isEnabled = true
 
                     if (task.isSuccessful) {
-                        val home = Intent(this, MainActivity::class.java).apply {
+                        val intent = Intent(this, ProfilePersonalActivity::class.java).apply {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         }
-                        startActivity(home)
+                        startActivity(intent)
 
                         val uid = auth.currentUser?.uid ?: return@addOnCompleteListener
                         val userDoc = mapOf(
@@ -82,10 +82,10 @@ class RegisterActivity : AppCompatActivity() {
                         )
                         Firebase.firestore.collection("users").document(uid)
                             .set(userDoc)
-                            .addOnFailureListener { e ->
+                            .addOnFailureListener { /* TODO: log error */ }
+                    }
 
-                            }
-                    } else {
+                else {
                         Toast.makeText(
                             this,
                             task.exception?.localizedMessage ?: "Greška pri registraciji",
