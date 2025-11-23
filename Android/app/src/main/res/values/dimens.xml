@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="news_indicator_width">40dp</dimen>
+    <dimen name="news_indicator_height">8dp</dimen>
+    <dimen name="news_indicator_margin">4dp</dimen>
+</resources>
