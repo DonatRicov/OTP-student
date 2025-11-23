@@ -11,7 +11,6 @@
     <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/ic_construction"
         android:layout_marginBottom="24dp"
         android:alpha="0.5"
         android:contentDescription="Work in progress" />
