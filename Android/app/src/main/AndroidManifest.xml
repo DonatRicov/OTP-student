@@ -14,17 +14,37 @@
         <!-- Login Activity -->
         <activity android:name=".LoginActivity" />
 
+        <activity android:name=".LoginSuccessActivity" android:exported="false" android:label="Prijava uspješna" />
+
         <!-- Main Activity -->
         <activity android:name=".MainActivity" />
 
-        <!-- Register Activity (trenutno LAUNCHER) -->
+        <!-- Register Activity -->
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".ProfilePersonalActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProfileFacultyActivity"
+            android:exported="false" />
+
+
+        <activity
+            android:name=".StartActivity"
+            android:exported="true"
+            android:label="Početni zaslon">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
 
