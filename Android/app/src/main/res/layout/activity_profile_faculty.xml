@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="Smjer"
-                app:placeholderText="Unesi smjer..."
+                app:placeholderText="Unesi naziv smjera..."
                 app:boxBackgroundMode="outline">
 
                 <com.google.android.material.textfield.TextInputEditText

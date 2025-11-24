@@ -124,29 +124,29 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--spol -->
-            <!-- spol -->
-            <!-- spol -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilGender"
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:hint="Odaberi spol"
                 app:boxBackgroundMode="outline"
-                app:endIconMode="dropdown_menu"
-                app:hintEnabled="false">
+                app:endIconMode="dropdown_menu">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/etGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Odaberi spol"
                     android:inputType="none"
                     android:textSize="16sp"
-                android:contentDescription=""
-                    android:importantForAccessibility="no"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@android:color/black"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
 
 
