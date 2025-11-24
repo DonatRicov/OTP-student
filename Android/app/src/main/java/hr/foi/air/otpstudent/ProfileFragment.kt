@@ -21,7 +21,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val tvName     = view.findViewById<TextView>(R.id.tvProfileName)
         val tvSubtitle = view.findViewById<TextView>(R.id.tvProfileSubtitle)
 
-        // Ime iz emaila (za sada; kasnije možeš iz Firestore-a)
         val nameFromEmail = user?.email
             ?.substringBefore("@")
             ?.replaceFirstChar { it.uppercase() }
@@ -41,7 +40,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(i)
         }
 
-        // Ostali redovi – za sada samo stubovi
         view.findViewById<LinearLayout>(R.id.rowCv).setOnClickListener {
             // TODO: otvori ekran za životopis
         }
