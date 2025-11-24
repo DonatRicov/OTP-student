@@ -136,9 +136,13 @@
             android:textSize="14sp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/otp_green"
-        app:iconTint="@color/otp_green"
+
+            app:icon="@drawable/ic_pin"
+
+            app:iconTint="@color/otp_green"
         app:iconPadding="8dp"
-        app:iconGravity="textStart" />
+            app:iconGravity="textEnd"
+            />
 
         <!-- Otisak koji cemo implementirati kasnije -->
         <com.google.android.material.button.MaterialButton
@@ -154,9 +158,12 @@
             app:strokeColor="@color/otp_green"
             app:cornerRadius="28dp"
             android:textColor="@color/otp_green"
-        app:iconTint="@color/otp_green"
+            app:icon="@drawable/ic_fingerprint"
+
+            app:iconTint="@color/otp_green"
         app:iconPadding="8dp"
-        app:iconGravity="textStart" />
+            app:iconGravity="textEnd"
+            />
 
         <!-- Link na registraciju -->
         <LinearLayout
