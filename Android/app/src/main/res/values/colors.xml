@@ -6,6 +6,7 @@
     <color name="otp_green_dark">#075C35</color>
     <color name="otp_orange">#F07B1A</color>
     <color name="otp_grey">#9AA1A7</color>
+    <color name="red">#E2001A</color>
 
 
 </resources>
