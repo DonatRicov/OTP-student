@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="otp"
+    android:background="@color/white"
     tools:context=".ProfileFragment">
 
         <LinearLayout
@@ -67,11 +67,8 @@
                         android:src="@drawable/ic_photo_edit"
                         android:layout_gravity="bottom|end"
                         android:layout_margin="4dp"
-                        android:background="@android:color/white"
-                        android:padding="4dp"
-                        android:elevation="2dp"
-                        android:clickable="true"
-                        android:focusable="true" />
+                        android:padding="0dp"
+                        android:background="@android:color/transparent"/>
                 </FrameLayout>
 
                 <!-- Ime + subtitle -->

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 import android.content.Context
+import com.bumptech.glide.Glide
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -50,12 +51,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val savedAvatarUri = prefs.getString("avatar_uri", null)
         if (savedAvatarUri != null) {
-            imgAvatar.setImageURI(Uri.parse(savedAvatarUri))
+            Glide.with(this)
+                .load(Uri.parse(savedAvatarUri))
+                .circleCrop()
+                .into(imgAvatar)
         }
 
 
 
-    val nameFromEmail = user?.email
+
+        val nameFromEmail = user?.email
             ?.substringBefore("@")
             ?.replaceFirstChar { it.uppercase() }
             ?: "Korisnik"
@@ -126,7 +131,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     private fun setAvatarImage(uri: Uri) {
-        view?.findViewById<ImageView>(R.id.imgAvatar)?.setImageURI(uri)
+        view?.findViewById<ImageView>(R.id.imgAvatar)?.let { imageView ->
+            Glide.with(this)
+                .load(uri)
+                .circleCrop()
+                .into(imageView)
+        }
 
         val prefs = requireContext()
             .getSharedPreferences("profile_prefs", Context.MODE_PRIVATE)
