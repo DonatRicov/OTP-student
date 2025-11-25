@@ -18,17 +18,18 @@
 <!--header-->
     <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
+        android:padding="12dp"
         android:src="@drawable/ic_back"
         app:tint="@color/otp_green_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
         android:focusable="true"
-        />
+        android:contentDescription="@string/back_button"/>
 
         <ImageView
             android:id="@+id/imgHeaderLogo"
@@ -78,7 +79,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_edit"
-                android:tint="@color/otp_green_dark" />
+                app:tint="@color/otp_green_dark" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
@@ -106,7 +107,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -137,7 +141,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -167,7 +174,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -209,7 +219,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_edit"
-                android:tint="@color/otp_green_dark" />
+                app:tint="@color/otp_green_dark" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
@@ -237,7 +247,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -268,7 +281,9 @@
                     android:orientation="horizontal"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     >
 
                     <TextView
@@ -300,7 +315,9 @@
                     android:orientation="horizontal"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
                     >
 
                     <TextView
@@ -331,7 +348,10 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:minHeight="48dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -375,7 +395,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_edit"
-                android:tint="@color/otp_green_dark" />
+                app:tint="@color/otp_green_dark" />
 
         </LinearLayout>
 
@@ -405,7 +425,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -435,7 +458,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:layout_width="0dp"
@@ -458,14 +484,17 @@
             android:layout_marginBottom="8dp"
             android:background="#22000000" />
 
-        <!-- RAZINA OBRAZOVANJA -->
+        <!-- razna ob. mozda bi promjenio kasnije -->
         <LinearLayout
             android:id="@+id/rowEducationLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
             <TextView
                 android:layout_width="0dp"

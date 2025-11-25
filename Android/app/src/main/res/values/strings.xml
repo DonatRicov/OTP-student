@@ -12,7 +12,7 @@
     <string name="news_package_title">OTP e-Indeks studentski paket</string>
     <string name="news_button_more">Saznajte više</string>
     <string name="cd_news_card">Otvori novost</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="back_button">Natrag</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
