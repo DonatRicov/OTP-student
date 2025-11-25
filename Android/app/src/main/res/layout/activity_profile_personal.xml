@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#F3F7F3">
+    android:background="@color/otp_green_light">
 
     <!--Gumb za preskociti -->
     <TextView
@@ -20,30 +19,38 @@
         android:layout_marginEnd="16dp" />
 
     <!-- Naslov-->
-    <TextView
-        android:id="@+id/tvTitlePersonal"
+    <LinearLayout
+        android:id="@+id/titleContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dobrodošli u "
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/otp_green_dark"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="24dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
 
-    <TextView
-        android:id="@+id/tvTitlePersonalOtp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="otpStudent"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/otp_green"
-        app:layout_constraintStart_toEndOf="@id/tvTitlePersonal"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvTitlePersonal" />
+        <TextView
+            android:id="@+id/tvTitlePersonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dobrodošli u "
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green_dark" />
 
+        <TextView
+            android:id="@+id/tvTitlePersonalOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="otpStudent"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green"
+            android:fontFamily="sans-serif-italic" />
+    </LinearLayout>
+
+    <!-- PODNASLOV -->
     <TextView
         android:id="@+id/tvSubtitlePersonal"
         android:layout_width="0dp"
@@ -51,12 +58,14 @@
         android:text="Kako bi započeli s traženjem poslova i praksi, molimo Vas da prvo postavite profil."
         android:textSize="14sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/tvTitlePersonal"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/titleContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="16dp" />
 
     <!--prva - osobni podaci studenta-->
     <com.google.android.material.card.MaterialCardView
@@ -64,7 +73,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        app:cardCornerRadius="16dp"
+        app:cardCornerRadius="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
         app:strokeColor="@color/otp_green"
         app:strokeWidth="1dp"
         app:cardUseCompatPadding="true"
@@ -79,6 +90,27 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <LinearLayout
+                android:id="@+id/stepIndicators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_active"
+                    android:layout_marginEnd="8dp"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_inactive"/>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvSectionPersonal"
                 android:layout_width="wrap_content"
@@ -86,9 +118,11 @@
                 android:text="Osobni podaci"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/otp_green_dark"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/otp_green"
                 android:layout_marginBottom="12dp"
-                android:gravity="center_horizontal" />
+                />
 
             <!--ime -->
             <com.google.android.material.textfield.TextInputLayout

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F3F7F3">
+    android:background="@color/otp_green_light">
 
     <!-- preskok gumb -->
     <TextView
@@ -18,31 +18,38 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp" />
 
-    <!--naslov-->
-    <TextView
-        android:id="@+id/tvTitleFaculty"
+    <LinearLayout
+        android:id="@+id/titleContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dobrodošli u "
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/otp_green_dark"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="24dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
 
-    <TextView
-        android:id="@+id/tvTitleFacultyOtp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="otpStudent"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/otp_green"
-        app:layout_constraintStart_toEndOf="@id/tvTitleFaculty"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvTitleFaculty" />
+        <TextView
+            android:id="@+id/tvTitleFaculty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dobrodošli u "
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green_dark" />
 
+        <TextView
+            android:id="@+id/tvTitleFacultyOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="otpStudent"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green"
+            android:fontFamily="sans-serif-italic" />
+    </LinearLayout>
+
+    <!-- PODNASLOV: centriran kao na slici -->
     <TextView
         android:id="@+id/tvSubtitleFaculty"
         android:layout_width="0dp"
@@ -50,12 +57,14 @@
         android:text="Kako bi započeli s traženjem poslova i praksi, molimo Vas da prvo postavite profil."
         android:textSize="14sp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/tvTitleFaculty"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/titleContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="16dp" />
 
     <!---->
     <com.google.android.material.card.MaterialCardView
@@ -63,7 +72,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        app:cardCornerRadius="16dp"
+        app:cardCornerRadius="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
         app:strokeColor="@color/otp_green"
         app:strokeWidth="1dp"
         app:cardUseCompatPadding="true"
@@ -78,6 +89,28 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <LinearLayout
+                android:id="@+id/stepIndicators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_inactive"
+                    android:layout_marginEnd="8dp"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_active"
+                />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvSectionFaculty"
                 android:layout_width="wrap_content"
@@ -86,7 +119,10 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/otp_green_dark"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                />
 
             <!-- faks-->
             <com.google.android.material.textfield.TextInputLayout
