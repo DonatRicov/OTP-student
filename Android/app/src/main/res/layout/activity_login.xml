@@ -5,33 +5,48 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <LinearLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="32dp"
-        android:paddingBottom="24dp">
+        android:paddingBottom="24dp">        >
 
-        <!-- naslov i logo. nez jel logo dobar tho -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="1.0">
+
+
+        <!-- NASLOV + LOGO -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:id="@+id/headerLayout"
+            android:layout_width="358dp"
+            android:layout_height="139dp"
             android:gravity="center_vertical"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="40dp">
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-
-        <TextView
+            <TextView
                 android:id="@+id/tvWelcome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Dobrodošli natrag!"
-                android:textStyle="bold"
+                android:textColor="@color/otp_green_dark"
                 android:textSize="22sp"
-                android:textColor="@color/otp_green_dark"/>
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgLogo"
@@ -43,32 +58,31 @@
                 android:src="@drawable/logo" />
         </LinearLayout>
 
-        <!-- Email input. trebamo jos vidit ocemo li persirati korisniku ili ne-->
+        <!-- EMAIL -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
             style="@style/OTPTextInputLayout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Email"
             app:placeholderText="Unesi studentsku email adresu..."
-            app:boxBackgroundMode="outline">
+            app:boxBackgroundMode="outline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
-
-            <!--ovo prvo je hardkodirano da bude na sredini-->
-            <!-- TODO:align with parent dodat-->
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_marginLeft="5dp"
-
                 android:id="@+id/etEmail"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- lozinka. provjeriti rubne slucajeve jer nez rade li one provjere -->
+        <!-- LOZINKA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             style="@style/OTPTextInputLayout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:hint="Lozinka"
@@ -76,100 +90,98 @@
             app:boxBackgroundMode="outline"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_visibility_off"
-            app:endIconTint="@color/otp_green">
+            app:endIconTint="@color/otp_green"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
-
-            <!--ovo prvo je hardkodirano da bude na sredini-->
-            <!-- TODO:align with parent dodat-->
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_marginLeft="5dp"
-
-
                 android:id="@+id/etPass"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <!-- glavni gumb -->
-
+        <!-- GLAVNI GUMB -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
+
             android:text="Prijavi se"
             android:textAllCaps="false"
+
+            android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:cornerRadius="90dp"
             app:backgroundTint="@color/otp_green"
-            android:textColor="@android:color/white"/>
+            app:cornerRadius="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.90" />
 
-
-        <!-- Divider  -->
+        <!-- DIVIDER -->
         <LinearLayout
-            android:layout_marginLeft="30dp"
-            android:layout_width="300dp"
+            android:id="@+id/dividerLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin">
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="#33000000"/>
+                android:background="#33000000" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="Ili se prijavi na drugi način"
-            android:textSize="12sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="#33000000"/>
+                android:background="#33000000" />
         </LinearLayout>
 
-        <!-- TO DO: DODATI IKONU -->
-
-        <!-- pin koji cemo implementirati kasnije. dodati ikonu -->
-
+        <!-- PIN GUMB -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPin"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:text="Prijava PIN-om"
             android:textAllCaps="false"
             android:textSize="16sp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/otp_green"
             app:cornerRadius="90dp"
-
             app:icon="@drawable/ic_pin"
-
-            app:iconTint="@color/otp_green"
-        app:iconPadding="10dp"
             app:iconGravity="textEnd"
+            app:iconPadding="10dp"
+            app:iconTint="@color/otp_green"
+            app:strokeColor="@color/otp_green"
+            app:strokeWidth="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerLayout" />
 
-            />
-
-        <!-- Otisak koji cemo implementirati kasnije -->
-
-        <!-- Link na registraciju -->
-
+        <!-- BIOMETRIJA GUMB -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBiometric"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:text="Prijava otiskom prsta"
@@ -180,18 +192,37 @@
             app:icon="@drawable/ic_fingerprint"
             app:iconGravity="textEnd"
             app:iconPadding="10dp"
-
-
             app:iconTint="@color/otp_green"
             app:strokeColor="@color/otp_green"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnPin" />
 
+        <!-- PROGRESS BAR -->
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btnBiometric"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- DONJI TEKST (REGISTRACIJA) -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/registerLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="70dp">
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:layout_constraintBottom_toBottomOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -207,14 +238,6 @@
                 android:textColor="@color/otp_orange"
                 android:textSize="14sp" />
         </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginTop="8dp"/>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
