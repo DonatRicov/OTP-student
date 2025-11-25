@@ -34,7 +34,9 @@
             app:labelVisibilityMode="labeled"
             app:itemIconTint="@color/nav_item_color"
             app:itemTextColor="@color/nav_item_color"
+            app:itemRippleColor="@android:color/transparent"
             app:elevation="0dp" />
+
     </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

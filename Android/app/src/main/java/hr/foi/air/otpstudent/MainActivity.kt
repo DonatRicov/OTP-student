@@ -13,10 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize Firebase globally if needed (optional here if Login already did it)
         FirebaseApp.initializeApp(this)
 
-        // SETUP NAVIGATION
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
