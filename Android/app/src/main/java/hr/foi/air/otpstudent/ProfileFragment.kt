@@ -99,8 +99,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
-            // TODO: postavke profila
+            val intent = Intent(requireContext(), ProfileSetupActivity::class.java)
+            startActivity(intent)
         }
+
     }
 
     private fun showChooseImageDialog() {
