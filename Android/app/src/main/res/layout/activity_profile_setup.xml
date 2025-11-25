@@ -81,12 +81,13 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfileData"
             android:layout_width="350dp"
-            android:layout_height="119dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:cardBackgroundColor="@color/otp_green_light"
             app:layout_constraintTop_toBottomOf="@id/profileHeader">
 
             <LinearLayout
@@ -97,8 +98,11 @@
 
                 <!--Email -->
                 <LinearLayout
+                    android:id="@+id/rowEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <TextView
@@ -124,8 +128,12 @@
 
                 <!--Lozinka -->
                 <LinearLayout
+
+                    android:id="@+id/rowPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <TextView
@@ -151,8 +159,11 @@
 
                 <!--Telefon -->
                 <LinearLayout
+                    android:id="@+id/rowPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <TextView
@@ -206,6 +217,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/studentHeader"
+            app:cardBackgroundColor="@color/otp_green_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -217,8 +229,11 @@
 
                 <!-- Ime i prezime -->
                 <LinearLayout
+                    android:id="@+id/rowName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <TextView
@@ -244,9 +259,14 @@
 
                 <!-- Spol -->
                 <LinearLayout
+                    android:id="@+id/rowGender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+
+                    >
 
                     <TextView
                         android:layout_width="0dp"
@@ -271,9 +291,14 @@
 
                 <!-- Lokacija -->
                 <LinearLayout
+                    android:id="@+id/rowLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+
+                    >
 
                     <TextView
                         android:layout_width="0dp"
@@ -298,8 +323,11 @@
 
                 <!-- Datum rođenja -->
                 <LinearLayout
+                    android:id="@+id/rowBirthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="horizontal">
 
                     <TextView
@@ -357,6 +385,8 @@
             app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/facultyHeader"
             app:layout_constraintStart_toStartOf="parent"
+            app:cardBackgroundColor="@color/otp_green_light"
+
             app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
@@ -367,8 +397,11 @@
 
         <!-- Fakultet -->
         <LinearLayout
+            android:id="@+id/rowFaculty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal">
 
             <TextView
@@ -394,8 +427,11 @@
 
         <!-- Smjer -->
         <LinearLayout
+            android:id="@+id/rowMajor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal">
 
             <TextView
@@ -421,8 +457,11 @@
 
         <!-- RAZINA OBRAZOVANJA -->
         <LinearLayout
+            android:id="@+id/rowEducationLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal">
 
             <TextView
