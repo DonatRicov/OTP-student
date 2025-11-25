@@ -39,6 +39,8 @@
             android:name=".ProfileFacultyActivity"
             android:exported="false" />
 
+        <activity android:name=".ProfileSetupActivity"/>
+
 
         <activity
             android:name=".StartActivity"
