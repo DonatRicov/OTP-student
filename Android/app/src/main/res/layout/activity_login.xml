@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="40dp">
 
 
         <TextView
@@ -34,12 +35,12 @@
 
             <ImageView
                 android:id="@+id/imgLogo"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/logo"
+                android:layout_width="114dp"
+                android:layout_height="96dp"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
-                android:contentDescription="@string/app_name" />
+                android:src="@drawable/logo" />
         </LinearLayout>
 
         <!-- Email input. trebamo jos vidit ocemo li persirati korisniku ili ne-->
@@ -51,9 +52,14 @@
             app:placeholderText="Unesi studentsku email adresu..."
             app:boxBackgroundMode="outline">
 
+
+            <!--ovo prvo je hardkodirano da bude na sredini-->
+            <!-- TODO:align with parent dodat-->
             <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginLeft="5dp"
+
                 android:id="@+id/etEmail"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,34 +78,43 @@
             app:endIconDrawable="@drawable/ic_visibility_off"
             app:endIconTint="@color/otp_green">
 
+
+            <!--ovo prvo je hardkodirano da bude na sredini-->
+            <!-- TODO:align with parent dodat-->
             <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginLeft="5dp"
+
+
                 android:id="@+id/etPass"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <!-- glavni gumb -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
             android:text="Prijavi se"
             android:textAllCaps="false"
             android:textSize="16sp"
-            app:cornerRadius="28dp"
+            app:cornerRadius="90dp"
             app:backgroundTint="@color/otp_green"
             android:textColor="@android:color/white"/>
 
+
         <!-- Divider  -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_marginLeft="30dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp">
 
             <View
@@ -125,53 +140,58 @@
         <!-- TO DO: DODATI IKONU -->
 
         <!-- pin koji cemo implementirati kasnije. dodati ikonu -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPin"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
             android:text="Prijava PIN-om"
             android:textAllCaps="false"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:strokeWidth="2dp"
             app:strokeColor="@color/otp_green"
+            app:cornerRadius="90dp"
 
             app:icon="@drawable/ic_pin"
 
             app:iconTint="@color/otp_green"
-        app:iconPadding="8dp"
+        app:iconPadding="10dp"
             app:iconGravity="textEnd"
+
             />
 
         <!-- Otisak koji cemo implementirati kasnije -->
+
+        <!-- Link na registraciju -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBiometric"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
             android:text="Prijava otiskom prsta"
             android:textAllCaps="false"
-            android:textSize="14sp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/otp_green"
-            app:cornerRadius="28dp"
             android:textColor="@color/otp_green"
+            android:textSize="16sp"
+            app:cornerRadius="90dp"
             app:icon="@drawable/ic_fingerprint"
+            app:iconGravity="textEnd"
+            app:iconPadding="10dp"
+
 
             app:iconTint="@color/otp_green"
-        app:iconPadding="8dp"
-            app:iconGravity="textEnd"
-            />
+            app:strokeColor="@color/otp_green"
+            app:strokeWidth="2dp" />
 
-        <!-- Link na registraciju -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="18dp">
+            android:layout_marginTop="70dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -182,7 +202,7 @@
                 android:id="@+id/tvGoRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Postani OTPStudent!"
+                android:text="Postani otpStudent!"
                 android:textStyle="bold"
                 android:textColor="@color/otp_orange"
                 android:textSize="14sp" />
