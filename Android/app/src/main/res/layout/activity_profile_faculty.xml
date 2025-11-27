@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/otp_green_light">
+
+    <!-- preskok gumb -->
+    <TextView
+        android:id="@+id/tvSkipFaculty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preskoči >"
+        android:textSize="14sp"
+        android:textColor="@color/otp_green_dark"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <LinearLayout
+        android:id="@+id/titleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/tvTitleFaculty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dobrodošli u "
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green_dark" />
+
+        <TextView
+            android:id="@+id/tvTitleFacultyOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="otpStudent"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green"
+            android:fontFamily="sans-serif-italic" />
+    </LinearLayout>
+
+    <!-- PODNASLOV: centriran kao na slici -->
+    <TextView
+        android:id="@+id/tvSubtitleFaculty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Kako bi započeli s traženjem poslova i praksi, molimo Vas da prvo postavite profil."
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/titleContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp" />
+
+    <!---->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardFaculty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        app:strokeColor="@color/otp_green"
+        app:strokeWidth="1dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitleFaculty"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:id="@+id/stepIndicators"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_inactive"
+                    android:layout_marginEnd="8dp"/>
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_tab_active"
+                />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvSectionFaculty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Podaci o fakultetu"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/otp_green_dark"
+                android:layout_marginBottom="12dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                />
+
+            <!-- faks-->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OTPTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fakultet"
+                app:placeholderText="Unesi naziv fakulteta..."
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFaculty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- smjer na faksu-->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OTPTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Smjer"
+                app:placeholderText="Unesi naziv smjera..."
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMajor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!---->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OTPTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Razina obrazovanja"
+                app:placeholderText="Npr. preddiplomski, diplomski..."
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--godina studija -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OTPTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Godina studija"
+                app:placeholderText="Unesi godinu studija..."
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--spremanje-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveFaculty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Spremi unos"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:cornerRadius="28dp"
+                app:backgroundTint="@color/otp_green"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

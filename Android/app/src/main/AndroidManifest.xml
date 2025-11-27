@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,18 +19,51 @@
         <!-- Login Activity -->
         <activity android:name=".LoginActivity" />
 
+        <activity android:name=".LoginSuccessActivity" android:exported="false" android:label="Prijava uspješna" />
+
         <!-- Main Activity -->
         <activity android:name=".MainActivity" />
 
-        <!-- Register Activity (trenutno LAUNCHER) -->
+        <!-- Register Activity -->
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".ProfilePersonalActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProfileFacultyActivity"
+            android:exported="false" />
+
+        <activity android:name=".ProfileSetupActivity"/>
+
+
+        <activity
+            android:name=".StartActivity"
+            android:exported="true"
+            android:label="Početni zaslon">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
 
     </application>
