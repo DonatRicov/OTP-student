@@ -87,7 +87,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowCv).setOnClickListener {
-            // TODO: otvori ekran za životopis
+            //zivotopis
+            val intent = Intent(requireContext(), MyCvActivity::class.java)
+            startActivity(intent)
         }
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
@@ -99,6 +101,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
+            // uredivanje profila
             val intent = Intent(requireContext(), ProfileSetupActivity::class.java)
             startActivity(intent)
         }
