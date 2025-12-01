@@ -7,4 +7,48 @@
         <item name="hintTextColor">@color/otp_green_dark</item>
         <item name="endIconTint">@color/otp_green</item>
     </style>
+    //običan tekst
+    <style name="Naslov">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_bold</item>
+    </style>
+
+    <style name="Podnaslov">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_medium</item>
+    </style>
+
+    <style name="Tekst">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_regular</item>
+    </style>
+
+    <style name="MaliTekst">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_regular</item>
+    </style>
+
+    //tekst interakcija
+    <style name="PodnaslovInterakcija">
+        <item name="android:textColor">@color/otp_green_dark</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_medium</item>
+    </style>
+
+    <style name="TekstInterakcija">
+        <item name="android:textColor">@color/otp_green_dark</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_regular</item>
+    </style>
+
+    <style name="MaliTekstInterakcija">
+        <item name="android:textColor">@color/otp_green_dark</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_regular</item>
+    </style>
 </resources>
+
