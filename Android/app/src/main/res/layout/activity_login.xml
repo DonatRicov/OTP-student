@@ -202,7 +202,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!--  -->
+        <!-- -->
         <LinearLayout
             android:id="@+id/registerLayout"
             android:layout_width="0dp"
