@@ -13,7 +13,7 @@
         android:id="@+id/imgPdfIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@android:drawable/ic_menu_view"
+        android:src="@drawable/ic_pdf"
         android:layout_marginEnd="12dp"
         android:contentDescription="PDF Icon" />
 
@@ -45,9 +45,9 @@
     <!-- This ID fixes 'btnDelete' -->
     <ImageView
         android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_delete"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_bin"
         android:padding="8dp"
         android:contentDescription="Izbriši" />
 
