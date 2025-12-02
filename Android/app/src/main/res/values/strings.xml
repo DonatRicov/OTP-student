@@ -1,4 +1,7 @@
 <resources>
+
+// od prije sto je ostalo. to be sorted
+
     <string name="app_name">OTP-Student</string>
     <string name="show_password">Prikaži lozinku</string>
     <string name="hide_password">Sakrij lozinku</string>
@@ -15,7 +18,38 @@
     <string name="back_button">Natrag</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+// activity_login.xml
+
+    <string name="welcome_back">Dobrodošli natrag!</string>
+    <string name="email">Email</string>
+    <string name="email_placeholder">Unesi studentsku email adresu…</string>
+    <string name="password">Lozinka</string>
+    <string name="password_placeholder">Unesi lozinku…</string>
+    <string name="login">Prijavi se</string>
+    <string name="or_login_other">Ili se prijavi na drugi način</string>
+    <string name="login_pin">Prijava PIN-om</string>
+    <string name="login_biometric">Prijava otiskom prsta</string>
+    <string name="no_account">Još nemaš račun? </string>
+    <string name="become_otp_student"> Postani OTPStudent!</string>
+
+// acivity_login_success
+
+    <string name="login_success">Prijava uspješna!</string>
+    <string name="success_icon_desc">Ikona uspjeha</string>
 
 
+    // acivity_my_cv
+
+    <string name="my_cv">Moj Životopis</string>
+    <string name="choose_file_for_upload">Odaberi datoteku za prijenos</string>
+    <string name="supported_format_pdf">Podržani format: PDF</string>
+    <string name="choose_file">Odaberi datoteku</string>
+    <string name="recent">Nedavno</string>
+    <string name="upload_icon_desc">Ikona prijenosa datoteke</string>
+    <string name="recent_files">Nedavne datoteke</string>
+    <string name="show_more">Prikaži više</string>
+    <string name="max_file_size_10mb">Maksimalna veličina datoteke: 10 MB</string>
+    <string name="cv_usage_info">Vaš životopis koristit će se za prijave na studentske poslove.</string>
+    <string name="empty_state_no_cvs">Još nemate prenesenih životopisa. Prenesite svoj prvi dokument putem gumba iznad.</string>
 
 </resources>
