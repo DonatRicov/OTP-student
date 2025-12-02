@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,65 +8,56 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="32dp"
-        android:paddingBottom="24dp">        >
+        android:paddingBottom="24dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/contentContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="1.0">
-
-
-        <!-- NASLOV + LOGO -->
+        <!-- NASLOVILOGO-->
         <LinearLayout
             android:id="@+id/headerLayout"
-            android:layout_width="358dp"
-            android:layout_height="139dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.30"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1.0">
 
             <TextView
                 android:id="@+id/tvWelcome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Dobrodošli natrag!"
+                android:text="@string/welcome_back"
                 android:textColor="@color/otp_green_dark"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/imgLogo"
-                android:layout_width="114dp"
-                android:layout_height="96dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:maxWidth="114dp"
+                android:maxHeight="96dp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
         </LinearLayout>
 
-        <!-- EMAIL -->
+        <!-- EMAIL-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
             style="@style/OTPTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            app:placeholderText="Unesi studentsku email adresu..."
+            android:layout_marginTop="16dp"
+            android:hint="@string/email"
+            app:placeholderText="@string/email_placeholder"
             app:boxBackgroundMode="outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,22 +67,22 @@
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:autofillHints="emailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- LOZINKA -->
+        <!-- LOZINKA-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             style="@style/OTPTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Lozinka"
+            android:layout_marginTop="16dp"
+            android:hint="@string/password"
             app:placeholderText="Unesi lozinku..."
             app:boxBackgroundMode="outline"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_visibility_off"
-            app:endIconTint="@color/otp_green"
+            app:endIconMode="password_toggle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tilEmail">
@@ -99,7 +91,9 @@
                 android:id="@+id/etPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:autofillHints="password" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- GLAVNI GUMB -->
@@ -108,10 +102,8 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
-
-            android:text="Prijavi se"
+            android:text="@string/login"
             android:textAllCaps="false"
-
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:backgroundTint="@color/otp_green"
@@ -122,7 +114,7 @@
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.90" />
 
-        <!-- DIVIDER -->
+        <!-- DIVDER -->
         <LinearLayout
             android:id="@+id/dividerLayout"
             android:layout_width="0dp"
@@ -146,8 +138,8 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:text="Ili se prijavi na drugi način"
-                android:textSize="12sp" />
+                android:text="@string/or_login_other"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="0dp"
@@ -156,14 +148,14 @@
                 android:background="#33000000" />
         </LinearLayout>
 
-        <!-- PIN GUMB -->
+        <!-- PIN -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPin"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:text="Prijava PIN-om"
+            android:text="@string/login_pin"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:cornerRadius="90dp"
@@ -177,14 +169,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerLayout" />
 
-        <!-- BIOMETRIJA GUMB -->
+        <!-- BIOMETRIJA-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBiometric"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:text="Prijava otiskom prsta"
+            android:text="@string/login_biometric"
             android:textAllCaps="false"
             android:textColor="@color/otp_green"
             android:textSize="16sp"
@@ -210,7 +202,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- DONJI TEKST (REGISTRACIJA) -->
+        <!--  -->
         <LinearLayout
             android:id="@+id/registerLayout"
             android:layout_width="0dp"
@@ -218,6 +210,7 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="16dp"
+            android:paddingTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress"
@@ -226,18 +219,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Još nemaš račun? "
+                android:text="@string/no_account"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvGoRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Postani otpStudent!"
+                android:text="@string/become_otp_student"
                 android:textStyle="bold"
                 android:textColor="@color/otp_orange"
                 android:textSize="14sp" />
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
