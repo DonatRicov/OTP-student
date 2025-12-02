@@ -1,91 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="@color/white">
 
-
+    <!-- Gornja traka-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@android:drawable/ic_menu_revert"
-            android:contentDescription="Back" />
-        <!-- STAVITI OTP STRELICU ZA NAZAD -->
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/back_button"
+            app:tint="@color/otp_green_dark"
+            />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Moj Životopis"
+            android:text="@string/my_cv"
             android:gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#000000"/>
+            android:textColor="@color/otp_green_dark" />
+
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
     </LinearLayout>
 
-    <!-- Upload Area: TREBA UREDIUTI PO SKICI-->
+    <!-- Upload kartica -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="false"
+        app:cardPreventCornerOverlap="false"
+        app:cardBackgroundColor="@android:color/white"
+        app:strokeColor="@color/otp_green"
+        app:strokeWidth="2dp">
+
+
+    <LinearLayout
+            android:id="@+id/layoutUploadArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp"
+            android:background="@drawable/upload_area"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_file_upload"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/upload_icon_desc" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_file_for_upload"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/supported_format_pdf"
+                android:textColor="#888888"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/max_file_size_10mb"
+                android:textColor="#888888"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- objašnjenje-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cv_usage_info"
+                android:textColor="#888888"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUploadPdf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_file"
+                android:textColor="@android:color/white"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                app:cornerRadius="999dp"
+                app:backgroundTint="@color/otp_green" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Naslov sekcije i više  dio ovaj-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@android:drawable/ic_menu_upload"
-            android:layout_marginBottom="10dp"/>
-        <!-- UPLOAD SLIKA DODATI -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_history"
+                android:layout_marginEnd="6dp"
+                android:contentDescription="@string/recent_files"
+                app:tint="@color/otp_grey"
+                />
+
+            <TextView
+                android:id="@+id/tvRecentTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_files"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/otp_grey" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/tvShowMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Odaberi datoteku za prijenos"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Podržani format: PDF"
-            android:textColor="#888888"
-            android:textSize="12sp"
-            android:layout_marginBottom="20dp"/>
-
-        <Button
-            android:id="@+id/btnUploadPdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Odaberi datoteku"
-            android:backgroundTint="#006400"
-            android:textColor="#FFFFFF"/>
+            android:text="@string/show_more"
+            android:textSize="14sp"
+            android:textColor="@color/otp_green_dark"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nedavno"
-        android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="#666666"/>
+    <!-- divider-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/otp_grey"
+        android:layout_marginBottom="4dp" />
 
-    <!-- List of CVs -->
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_state_no_cvs"
+        android:textColor="@color/otp_grey"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:visibility="gone" />
+
+    <!-- Lista cv -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCvs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="4dp" />
 
 </LinearLayout>
