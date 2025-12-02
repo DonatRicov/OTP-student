@@ -15,13 +15,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_success_check" />
+        app:srcCompat="@drawable/ic_success_check"
+        android:contentDescription="@string/success_icon_desc"
+        />
 
     <TextView
         android:id="@+id/tvSuccess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Prijava uspješna!"
+        android:text="@string/login_success"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/otp_green_dark"
