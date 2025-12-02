@@ -103,12 +103,16 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:src="@drawable/ic_tab_active"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@null" />
+
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_tab_inactive"/>
+                    android:src="@drawable/ic_tab_inactive"
+                    android:contentDescription="@null" />
+
             </LinearLayout>
 
             <TextView
