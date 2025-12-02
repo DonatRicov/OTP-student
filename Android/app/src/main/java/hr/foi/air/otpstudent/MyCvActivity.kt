@@ -8,19 +8,19 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.UUID
+import com.google.firebase.auth.FirebaseAuth
 
 class MyCvActivity : AppCompatActivity() {
 
     // promjeniti za koristenje baze
     private lateinit var repository: CvRepository
     private lateinit var adapter: CvAdapter
+    private lateinit var auth: FirebaseAuth
 
     // PDF Picker
     private val pdfLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -31,8 +31,17 @@ class MyCvActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_cv)
 
-        // Promjeniti za FIREBASE
-        repository = MockCvRepository(this)
+        auth = FirebaseAuth.getInstance()
+
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // fallback ako se ne varam
+            Toast.makeText(this, "Molimo prijavite se.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        repository = FirebaseCvRepository(currentUser.uid)
 
         setupRecyclerView()
 
@@ -44,6 +53,7 @@ class MyCvActivity : AppCompatActivity() {
 
         loadCvs()
     }
+
 
     private fun setupRecyclerView() {
         adapter = CvAdapter(
@@ -58,26 +68,31 @@ class MyCvActivity : AppCompatActivity() {
 
     private fun uploadCv(uri: Uri) {
         lifecycleScope.launch {
-            val fileName = "cv_${System.currentTimeMillis()}.pdf" // Or extract real name
-            val savedPath = repository.saveFile(uri, fileName)
+            val fileName = "cv_${System.currentTimeMillis()}.pdf"
+            val downloadUrl = repository.saveFile(uri, fileName)
 
-            if (savedPath != null) {
+            if (downloadUrl != null) {
+                val uid = auth.currentUser?.uid ?: return@launch
+
                 val newCv = CvDocument(
                     id = UUID.randomUUID().toString(),
+                    userId = uid,
                     fileName = fileName,
-                    filePath = savedPath,
+                    fileUrl = downloadUrl,
                     uploaderName = "Student",
                     timestamp = System.currentTimeMillis()
                 )
 
                 repository.addCv(newCv)
                 loadCvs()
-                Toast.makeText(this@MyCvActivity, "Dodan Zivotopis!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MyCvActivity, "Dodan životopis!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@MyCvActivity, "Greska pri spremanju.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MyCvActivity, "Greška pri spremanju.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+
 
     private fun loadCvs() {
         lifecycleScope.launch {
@@ -94,23 +109,22 @@ class MyCvActivity : AppCompatActivity() {
     }
 
     private fun openPdf(cv: CvDocument) {
-        val file = File(cv.filePath)
-        if (!file.exists()) {
-            Toast.makeText(this, "Datoteka ne postoji!", Toast.LENGTH_SHORT).show()
-            return
+        val uri = Uri.parse(cv.fileUrl)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            flags = Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
-
-
-        val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
-
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
 
         try {
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "Nemate aplikaciju za PDF", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Nemate aplikaciju za PDF (pokušajte kroz browser).", Toast.LENGTH_SHORT).show()
+
+            // fallback
+            val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(browserIntent)
         }
     }
+
 }
