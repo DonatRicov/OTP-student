@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Odbaciti promjene"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvDialogMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Ako se vratite nazad, izgubit ćete promjene."
+        android:textSize="14sp"
+        android:textColor="@color/otp_grey" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDiscardChanges"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="Odbaci promjene"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/otp_green"
+        app:cornerRadius="90dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinueEditing"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:text="Nastavi uređivanje"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="@color/otp_green"
+        app:cornerRadius="90dp"
+        app:strokeColor="@color/otp_green"
+        app:strokeWidth="2dp" />
+
+</LinearLayout>
