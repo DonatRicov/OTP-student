@@ -1,242 +1,371 @@
 package hr.foi.air.otpstudent
 
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.EditText
+import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import android.widget.Toast
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import java.util.Calendar
+import android.view.LayoutInflater
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ProfileSetupActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var storage: FirebaseStorage
+    private lateinit var currentUid: String
 
-    private lateinit var tvEmailValue: TextView
-    private lateinit var tvPasswordValue: TextView
-    private lateinit var tvPhoneValue: TextView
-    private lateinit var tvNameValue: TextView
-    private lateinit var tvLocationValue: TextView
-    private lateinit var tvBirthdayValue: TextView
-    private lateinit var tvFacultyValue: TextView
-    private lateinit var tvMajorValue: TextView
-    private lateinit var tvEducationLevelValue: TextView
-    private lateinit var tvGenderValue: TextView
+    // profilna
+    private lateinit var imgAvatar: ShapeableImageView
+    private lateinit var imgEditPhoto: ImageView
+    private var cameraImageUri: Uri? = null
+
+    // header ime
+    private lateinit var tvFullNameHeader: android.widget.TextView
+
+    // polja u formi
+    private lateinit var etFirstName: TextInputEditText
+    private lateinit var etLastName: TextInputEditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
+    private lateinit var etPhone: TextInputEditText
+    private lateinit var etLocation: TextInputEditText
+    private lateinit var etBirthday: TextInputEditText
+
+    private lateinit var acGender: AutoCompleteTextView
+    private lateinit var acFaculty: AutoCompleteTextView
+    private lateinit var acMajor: AutoCompleteTextView
+    private lateinit var acEducationLevel: AutoCompleteTextView
+
+    private lateinit var btnSave: MaterialButton
+    private lateinit var btnCancel: MaterialButton
+
+    // launcher za odabir slike iz galerije
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { setAvatarImage(it) }
+        }
+
+    // launcher za slikanje kamerom
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
+            if (success) {
+                cameraImageUri?.let { setAvatarImage(it) }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_setup)
 
-        // gumbic za back
-        val btnBack = findViewById<ImageButton>(R.id.btnBack)
-        btnBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showDiscardChangesDialog()
+            }
         }
+
+        onBackPressedDispatcher.addCallback(this, callback)
+
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        storage = FirebaseStorage.getInstance()
 
         val user = auth.currentUser ?: return
         val uid = user.uid
+        currentUid = uid
 
-        tvEmailValue          = findViewById(R.id.tvEmailValue)
-        tvPasswordValue       = findViewById(R.id.tvPasswordValue)
-        tvPhoneValue          = findViewById(R.id.tvPhoneValue)
-        tvNameValue           = findViewById(R.id.tvNameValue)
-        tvLocationValue       = findViewById(R.id.tvLocationValue)
-        tvBirthdayValue       = findViewById(R.id.tvBirthdayValue)
-        tvFacultyValue        = findViewById(R.id.tvFacultyValue)
-        tvMajorValue          = findViewById(R.id.tvMajorValue)
-        tvEducationLevelValue = findViewById(R.id.tvEducationLevelValue)
-        tvGenderValue         = findViewById(R.id.tvGenderValue)
+        // back
+        findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            showDiscardChangesDialog()
+        }
 
-        val rowEmail           = findViewById<LinearLayout>(R.id.rowEmail)
-        val rowPassword        = findViewById<LinearLayout>(R.id.rowPassword)
-        val rowPhone           = findViewById<LinearLayout>(R.id.rowPhone)
-        val rowName            = findViewById<LinearLayout>(R.id.rowName)
-        val rowGender          = findViewById<LinearLayout>(R.id.rowGender)
-        val rowLocation        = findViewById<LinearLayout>(R.id.rowLocation)
-        val rowBirthday        = findViewById<LinearLayout>(R.id.rowBirthday)
-        val rowFaculty         = findViewById<LinearLayout>(R.id.rowFaculty)
-        val rowMajor           = findViewById<LinearLayout>(R.id.rowMajor)
-        val rowEducationLevel  = findViewById<LinearLayout>(R.id.rowEducationLevel)
+        // slikica
+        imgAvatar = findViewById(R.id.imgAvatar)
+        imgEditPhoto = findViewById(R.id.imgEditPhoto)
 
+        val avatarClickListener = android.view.View.OnClickListener {
+            showChooseImageDialog()
+        }
+        imgAvatar.setOnClickListener(avatarClickListener)
+        imgEditPhoto.setOnClickListener(avatarClickListener)
 
+        // header
+        tvFullNameHeader = findViewById(R.id.tvFullName)
+
+        // form fields
+        etFirstName       = findViewById(R.id.tvNameValue)
+        etLastName        = findViewById(R.id.etLastName)
+        etEmail           = findViewById(R.id.tvEmailValue)
+        etPassword        = findViewById(R.id.tvPasswordValue)
+        etPhone           = findViewById(R.id.tvPhoneValue)
+        etLocation        = findViewById(R.id.tvLocationValue)
+        etBirthday        = findViewById(R.id.tvBirthdayValue)
+
+        acGender          = findViewById(R.id.tvGenderValue)
+        acFaculty         = findViewById(R.id.tvFacultyValue)
+        acMajor           = findViewById(R.id.tvMajorValue)
+        acEducationLevel  = findViewById(R.id.tvEducationLevelValue)
+
+        btnSave           = findViewById(R.id.btnSave)
+        btnCancel         = findViewById(R.id.btnCancel)
+
+        // UČITAJ POSTOJEĆE PODATKE IZ BAZE
         db.collection("users").document(uid).get()
             .addOnSuccessListener { doc ->
-                tvEmailValue.text          = doc.getString("email") ?: user.email ?: ""
-                tvPhoneValue.text          = doc.getString("phone") ?: "dodajte broj telefona"
-                tvNameValue.text           = doc.getString("fullName") ?: "Ime i prezime"
-                tvLocationValue.text       = doc.getString("location") ?: "Lokacija"
-                tvBirthdayValue.text       = doc.getString("birthday") ?: "dodajte datum rođenja"
-                tvFacultyValue.text        = doc.getString("faculty") ?: "Fakultet organizacije i informatike"
-                tvMajorValue.text          = doc.getString("major") ?: "Informacijsko i programsko inženjerstvo"
-                tvEducationLevelValue.text = doc.getString("educationLevel") ?: "dodajte razinu obrazovanja"
-                tvGenderValue.text         = doc.getString("gender") ?: "—"
-                // Lozinku moram reworkat
-                tvPasswordValue.text       = "************"
-            }
+                if (doc != null && doc.exists()) {
 
+                    // razdvajanje imena i prezimena
+                    val fullName = doc.getString("fullName") ?: ""
+                    if (fullName.isNotEmpty()) {
+                        val parts = fullName.trim().split(" ")
+                        val first = parts.firstOrNull() ?: ""
+                        val last  = parts.drop(1).joinToString(" ")
 
-        // Email
-        rowEmail.setOnClickListener {
-            showEditDialog(
-                title = "Uredite email",
-                currentValue = tvEmailValue.text.toString()
-            ) { newValue ->
-                tvEmailValue.text = newValue
-                saveField(uid, "email", newValue)
+                        etFirstName.setText(first)
+                        etLastName.setText(last)
+                        tvFullNameHeader.text = fullName
+                    }
 
-            }
-        }
+                    // inace
+                    doc.getString("firstName")?.let { if (it.isNotEmpty()) etFirstName.setText(it) }
+                    doc.getString("lastName")?.let  { if (it.isNotEmpty()) etLastName.setText(it) }
 
-        // Lozinka
-        rowPassword.setOnClickListener {
-            showEditDialog(
-                title = "Uredite lozinku",
-                currentValue = ""
-            ) { newPassword ->
-                tvPasswordValue.text = "************"
-                saveField(uid, "passwordHint", "set")
+                    etEmail.setText(
+                        doc.getString("email") ?: user.email ?: ""
+                    )
+                    etPhone.setText(
+                        doc.getString("phone") ?: ""
+                    )
+                    etLocation.setText(
+                        doc.getString("location") ?: ""
+                    )
+                    etBirthday.setText(
+                        doc.getString("birthday") ?: ""
+                    )
 
-            }
-        }
+                    acFaculty.setText(
+                        doc.getString("faculty")
+                            ?: "Fakultet organizacije i informatike",
+                        false
+                    )
+                    acMajor.setText(
+                        doc.getString("major")
+                            ?: "Informacijsko i programsko inženjerstvo",
+                        false
+                    )
+                    acEducationLevel.setText(
+                        doc.getString("educationLevel") ?: "",
+                        false
+                    )
+                    acGender.setText(
+                        doc.getString("gender") ?: "—",
+                        false
+                    )
 
-        // Telefon
-        rowPhone.setOnClickListener {
-            showEditDialog(
-                title = "Uredite broj telefona",
-                currentValue = tvPhoneValue.text.toString()
-            ) { newValue ->
-                tvPhoneValue.text = newValue
-                saveField(uid, "phone", newValue)
-            }
-        }
+                    // profilna iz baze gdje je ima ako je ima
+                    doc.getString("avatarUrl")
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.let { url ->
+                            Glide.with(this)
+                                .load(url)
+                                .placeholder(R.drawable.ic_profile_placeholder)
+                                .into(imgAvatar)
+                        }
 
-        // Ime i prezime
-        rowName.setOnClickListener {
-            showEditDialog(
-                title = "Uredite ime i prezime",
-                currentValue = tvNameValue.text.toString()
-            ) { newValue ->
-                tvNameValue.text = newValue
-                saveField(uid, "fullName", newValue)
-            }
-        }
-
-        // Spol
-        rowGender.setOnClickListener {
-            showEditDialog(
-                title = "Uredite spol",
-                currentValue = tvGenderValue.text.toString()
-            ) { newValue ->
-                tvGenderValue.text = newValue
-                saveField(uid, "gender", newValue)
-            }
-        }
-
-        // Lokacija
-        rowLocation.setOnClickListener {
-            showEditDialog(
-                title = "Uredite lokaciju",
-                currentValue = tvLocationValue.text.toString()
-            ) { newValue ->
-                tvLocationValue.text = newValue
-                saveField(uid, "location", newValue)
-            }
-        }
-
-        // Datum rođenja
-        rowBirthday.setOnClickListener {
-            showEditDialog(
-                title = "Uredite datum rođenja",
-                currentValue = tvBirthdayValue.text.toString()
-            ) { newValue ->
-                tvBirthdayValue.text = newValue
-                saveField(uid, "birthday", newValue)
-            }
-        }
-
-        // Fakultet
-        rowFaculty.setOnClickListener {
-            showEditDialog(
-                title = "Uredite fakultet",
-                currentValue = tvFacultyValue.text.toString()
-            ) { newValue ->
-                tvFacultyValue.text = newValue
-                saveField(uid, "faculty", newValue)
-            }
-        }
-
-        // Smjer
-        rowMajor.setOnClickListener {
-            showEditDialog(
-                title = "Uredite smjer",
-                currentValue = tvMajorValue.text.toString()
-            ) { newValue ->
-                tvMajorValue.text = newValue
-                saveField(uid, "major", newValue)
-            }
-        }
-
-        // Razina obrazovanja
-        rowEducationLevel.setOnClickListener {
-            showEditDialog(
-                title = "Uredite razinu obrazovanja",
-                currentValue = tvEducationLevelValue.text.toString()
-            ) { newValue ->
-                tvEducationLevelValue.text = newValue
-                saveField(uid, "educationLevel", newValue)
-            }
-        }
-    }
-
-    private fun showEditDialog(
-        title: String,
-        currentValue: String,
-        onConfirm: (String) -> Unit
-    ) {
-        val dialogView = LayoutInflater.from(this)
-            .inflate(R.layout.dialog_edit_field, null)
-
-        val etValue = dialogView.findViewById<EditText>(R.id.etDialogValue)
-        val tvTitle = dialogView.findViewById<TextView>(R.id.tvDialogTitle)
-
-        tvTitle.text = title
-        etValue.setText(currentValue)
-        etValue.setSelection(etValue.text.length)
-
-        AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setPositiveButton("Spremi") { _, _ ->
-                val newValue = etValue.text.toString().trim()
-                if (newValue.isNotEmpty()) {
-                    onConfirm(newValue)
+                    // Lozinka to be reworked
+                    etPassword.setText("************")
+                } else {
+                    // dokument ne postoji
+                    etEmail.setText(user.email ?: "")
+                    tvFullNameHeader.text = "Uredi profil"
                 }
             }
-            .setNegativeButton("Odustani") { dialog, _ ->
-                dialog.dismiss()
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Greška pri dohvaćanju podataka: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+
+        // DatePicker
+        etBirthday.setOnClickListener {
+            showDatePicker { formatted ->
+                etBirthday.setText(formatted)
+            }
+        }
+
+
+        // SPREMI PROMJENE
+        btnSave.setOnClickListener {
+            val firstName      = etFirstName.text?.toString()?.trim() ?: ""
+            val lastName       = etLastName.text?.toString()?.trim() ?: ""
+            val fullName       = listOf(firstName, lastName)
+                .filter { it.isNotEmpty() }
+                .joinToString(" ")
+
+            val email          = etEmail.text?.toString()?.trim() ?: ""
+            val phone          = etPhone.text?.toString()?.trim() ?: ""
+            val location       = etLocation.text?.toString()?.trim() ?: ""
+            val birthday       = etBirthday.text?.toString()?.trim() ?: ""
+            val gender         = acGender.text?.toString()?.trim() ?: ""
+            val faculty        = acFaculty.text?.toString()?.trim() ?: ""
+            val major          = acMajor.text?.toString()?.trim() ?: ""
+            val educationLevel = acEducationLevel.text?.toString()?.trim() ?: ""
+
+            val data = mapOf(
+                "fullName"       to fullName,
+                "firstName"      to firstName,
+                "lastName"       to lastName,
+                "email"          to email,
+                "phone"          to phone,
+                "location"       to location,
+                "birthday"       to birthday,
+                "gender"         to gender,
+                "faculty"        to faculty,
+                "major"          to major,
+                "educationLevel" to educationLevel
+            )
+
+            db.collection("users").document(uid)
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Podaci spremljeni", Toast.LENGTH_SHORT).show()
+                    if (fullName.isNotEmpty()) {
+                        tvFullNameHeader.text = fullName
+                    }
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(
+                        this,
+                        "Greška pri spremanju: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
+
+        // Natrag gumb
+        btnCancel.setOnClickListener {
+            showDiscardChangesDialog()
+        }
+
+    }
+
+    // Galerija/KAmera za sliku
+    private fun showChooseImageDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Profilna slika")
+            .setItems(arrayOf("Odaberi iz galerije", "Slikaj kamerom")) { _, which ->
+                when (which) {
+                    0 -> pickFromGallery()
+                    1 -> takePhoto()
+                }
             }
             .show()
     }
 
-    private fun saveField(uid: String, fieldName: String, value: String) {
-        val data = mapOf(fieldName to value)
+    private fun pickFromGallery() {
+        pickImageLauncher.launch("image/*")
+    }
 
-        db.collection("users").document(uid)
-            .set(data, SetOptions.merge())
-            .addOnSuccessListener {
-                Toast.makeText(this, "Spremljeno", Toast.LENGTH_SHORT).show()
+    private fun takePhoto() {
+        val imageFile = File(cacheDir, "avatar_${System.currentTimeMillis()}.jpg")
+        cameraImageUri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.fileprovider",
+            imageFile
+        )
+        takePictureLauncher.launch(cameraImageUri)
+    }
+
+    private fun setAvatarImage(uri: Uri) {
+        Glide.with(this)
+            .load(uri)
+            .placeholder(R.drawable.ic_profile_placeholder)
+            .into(imgAvatar)
+
+        uploadAvatarToStorage(currentUid, uri)
+    }
+
+    private fun uploadAvatarToStorage(uid: String, imageUri: Uri) {
+        //
+
+        val ref = storage.reference.child("avatars/$uid/profile.jpg")
+
+        ref.putFile(imageUri)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception ?: Exception("Upload nije uspio")
+                }
+                ref.downloadUrl
+            }
+            .addOnSuccessListener { downloadUri ->
+                val url = downloadUri.toString()
+                db.collection("users").document(uid)
+                    .set(mapOf("avatarUrl" to url), SetOptions.merge())
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Greška pri spremanju: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Greška pri uploadu slike: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 
+    private fun showDatePicker(onDatePicked: (String) -> Unit) {
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+
+        DatePickerDialog(this, { _, y, m, d ->
+            val dayStr = d.toString().padStart(2, '0')
+            val monthStr = (m + 1).toString().padStart(2, '0')
+            onDatePicked("$dayStr.$monthStr.$y.")
+        }, year, month, day).show()
+    }
+
+
+    private fun showDiscardChangesDialog() {
+        val dialogView = LayoutInflater.from(this)
+            .inflate(R.layout.dialog_discard_changes, null)
+
+        val btnDiscard = dialogView.findViewById<com.google.android.material.button.MaterialButton>(
+            R.id.btnDiscardChanges
+        )
+        val btnContinue = dialogView.findViewById<com.google.android.material.button.MaterialButton>(
+            R.id.btnContinueEditing
+        )
+
+        val alertDialog = MaterialAlertDialogBuilder(this, R.style.RoundedDialog)
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        btnDiscard.setOnClickListener {
+            alertDialog.dismiss()
+            // confirm za odbacivanje ili ostajanje na screenu
+            finish()
+        }
+
+        btnContinue.setOnClickListener {
+            // samo zatvori popup, ostani na ekranu
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
 }
