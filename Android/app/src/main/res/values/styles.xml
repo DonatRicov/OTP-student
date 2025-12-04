@@ -50,5 +50,22 @@
         <item name="android:textSize">11sp</item>
         <item name="android:fontFamily">@font/sf_pro_display_regular</item>
     </style>
+
+
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="RoundedDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceMediumComponent">@style/DialogRoundedCorners</item>
+    </style>
+
+    <style name="DialogRoundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+
 </resources>
 
