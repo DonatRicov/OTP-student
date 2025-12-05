@@ -7,7 +7,7 @@
 
     <fragment android:id="@+id/nav_home" android:name="hr.foi.air.otpstudent.HomeFragment" tools:layout="@layout/fragment_home" />
     <fragment android:id="@+id/nav_praksa" android:name="hr.foi.air.otpstudent.PraksaFragment" tools:layout="@layout/fragment_praksa" />
-    <fragment android:id="@+id/nav_poslovi" android:name="hr.foi.air.otpstudent.PosloviFragment" tools:layout="@layout/fragment_poslovi" />
+    <fragment android:id="@+id/nav_poslovi" android:name="hr.foi.air.otpstudent.JobsFragment" tools:layout="@layout/fragment_jobs" />
     <fragment android:id="@+id/nav_chatbot" android:name="hr.foi.air.otpstudent.ChatbotFragment" tools:layout="@layout/fragment_chatbot" />
     <fragment android:id="@+id/nav_profile" android:name="hr.foi.air.otpstudent.ProfileFragment" tools:layout="@layout/fragment_profile" />
 </navigation>
