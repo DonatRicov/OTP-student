@@ -22,10 +22,12 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
     private lateinit var etSearch: TextInputEditText
     private lateinit var tvMyApplications: TextView
 
+    private lateinit var tvEmpty: TextView
     private var allJobs: List<Job> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvEmpty = view.findViewById(R.id.tvEmpty)
 
         db = FirebaseFirestore.getInstance()
 
@@ -67,8 +69,11 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
 
                 if (snapshot.isEmpty) {
                     adapter.submitList(emptyList())
+                    tvEmpty.visibility = View.VISIBLE
+                    rvJobs.visibility = View.GONE
                     return@addOnSuccessListener
                 }
+
 
                 val jobs = snapshot.documents.map { doc ->
                     Job(
@@ -87,9 +92,13 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
                         description = doc.getString("description") ?: ""
                     )
                 }
+                tvEmpty.visibility = View.GONE
+                rvJobs.visibility = View.VISIBLE
 
                 allJobs = jobs
                 adapter.submitList(jobs)
+
+
             }
             .addOnFailureListener { e ->
                 Toast.makeText(
