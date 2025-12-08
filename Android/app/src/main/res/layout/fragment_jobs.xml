@@ -61,17 +61,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- filteri i povijest -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/filterRow"
-        android:layout_width="380dp"
-        android:layout_height="48dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutSearch">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Filter  -->
+        <!-- Filter gumb ZALJEPLJEN LIJEVO -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilter"
             style="@style/Tekst"
@@ -86,28 +85,45 @@
             android:textColor="@color/white"
             app:backgroundTint="@color/otp_green_dark"
             app:cornerRadius="5dp"
-            app:drawableTint="@color/white" />
+            app:drawableTint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- RAZMAK izmedu -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <!-- Favoriti  -->
+        <!-- Favoriti – ZALJEPLJEN DESNO -->
         <TextView
-            android:id="@+id/tvMyApplications"
+            android:id="@+id/btnFavourites"
             style="@style/TekstInterakcija"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_favourites"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-
             android:text="Favoriti"
-            app:drawableTint="@color/otp_green_dark" />
+            app:drawableTint="@color/otp_green_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+        <!-- Tekst aktivnih filtera  -->
+        <TextView
+            android:id="@+id/tvActiveFilters"
+            style="@style/Tekst"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:visibility="gone"
+            android:textColor="@color/otp_grey"
+            app:layout_constraintStart_toEndOf="@id/btnFilter"
+            app:layout_constraintEnd_toStartOf="@id/btnFavourites"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <!-- popis poslova -->
     <androidx.recyclerview.widget.RecyclerView
