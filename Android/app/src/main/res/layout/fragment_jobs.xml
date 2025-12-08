@@ -63,31 +63,50 @@
     <!-- filteri i povijest -->
     <LinearLayout
         android:id="@+id/filterRow"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_width="380dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/layoutSearch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/layoutSearch">
 
-        <!-- FILTER STAVITI TU -->
+        <!-- Filter  -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnFilter"
+            style="@style/Tekst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_filter"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:text="Filtriraj"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/otp_green_dark"
+            app:cornerRadius="5dp"
+            app:drawableTint="@color/white" />
 
-
+        <!-- RAZMAK izmedu -->
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
 
-        <!-- moje prijave tj povijest -->
+        <!-- Favoriti  -->
         <TextView
             android:id="@+id/tvMyApplications"
+            style="@style/TekstInterakcija"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Moje prijave"
-            android:textColor="@color/otp_green_dark"
-            android:textSize="13sp"
-            android:layout_gravity="center_vertical" />
+            android:drawableLeft="@drawable/ic_favourites"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+
+            android:text="Favoriti"
+            app:drawableTint="@color/otp_green_dark" />
+
     </LinearLayout>
 
     <!-- popis poslova -->
