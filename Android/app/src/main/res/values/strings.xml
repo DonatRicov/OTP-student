@@ -1,6 +1,6 @@
 <resources>
 
-// od prije sto je ostalo. to be sorted
+    // od prije sto je ostalo. to be sorted
 
     <string name="app_name">OTP-Student</string>
     <string name="show_password">Prikaži lozinku</string>
@@ -18,7 +18,7 @@
     <string name="back_button">Natrag</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-// activity_login.xml
+    // activity_login.xml
 
     <string name="welcome_back">Dobrodošli natrag!</string>
     <string name="email">Email</string>
@@ -32,7 +32,7 @@
     <string name="no_account">Još nemaš račun? </string>
     <string name="become_otp_student"> Postani OTPStudent!</string>
 
-// acivity_login_success
+    // acivity_login_success
 
     <string name="login_success">Prijava uspješna!</string>
     <string name="success_icon_desc">Ikona uspjeha</string>

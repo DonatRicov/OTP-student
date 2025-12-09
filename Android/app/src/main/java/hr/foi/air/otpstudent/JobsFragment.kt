@@ -233,6 +233,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
                 }
 
                 allJobs = jobs
+                markExpiredJobsLocally()
                 tvEmpty.visibility = View.GONE
                 rvJobs.visibility = View.VISIBLE
 
@@ -245,5 +246,21 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
                     Toast.LENGTH_LONG
                 ).show()
             }
+    }
+
+    private fun markExpiredJobsLocally() {
+        val now = com.google.firebase.Timestamp.now()
+
+        allJobs.forEach { job ->
+            val exp = job.expiresAt
+            if (exp != null && exp <= now && !job.isClosed) {
+                job.copy(isClosed = true)
+
+                // opcionalno – odmah osvježi dokument u Firestore
+                db.collection("jobs")
+                    .document(job.id)
+                    .update("isClosed", true)
+            }
+        }
     }
 }
