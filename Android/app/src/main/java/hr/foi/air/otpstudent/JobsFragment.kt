@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import hr.foi.air.otpstudent.model.Job
+import android.content.Intent
 
 class JobsFragment : Fragment(R.layout.fragment_jobs) {
 
@@ -53,8 +54,15 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
         db = FirebaseFirestore.getInstance()
 
         adapter = JobAdapter { job ->
-            Toast.makeText(requireContext(), job.title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), JobDetailsActivity::class.java)
+            intent.putExtra("JOB_ID", job.id)
+            startActivity(intent)
+
         }
+
+
+
+
 
         rvJobs.layoutManager = LinearLayoutManager(requireContext())
         rvJobs.adapter = adapter
@@ -256,11 +264,15 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             if (exp != null && exp <= now && !job.isClosed) {
                 job.copy(isClosed = true)
 
-                // opcionalno – odmah osvježi dokument u Firestore
+
                 db.collection("jobs")
                     .document(job.id)
                     .update("isClosed", true)
             }
         }
     }
+
+
+
+
 }

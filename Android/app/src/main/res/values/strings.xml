@@ -52,4 +52,6 @@
     <string name="cv_usage_info">Vaš životopis koristit će se za prijave na studentske poslove.</string>
     <string name="empty_state_no_cvs">Još nemate prenesenih životopisa. Prenesite svoj prvi dokument putem gumba iznad.</string>
 
+
+    <string name="cd_back">Natrag</string>
 </resources>

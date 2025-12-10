@@ -17,46 +17,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OTPStudent">
+        <activity
+            android:name=".JobDetailsActivity"
+            android:exported="false" />
         <!-- Login Activity -->
         <activity android:name=".LoginActivity" />
-
-        <activity android:name=".LoginSuccessActivity" android:exported="false" android:label="Prijava uspješna" />
-
-        <!-- Main Activity -->
-        <activity android:name=".MainActivity" />
-
-        <!-- Register Activity -->
+        <activity
+            android:name=".LoginSuccessActivity"
+            android:exported="false"
+            android:label="Prijava uspješna" /> <!-- Main Activity -->
+        <activity android:name=".MainActivity" /> <!-- Register Activity -->
         <activity
             android:name=".RegisterActivity"
-            android:exported="true">
-
-        </activity>
-
+            android:exported="true"></activity>
         <activity
             android:name=".ProfilePersonalActivity"
             android:exported="false" />
-
         <activity
             android:name=".ProfileFacultyActivity"
             android:exported="false" />
-
-        <activity android:name=".ProfileSetupActivity"/>
-
-
+        <activity android:name=".ProfileSetupActivity" />
         <activity
             android:name=".StartActivity"
             android:exported="true"
             android:label="Početni zaslon">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity android:name=".MyCvActivity" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -67,10 +58,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-
-
-
     </application>
 
 </manifest>

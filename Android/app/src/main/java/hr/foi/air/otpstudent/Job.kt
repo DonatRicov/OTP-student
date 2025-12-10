@@ -15,5 +15,7 @@ data class Job(
     val isClosed: Boolean = false,
     val isApplied: Boolean = false,
     val isFavorite: Boolean = false,
-    val description: String = ""
+    val description: String = "",
+
+    val requirements: List<String> = emptyList()
 )
