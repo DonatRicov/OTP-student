@@ -60,10 +60,6 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
 
         }
 
-
-
-
-
         rvJobs.layoutManager = LinearLayoutManager(requireContext())
         rvJobs.adapter = adapter
 
@@ -72,14 +68,6 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             applyAllFilters(text?.toString().orEmpty())
         }
 
-        tvMyApplications.setOnClickListener {
-            if (activeFilters.contains(JobFilter.APPLIED)) {
-                activeFilters.remove(JobFilter.APPLIED)
-            } else {
-                activeFilters.add(JobFilter.APPLIED)
-            }
-            applyAllFilters(etSearch.text?.toString().orEmpty())
-        }
 
         // FILTER gumb
         btnFilter.setOnClickListener {
@@ -152,6 +140,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
                 if (JobFilter.APPLIED in activeFilters) {
                     ok = ok && job.isApplied
                 }
+
                 if (JobFilter.FAVORITE in activeFilters) {
                     ok = ok && job.isFavorite
                 }
