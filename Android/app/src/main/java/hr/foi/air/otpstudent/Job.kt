@@ -17,5 +17,6 @@ data class Job(
     val isFavorite: Boolean = false,
     val description: String = "",
 
+    val applyUrl: String = "",
     val requirements: List<String> = emptyList()
 )
