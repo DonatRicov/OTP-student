@@ -90,6 +90,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <!-- RIGHT: Moji favoriti tekst -->
+        <TextView
+            android:id="@+id/tvPageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Moji favoriti"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
 
 
         <!-- Tekst aktivnih filtera  -->

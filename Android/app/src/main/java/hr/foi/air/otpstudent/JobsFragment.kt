@@ -15,6 +15,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import hr.foi.air.otpstudent.model.Job
 import android.content.Intent
+import androidx.navigation.fragment.findNavController
+import hr.foi.air.otpstudent.R
+
+
 
 class JobsFragment : Fragment(R.layout.fragment_jobs) {
 
@@ -48,6 +52,11 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
         rvJobs = view.findViewById(R.id.rvJobs)
         etSearch = view.findViewById(R.id.etSearch)
         tvMyApplications = view.findViewById(R.id.btnFavourites)
+
+        tvMyApplications.setOnClickListener {
+            findNavController().navigate(R.id.nav_jobs_favorites)
+        }
+
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
 
