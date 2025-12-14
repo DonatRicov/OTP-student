@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Filter gumb ZALJEPLJEN LIJEVO -->
+        <!-- Filter gumb  -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilter"
             style="@style/Tekst"
@@ -90,15 +90,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- RIGHT: Moji favoriti tekst -->
+        <!-- Moji favoriti  -->
         <TextView
-            android:id="@+id/tvPageTitle"
+            android:id="@+id/btnFavourites"
+            style="@style/TekstInterakcija"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Moji favoriti"
-            android:textSize="16sp"
+            android:drawableLeft="@drawable/ic_favorite_filled"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="Svi poslovi"
             android:textStyle="bold"
-            android:textColor="@color/otp_green_dark"
+            app:drawableTint="@color/otp_green_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />

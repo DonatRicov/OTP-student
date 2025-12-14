@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import hr.foi.air.otpstudent.model.Job
+import androidx.navigation.fragment.findNavController
 
 class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
 
@@ -39,6 +40,12 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val btnFavourites = view.findViewById<TextView>(R.id.btnFavourites)
+        btnFavourites.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
 
         tvEmpty = view.findViewById(R.id.tvEmpty)
         rvJobs = view.findViewById(R.id.rvJobs)
@@ -66,7 +73,7 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
             showFilterDialog()
         }
 
-        loadJobs()
+        loadJobsWithUserStatus()
     }
 
     private fun showFilterDialog() {
@@ -109,7 +116,7 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
 
     private fun applyAllFilters(query: String) {
 
-        var filtered = allJobs.filter { it.isFavorite }
+        var filtered = allJobs
 
         val lower = query.lowercase().trim()
         if (lower.isNotEmpty()) {
@@ -179,60 +186,71 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
         tvActiveFilters.text = "Odabrani: " + parts.joinToString(", ")
     }
 
-    private fun loadJobs() {
-        db.collection("jobs")
+    private fun loadJobsWithUserStatus() {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+            ?: return
+
+        val jobsTask = db.collection("jobs")
             .orderBy("postedAt", Query.Direction.DESCENDING)
             .get()
-            .addOnSuccessListener { snapshot ->
 
-                if (snapshot.isEmpty) {
-                    adapter.submitList(emptyList())
-                    tvEmpty.visibility = View.VISIBLE
-                    rvJobs.visibility = View.GONE
-                    return@addOnSuccessListener
-                }
+        val appliedTask = db.collection("users")
+            .document(uid)
+            .collection("applied")
+            .get()
 
-                val jobs = snapshot.documents.map { doc ->
+        val favoritesTask = db.collection("users")
+            .document(uid)
+            .collection("favorites")
+            .get()
+
+        com.google.android.gms.tasks.Tasks.whenAllSuccess<Any>(
+            jobsTask,
+            appliedTask,
+            favoritesTask
+        ).addOnSuccessListener { results ->
+
+            val jobsSnap = results[0] as com.google.firebase.firestore.QuerySnapshot
+            val appliedSnap = results[1] as com.google.firebase.firestore.QuerySnapshot
+            val favoritesSnap = results[2] as com.google.firebase.firestore.QuerySnapshot
+
+            val appliedIds = appliedSnap.documents.map { it.id }.toHashSet()
+            val favoriteIds = favoritesSnap.documents.map { it.id }.toHashSet()
+
+            //filtriranje favorita
+            val jobs = jobsSnap.documents
+                .filter { favoriteIds.contains(it.id) }
+                .map { doc ->
                     Job(
                         id = doc.id,
                         title = doc.getString("title") ?: "",
                         company = doc.getString("company") ?: "",
                         location = doc.getString("location") ?: "",
-                        hourlyRate = (doc.getDouble("hourlyRate") ?: 0.0),
-                        hourlyRateMax = (doc.getDouble("hourlyRateMax") ?: 0.0),
+                        hourlyRate = doc.getDouble("hourlyRate") ?: 0.0,
+                        hourlyRateMax = doc.getDouble("hourlyRateMax") ?: 0.0,
                         applicantsCount = (doc.getLong("applicantsCount") ?: 0L).toInt(),
                         postedAt = doc.getTimestamp("postedAt"),
                         expiresAt = doc.getTimestamp("expiresAt"),
                         isClosed = doc.getBoolean("isClosed") ?: false,
-                        isApplied = doc.getBoolean("isApplied") ?: false,
-                        isFavorite = doc.getBoolean("isFavorite") ?: false,
+                        isApplied = appliedIds.contains(doc.id),
+                        isFavorite = true,
                         description = doc.getString("description") ?: ""
                     )
                 }
 
-                allJobs = jobs
-                markExpiredJobsLocally()
-
-                applyAllFilters(etSearch.text?.toString().orEmpty())
-            }
+            allJobs = jobs
+            applyAllFilters(etSearch.text?.toString().orEmpty())
+        }
             .addOnFailureListener { e ->
                 Toast.makeText(
                     requireContext(),
-                    "Greška: ${e.message}",
+                    "Greška pri dohvaćanju favorita: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
     }
 
-    private fun markExpiredJobsLocally() {
-        val now = com.google.firebase.Timestamp.now()
-        allJobs.forEach { job ->
-            val exp = job.expiresAt
-            if (exp != null && exp <= now && !job.isClosed) {
-                db.collection("jobs")
-                    .document(job.id)
-                    .update("isClosed", true)
-            }
-        }
-    }
+
+
+
 }
