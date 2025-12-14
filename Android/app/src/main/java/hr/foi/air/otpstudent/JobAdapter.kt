@@ -3,7 +3,6 @@ package hr.foi.air.otpstudent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -27,14 +26,6 @@ class JobAdapter(
             oldItem == newItem
     }
 
-    private val appliedBinder = JobAppliedUiBinder { jobId, applied ->
-        val newList = currentList.toMutableList()
-        val index = newList.indexOfFirst { it.id == jobId }
-        if (index != -1) {
-            newList[index] = newList[index].copy(isApplied = applied)
-            submitList(newList)
-        }
-    }
 
     inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle: TextView = itemView.findViewById(R.id.tvJobTitle)
@@ -42,7 +33,6 @@ class JobAdapter(
         private val imgLogo: ImageView = itemView.findViewById(R.id.imgCompanyLogo)
         private val tvApplicants: TextView = itemView.findViewById(R.id.tvApplicants)
 
-        private val cbJob: CheckBox = itemView.findViewById(R.id.cbJob)
         private val btnApplied: MaterialButton = itemView.findViewById(R.id.btnApplied)
 
         private val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
@@ -52,6 +42,7 @@ class JobAdapter(
             tvLocation.text = job.location
             tvApplicants.text = "${job.applicantsCount} studenata"
             imgLogo.setImageResource(R.drawable.ic_otp_logo_circle)
+            btnApplied.visibility = if (job.isApplied) View.VISIBLE else View.GONE
 
             val now = Date()
             val expiresDate = job.expiresAt?.toDate()
@@ -67,8 +58,6 @@ class JobAdapter(
                 else -> {
                 }
             }
-
-            appliedBinder.bind(job, cbJob, btnApplied)
 
             itemView.setOnClickListener {
                 onItemClick(job)

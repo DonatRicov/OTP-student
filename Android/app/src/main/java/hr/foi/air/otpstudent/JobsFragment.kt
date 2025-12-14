@@ -17,6 +17,8 @@ import hr.foi.air.otpstudent.model.Job
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import hr.foi.air.otpstudent.R
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.auth.FirebaseAuth
 
 
 
@@ -57,6 +59,9 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             findNavController().navigate(R.id.nav_jobs_favorites)
         }
 
+
+
+
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
 
@@ -83,7 +88,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             showFilterDialog()
         }
 
-        loadJobs()
+        loadJobsWithUserStatus()
     }
 
     private fun showFilterDialog() {
@@ -173,7 +178,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             rvJobs.visibility = View.VISIBLE
         }
 
-        // update teksta
+        // updateaj tekst
         updateActiveFiltersLabel()
     }
 
@@ -183,7 +188,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             return
         }
 
-        // ako su uključeni SVI filteri
+        // ako su uključeni svi filteri
         if (activeFilters.size == JobFilter.values().size) {
             tvActiveFilters.visibility = View.VISIBLE
             tvActiveFilters.text = "Svi su filteri primjenjeni"
@@ -202,24 +207,16 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
     }
 
 
-    private fun loadJobs() {
-        db.collection("jobs")
+    private fun loadJobsWithUserStatus() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val jobsTask = db.collection("jobs")
             .orderBy("postedAt", Query.Direction.DESCENDING)
             .get()
-            .addOnSuccessListener { snapshot ->
-                Toast.makeText(
-                    requireContext(),
-                    "Dohvaćeno poslova: ${snapshot.size()}",
-                    Toast.LENGTH_SHORT
-                ).show()
 
-                if (snapshot.isEmpty) {
-                    adapter.submitList(emptyList())
-                    tvEmpty.visibility = View.VISIBLE
-                    rvJobs.visibility = View.GONE
-                    return@addOnSuccessListener
-                }
-
+        // ako user nije prijavljen fallback
+        if (uid == null) {
+            jobsTask.addOnSuccessListener { snapshot ->
                 val jobs = snapshot.documents.map { doc ->
                     Job(
                         id = doc.id,
@@ -232,44 +229,87 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
                         postedAt = doc.getTimestamp("postedAt"),
                         expiresAt = doc.getTimestamp("expiresAt"),
                         isClosed = doc.getBoolean("isClosed") ?: false,
-                        isApplied = doc.getBoolean("isApplied") ?: false,
-                        isFavorite = doc.getBoolean("isFavorite") ?: false,
+                        isApplied = false,
+                        isFavorite = false,
                         description = doc.getString("description") ?: ""
                     )
                 }
 
                 allJobs = jobs
                 markExpiredJobsLocally()
-                tvEmpty.visibility = View.GONE
-                rvJobs.visibility = View.VISIBLE
+                applyAllFilters(etSearch.text?.toString().orEmpty())
+            }
+            return
+        }
 
+        val appliedTask = db.collection("users").document(uid)
+            .collection("applied")
+            .get()
+
+        val favoritesTask = db.collection("users").document(uid)
+            .collection("favorites")
+            .get()
+
+        Tasks.whenAllSuccess<Any>(jobsTask, appliedTask, favoritesTask)
+            .addOnSuccessListener { results ->
+                val jobsSnap = results[0] as com.google.firebase.firestore.QuerySnapshot
+                val appliedSnap = results[1] as com.google.firebase.firestore.QuerySnapshot
+                val favoritesSnap = results[2] as com.google.firebase.firestore.QuerySnapshot
+
+                val appliedIds = appliedSnap.documents.map { it.id }.toHashSet()
+                val favoriteIds = favoritesSnap.documents.map { it.id }.toHashSet()
+
+                val jobs = jobsSnap.documents.map { doc ->
+                    Job(
+                        id = doc.id,
+                        title = doc.getString("title") ?: "",
+                        company = doc.getString("company") ?: "",
+                        location = doc.getString("location") ?: "",
+                        hourlyRate = (doc.getDouble("hourlyRate") ?: 0.0),
+                        hourlyRateMax = (doc.getDouble("hourlyRateMax") ?: 0.0),
+                        applicantsCount = (doc.getLong("applicantsCount") ?: 0L).toInt(),
+                        postedAt = doc.getTimestamp("postedAt"),
+                        expiresAt = doc.getTimestamp("expiresAt"),
+                        isClosed = doc.getBoolean("isClosed") ?: false,
+                        isApplied = appliedIds.contains(doc.id),
+                        isFavorite = favoriteIds.contains(doc.id),
+                        description = doc.getString("description") ?: ""
+                    )
+                }
+
+                allJobs = jobs
+                markExpiredJobsLocally()
                 applyAllFilters(etSearch.text?.toString().orEmpty())
             }
             .addOnFailureListener { e ->
                 Toast.makeText(
                     requireContext(),
-                    "Greška pri dohvaćanju poslova: ${e.message}",
+                    "Greška pri dohvaćanju statusa: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }
     }
 
+
     private fun markExpiredJobsLocally() {
         val now = com.google.firebase.Timestamp.now()
 
-        allJobs.forEach { job ->
+        val updated = allJobs.map { job ->
             val exp = job.expiresAt
             if (exp != null && exp <= now && !job.isClosed) {
+                db.collection("jobs").document(job.id).update("isClosed", true)
                 job.copy(isClosed = true)
-
-
-                db.collection("jobs")
-                    .document(job.id)
-                    .update("isClosed", true)
-            }
+            } else job
         }
+
+        allJobs = updated
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        loadJobsWithUserStatus()
+    }
 
 
 

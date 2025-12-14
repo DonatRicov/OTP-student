@@ -90,16 +90,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Favoriti – ZALJEPLJEN DESNO -->
+        <!-- Favoriti -->
         <TextView
             android:id="@+id/btnFavourites"
             style="@style/TekstInterakcija"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_favourites"
+            android:drawableLeft="@drawable/ic_favorite_filled"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="Favoriti"
+            android:text="Svi poslovi"
             app:drawableTint="@color/otp_green_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

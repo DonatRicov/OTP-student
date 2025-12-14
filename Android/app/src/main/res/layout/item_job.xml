@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="6dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
+    app:cardBackgroundColor="@android:color/white"
     app:strokeWidth="1dp"
-    app:strokeColor="@color/white">
+    app:strokeColor="@color/otp_grey">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +18,7 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
-        <!-- Logo / ikona -->
+        <!-- Logo od otpda -->
         <ImageView
             android:id="@+id/imgCompanyLogo"
             android:layout_width="40dp"
@@ -63,7 +65,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_people"
-                    android:tint="@color/otp_grey"
+                    app:tint="@color/otp_grey"
                     android:contentDescription="@string/app_name" />
 
                 <TextView
@@ -79,18 +81,11 @@
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/cbJob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:focusable="false"
-            android:clickable="true" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnApplied"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:text="Prijavljeno"
             android:textAllCaps="false"
@@ -100,7 +95,10 @@
             app:iconPadding="6dp"
             app:iconTint="@android:color/white"
             android:textColor="@android:color/white"
-            app:backgroundTint="@color/otp_green_dark"/>
+            app:backgroundTint="@color/otp_green_dark"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"/>
+
 
 
 
