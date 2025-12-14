@@ -148,48 +148,16 @@
                 android:background="#33000000" />
         </LinearLayout>
 
-        <!-- PIN -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPin"
-            style="?attr/materialButtonOutlinedStyle"
+        <LinearLayout
+            android:id="@+id/authMethodsContainer"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/login_pin"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:cornerRadius="90dp"
-            app:icon="@drawable/ic_pin"
-            app:iconGravity="textEnd"
-            app:iconPadding="10dp"
-            app:iconTint="@color/otp_green"
-            app:strokeColor="@color/otp_green"
-            app:strokeWidth="2dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerLayout" />
 
-        <!-- BIOMETRIJA-->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBiometric"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/login_biometric"
-            android:textAllCaps="false"
-            android:textColor="@color/otp_green"
-            android:textSize="16sp"
-            app:cornerRadius="90dp"
-            app:icon="@drawable/ic_fingerprint"
-            app:iconGravity="textEnd"
-            app:iconPadding="10dp"
-            app:iconTint="@color/otp_green"
-            app:strokeColor="@color/otp_green"
-            app:strokeWidth="2dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnPin" />
 
         <!-- PROGRESS BAR -->
         <ProgressBar
@@ -198,9 +166,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/btnBiometric"
+            app:layout_constraintTop_toBottomOf="@id/authMethodsContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
 
         <!-- -->
         <LinearLayout

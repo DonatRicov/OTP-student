@@ -12,6 +12,11 @@ import com.google.android.material.textfield.TextInputLayout
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
+import com.google.android.material.button.MaterialButton
+import hr.foi.air.core.auth.AuthRegistry
+import hr.foi.air.core.auth.AuthRequest
+import hr.foi.air.core.auth.AuthResult
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -20,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        Toast.makeText(this, "Auth plugins: ${AuthRegistry.available().size}", Toast.LENGTH_LONG).show()
 
         auth = FirebaseAuth.getInstance()
 
@@ -27,10 +33,51 @@ class LoginActivity : AppCompatActivity() {
         val etPass   = findViewById<EditText>(R.id.etPass)
         val tilPass  = findViewById<TextInputLayout>(R.id.textInputLayoutPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
-        val btnPin   = findViewById<Button>(R.id.btnPin)
-        val btnBio   = findViewById<Button>(R.id.btnBiometric)
         val tvReg    = findViewById<TextView>(R.id.tvGoRegister)
         val progress = findViewById<ProgressBar>(R.id.progress)
+
+        val authContainer = findViewById<LinearLayout>(R.id.authMethodsContainer)
+
+        AuthRegistry.available().forEach { plugin ->
+            val spec = plugin.uiSpec()
+
+            val btn = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    resources.getDimensionPixelSize(R.dimen.auth_btn_height)
+                ).also { it.topMargin = resources.getDimensionPixelSize(R.dimen.auth_btn_margin_top) }
+
+                text = spec.title
+                isAllCaps = false
+
+                spec.iconRes?.let {
+                    setIconResource(it)
+                    iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
+                    iconPadding = resources.getDimensionPixelSize(R.dimen.auth_btn_icon_padding)
+                }
+
+                setOnClickListener {
+                    val request = AuthRequest(
+                        email = etEmail.text.toString().trim()
+                    )
+
+                    plugin.authenticate(this@LoginActivity, request) { result ->
+                        when (result) {
+                            is AuthResult.Success -> {
+                                startActivity(Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                })
+                            }
+                            is AuthResult.Error -> Toast.makeText(this@LoginActivity, result.message, Toast.LENGTH_LONG).show()
+                            AuthResult.Cancelled -> Unit
+                        }
+                    }
+                }
+            }
+
+            authContainer.addView(btn)
+        }
+
 
         setPasswordHidden(etPass, tilPass)
 
@@ -41,8 +88,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         tvReg.setOnClickListener { startActivity(Intent(this, RegisterActivity::class.java)) }
-        btnPin.setOnClickListener { Toast.makeText(this, "PIN login uskoro", Toast.LENGTH_SHORT).show() }
-        btnBio.setOnClickListener { Toast.makeText(this, "Biometrija uskoro", Toast.LENGTH_SHORT).show() }
+
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()

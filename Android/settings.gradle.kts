@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "OTP-Student"
 include(":app")
+include(":core")
+include(":auth-pin")
