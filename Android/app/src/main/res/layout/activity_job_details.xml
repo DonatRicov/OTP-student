@@ -2,146 +2,375 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".JobDetailsActivity">
 
-    <!-- Zaglavlje (Toolbar) -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:elevation="0dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-
-            <ImageView
-                android:id="@+id/iv_back_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back"  />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_gravity="center"
-                android:src="@drawable/logo"  />
-
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/btn_apply"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        android:layout_marginBottom="16dp">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Kartica s glavnim sadržajem -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- header -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:paddingTop="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <LinearLayout
+                    android:id="@+id/topBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/btnBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_back"
+                        android:contentDescription="@string/back_button"
+                        app:tint="@color/otp_green_dark" />
+
+                    <TextView
+                        android:id="@+id/tvHeaderTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Detalji posla"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/otp_green_dark" />
+
+                    <ImageView
+                        android:id="@+id/btnFavorite"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_favorite_outline"
+                        android:contentDescription="@null"
+                        app:tint="@color/otp_green_dark"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardLogo"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    app:cardCornerRadius="42dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/topBar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="18dp">
+
+                    <ImageView
+                        android:id="@+id/ivCompanyLogo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="14dp"
+                        android:src="@drawable/ic_otp_logo_circle"
+                        android:contentDescription="@string/app_name" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:id="@+id/titleContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/cardLogo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <!-- NAZIV POSLA -->
+                    <TextView
+                        android:id="@+id/tv_job_title_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/otp_green_dark"
+                        tools:text="Junior UI/UX designer" />
+
+                    <!-- OTP BANKA -->
+                    <TextView
+                        android:id="@+id/tvCompany"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/otp_grey"
+                        tools:text="OTP Banka" />
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+            <!-- tri kucice one, Lana promjeni na nest drugo ak mislis da treba -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <!-- satnica (cekamo franu) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#11000000">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_money"
+                            app:tint="@color/otp_green_dark" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Satnica"
+                            android:textSize="12sp"
+                            android:textColor="@color/otp_grey" />
+
+                        <TextView
+                            android:id="@+id/tvHourlyRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textStyle="bold"
+                            android:textSize="13sp"
+                            android:textColor="@color/black"
+                            tools:text="7.5 €/h" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- samo tri lokacije za sad afaik -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#11000000">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_location"
+                            app:tint="@color/otp_green_dark" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Lokacija"
+                            android:textSize="12sp"
+                            android:textColor="@color/otp_grey" />
+
+                        <TextView
+                            android:id="@+id/tvLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textStyle="bold"
+                            android:textSize="13sp"
+                            android:textColor="@color/black"
+                            tools:text="Zagreb" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Istječe -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#11000000">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_history"
+                            app:tint="@color/otp_green_dark" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Istječe"
+                            android:textSize="12sp"
+                            android:textColor="@color/otp_grey" />
+
+                        <TextView
+                            android:id="@+id/tvExpires"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textStyle="bold"
+                            android:textSize="13sp"
+                            android:textColor="@color/black"
+                            tools:text="19.12.2025." />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- okvir -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cardCornerRadius="22dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#DADADA"
-                app:strokeWidth="1dp">
+                app:strokeWidth="1dp"
+                app:strokeColor="#11000000"
+                android:backgroundTint="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <!-- Zeleni dio kartice s naslovom -->
-                    <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opis posla"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_description_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/otp_green"
-                        android:padding="16dp">
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="4dp"
+                        android:textColor="@color/otp_grey"
+                        android:textSize="14sp"
+                        tools:text="Opis posla ide ovdje..." />
 
-                        <TextView
-                            android:id="@+id/tv_job_title_details"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="@android:color/white"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            tools:text="Praksa u OTP banci" />
+                    <TextView
+                        android:id="@+id/label_areas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Područja"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                        <!-- Možete dodati logo kompanije ovdje ako ga imate -->
-                        <!-- <ImageView android:id="@+id/iv_company_logo" ... /> -->
-                    </LinearLayout>
-
-                    <!-- Svijetli dio kartice s opisom -->
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_job_requirements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/otp_green"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="4dp"
+                        android:textColor="@color/otp_grey"
+                        android:textSize="14sp"
+                        tools:text="• IT\n• Financije\n• Analitika" />
 
-                        <TextView
-                            android:id="@+id/tv_description_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:lineSpacingExtra="4dp"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            tools:text="Iskusi rad u našem timu kroz stručnu praksu i stekni vrijedno iskustvo u dinamičnom okruženju OTP banke! Ako ste zainteresirani, prijavite stručnu praksu već danas unutar aplikacije!" />
-
-                        <TextView
-                            android:id="@+id/label_areas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="Područja:"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_job_requirements"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:lineSpacingExtra="4dp"
-                            android:textColor="@android:color/black"
-                            tools:text="• Poslovno bankarstvo\n• Maloprodaja\n• Upravljanje rizicima\n• Financije i računovodstvo\n• IT" />
-
-                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-    </ScrollView>
 
-    <!-- Gumb za prijavu -->
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_apply"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom bar -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_background_green"
-        android:text="Prijavi se"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_apply"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Prijavi se"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:backgroundTint="@color/otp_green"
+            app:cornerRadius="90dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
