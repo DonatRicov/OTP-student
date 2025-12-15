@@ -49,6 +49,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyCvActivity" />
+        <activity android:name=".QuickLoginOfferActivity" />
+        <activity android:name=".PinUnlockActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
