@@ -38,7 +38,9 @@ class LoginActivity : AppCompatActivity() {
 
         val authContainer = findViewById<LinearLayout>(R.id.authMethodsContainer)
 
-        AuthRegistry.available().forEach { plugin ->
+        val enabledPlugins = AuthRegistry.available().filter { it.isEnabled(this) }
+
+        enabledPlugins.forEach { plugin ->
             val spec = plugin.uiSpec()
 
             val btn = MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle).apply {
@@ -109,6 +111,8 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(this, LoginSuccessActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     }
+                    SecureCreds.save(this, email, pass)
+
                     startActivity(intent)
                 }
                 else {

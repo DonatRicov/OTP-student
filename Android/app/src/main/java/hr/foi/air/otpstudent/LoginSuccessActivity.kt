@@ -11,7 +11,7 @@ import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import android.widget.Toast
 class LoginSuccessActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
@@ -48,9 +48,23 @@ class LoginSuccessActivity : AppCompatActivity() {
             .start()
 
         handler.postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            val prefs = getSharedPreferences("otp_prefs", MODE_PRIVATE)
+            prefs.edit().remove("quick_login_offer_shown").apply()
+            val shown = prefs.getBoolean("quick_login_offer_shown", false)
+
+
+            val next = if (!shown) {
+                prefs.edit().putBoolean("quick_login_offer_shown", true).apply()
+                Intent(this, QuickLoginOfferActivity::class.java)
+            } else {
+                Intent(this, MainActivity::class.java)
+            }
+            Toast.makeText(this, "Next: ${next.component?.className}", Toast.LENGTH_LONG).show()
+
+            startActivity(next)
             finish()
         }, 2000)
+
     }
 
     override fun onDestroy() {
