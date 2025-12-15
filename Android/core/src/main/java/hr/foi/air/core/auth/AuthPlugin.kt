@@ -13,8 +13,12 @@ interface AuthPlugin {
         callback: (AuthResult) -> Unit
     )
 
-
     fun isEnabled(context: Context): Boolean = true
     fun setEnabled(context: Context, enabled: Boolean) {}
 
-    fun isConfigured(context: Context): Boolean =
+    fun isConfigured(context: Context): Boolean = true
+
+    fun configure(activity: FragmentActivity, callback: (AuthResult) -> Unit) {
+        callback(AuthResult.Success())
+    }
+}
