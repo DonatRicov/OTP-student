@@ -82,7 +82,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
             startActivity(i)
+            ctx.finish() //
         }
+
 
         view.findViewById<LinearLayout>(R.id.rowCv).setOnClickListener {
             val intent = Intent(requireContext(), MyCvActivity::class.java)
@@ -90,11 +92,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
-            // TODO: odrađene prakse
+            // TO DO: Odradener prakse
         }
 
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
-            // TODO: moji poslovi
+            // TO DO: Moji poslovi
         }
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
