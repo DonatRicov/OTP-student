@@ -1,59 +1,188 @@
 package hr.foi.air.otpstudent
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Tasks
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import hr.foi.air.otpstudent.PracticeAdapter
+import hr.foi.air.otpstudent.Practice
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class PraksaFragment : Fragment(R.layout.fragment_praksa) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PraksaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PraksaFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var db: FirebaseFirestore
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var rvJobs: RecyclerView
+    private lateinit var tvEmpty: TextView
+    private lateinit var etSearch: TextInputEditText
+    private lateinit var tvAllPractices: TextView
+
+    private lateinit var adapter: PracticeAdapter
+
+    private var allPractices: List<Practice> = emptyList()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        db = FirebaseFirestore.getInstance()
+
+        rvJobs = view.findViewById(R.id.rvJobs)
+        tvEmpty = view.findViewById(R.id.tvEmpty)
+        etSearch = view.findViewById(R.id.etSearch)
+        tvAllPractices = view.findViewById(R.id.btnFavourites)
+
+        tvAllPractices.setOnClickListener {
+
+        }
+
+
+        adapter = PracticeAdapter { practice ->
+            Toast.makeText(
+                requireContext(),
+                "Odabrana praksa: ${practice.title}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
+        rvJobs.layoutManager = LinearLayoutManager(requireContext())
+        rvJobs.adapter = adapter
+
+        etSearch.addTextChangedListener { text ->
+            applySearch(text?.toString().orEmpty())
+        }
+
+        loadPracticesWithUserStatus()
+    }
+
+    private fun applySearch(query: String) {
+        val lower = query.lowercase().trim()
+
+        val filtered = if (lower.isEmpty()) {
+            allPractices
+        } else {
+            allPractices.filter { p ->
+                p.title.lowercase().contains(lower) ||
+                        p.location.lowercase().contains(lower) ||
+                        p.company.lowercase().contains(lower)
+            }
+        }
+
+        adapter.submitList(filtered)
+
+        if (filtered.isEmpty()) {
+            tvEmpty.visibility = View.VISIBLE
+            rvJobs.visibility = View.GONE
+        } else {
+            tvEmpty.visibility = View.GONE
+            rvJobs.visibility = View.VISIBLE
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_praksa, container, false)
+    private fun loadPracticesWithUserStatus() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val practicesTask = db.collection("practice")
+            .orderBy("postedAt", Query.Direction.DESCENDING)
+            .get()
+
+        if (uid == null) {
+            practicesTask
+                .addOnSuccessListener { snapshot ->
+                    val practices = snapshot.documents.map { doc ->
+                        Practice(
+                            id = doc.id,
+                            title = doc.getString("title") ?: "",
+                            company = doc.getString("company") ?: "",
+                            location = doc.getString("location") ?: "",
+                            hourlyRate = doc.getDouble("hourlyRate") ?: 0.0,
+                            hourlyRateMax = doc.getDouble("hourlyRateMax") ?: 0.0,
+                            applicantsCount = (doc.getLong("applicantsCount") ?: 0L).toInt(),
+                            postedAt = doc.getTimestamp("postedAt"),
+                            expiresAt = doc.getTimestamp("expiresAt"),
+                            isClosed = doc.getBoolean("isClosed") ?: false,
+                            isApplied = false,
+                            isFavorite = false,
+                            description = doc.getString("description") ?: "",
+                            applyUrl = doc.getString("applyUrl") ?: "",
+                            requirements = (doc.get("requirements") as? List<String>) ?: emptyList()
+                        )
+                    }
+
+                    allPractices = practices
+                    applySearch(etSearch.text?.toString().orEmpty())
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(
+                        requireContext(),
+                        "Greška pri dohvaćanju praksi: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    applySearch(etSearch.text?.toString().orEmpty())
+                }
+            return
+        }
+
+        val appliedTask = db.collection("users").document(uid)
+            .collection("applied_practices")
+            .get()
+
+        val favoritesTask = db.collection("users").document(uid)
+            .collection("favorite_practices")
+            .get()
+
+        Tasks.whenAllSuccess<Any>(practicesTask, appliedTask, favoritesTask)
+            .addOnSuccessListener { results ->
+                val practicesSnap = results[0] as com.google.firebase.firestore.QuerySnapshot
+                val appliedSnap = results[1] as com.google.firebase.firestore.QuerySnapshot
+                val favoritesSnap = results[2] as com.google.firebase.firestore.QuerySnapshot
+
+                val appliedIds = appliedSnap.documents.map { it.id }.toHashSet()
+                val favoriteIds = favoritesSnap.documents.map { it.id }.toHashSet()
+
+                val practices = practicesSnap.documents.map { doc ->
+                    Practice(
+                        id = doc.id,
+                        title = doc.getString("title") ?: "",
+                        company = doc.getString("company") ?: "",
+                        location = doc.getString("location") ?: "",
+                        hourlyRate = doc.getDouble("hourlyRate") ?: 0.0,
+                        hourlyRateMax = doc.getDouble("hourlyRateMax") ?: 0.0,
+                        applicantsCount = (doc.getLong("applicantsCount") ?: 0L).toInt(),
+                        postedAt = doc.getTimestamp("postedAt"),
+                        expiresAt = doc.getTimestamp("expiresAt"),
+                        isClosed = doc.getBoolean("isClosed") ?: false,
+                        isApplied = appliedIds.contains(doc.id),
+                        isFavorite = favoriteIds.contains(doc.id),
+                        description = doc.getString("description") ?: "",
+                        applyUrl = doc.getString("applyUrl") ?: "",
+                        requirements = (doc.get("requirements") as? List<String>) ?: emptyList()
+                    )
+                }
+
+                allPractices = practices
+                applySearch(etSearch.text?.toString().orEmpty())
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    requireContext(),
+                    "Greška pri dohvaćanju praksi: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+                applySearch(etSearch.text?.toString().orEmpty())
+            }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PraksaFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PraksaFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        loadPracticesWithUserStatus()
     }
 }
