@@ -13,8 +13,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import hr.foi.air.otpstudent.PracticeAdapter
 import hr.foi.air.otpstudent.Practice
+import hr.foi.air.otpstudent.PracticeAdapter
+
 
 class PraksaFragment : Fragment(R.layout.fragment_praksa) {
 
@@ -88,67 +89,13 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
     }
 
     private fun loadPracticesWithUserStatus() {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-
         val practicesTask = db.collection("practice")
             .orderBy("postedAt", Query.Direction.DESCENDING)
             .get()
 
-        if (uid == null) {
-            practicesTask
-                .addOnSuccessListener { snapshot ->
-                    val practices = snapshot.documents.map { doc ->
-                        Practice(
-                            id = doc.id,
-                            title = doc.getString("title") ?: "",
-                            company = doc.getString("company") ?: "",
-                            location = doc.getString("location") ?: "",
-                            hourlyRate = doc.getDouble("hourlyRate") ?: 0.0,
-                            hourlyRateMax = doc.getDouble("hourlyRateMax") ?: 0.0,
-                            applicantsCount = (doc.getLong("applicantsCount") ?: 0L).toInt(),
-                            postedAt = doc.getTimestamp("postedAt"),
-                            expiresAt = doc.getTimestamp("expiresAt"),
-                            isClosed = doc.getBoolean("isClosed") ?: false,
-                            isApplied = false,
-                            isFavorite = false,
-                            description = doc.getString("description") ?: "",
-                            applyUrl = doc.getString("applyUrl") ?: "",
-                            requirements = (doc.get("requirements") as? List<String>) ?: emptyList()
-                        )
-                    }
-
-                    allPractices = practices
-                    applySearch(etSearch.text?.toString().orEmpty())
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Greška pri dohvaćanju praksi: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    applySearch(etSearch.text?.toString().orEmpty())
-                }
-            return
-        }
-
-        val appliedTask = db.collection("users").document(uid)
-            .collection("applied_practices")
-            .get()
-
-        val favoritesTask = db.collection("users").document(uid)
-            .collection("favorite_practices")
-            .get()
-
-        Tasks.whenAllSuccess<Any>(practicesTask, appliedTask, favoritesTask)
-            .addOnSuccessListener { results ->
-                val practicesSnap = results[0] as com.google.firebase.firestore.QuerySnapshot
-                val appliedSnap = results[1] as com.google.firebase.firestore.QuerySnapshot
-                val favoritesSnap = results[2] as com.google.firebase.firestore.QuerySnapshot
-
-                val appliedIds = appliedSnap.documents.map { it.id }.toHashSet()
-                val favoriteIds = favoritesSnap.documents.map { it.id }.toHashSet()
-
-                val practices = practicesSnap.documents.map { doc ->
+        practicesTask
+            .addOnSuccessListener { snapshot ->
+                val practices = snapshot.documents.map { doc ->
                     Practice(
                         id = doc.id,
                         title = doc.getString("title") ?: "",
@@ -160,8 +107,8 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
                         postedAt = doc.getTimestamp("postedAt"),
                         expiresAt = doc.getTimestamp("expiresAt"),
                         isClosed = doc.getBoolean("isClosed") ?: false,
-                        isApplied = appliedIds.contains(doc.id),
-                        isFavorite = favoriteIds.contains(doc.id),
+                        isApplied = false,
+                        isFavorite = false,
                         description = doc.getString("description") ?: "",
                         applyUrl = doc.getString("applyUrl") ?: "",
                         requirements = (doc.get("requirements") as? List<String>) ?: emptyList()
