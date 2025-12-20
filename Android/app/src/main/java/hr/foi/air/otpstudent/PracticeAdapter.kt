@@ -22,7 +22,21 @@ class PracticeAdapter(
             oldItem == newItem
     }
 
-    inner class PracticeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PracticeViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_job, parent, false) // <-- BITNO (nema item_practice)
+        return PracticeViewHolder(view, onItemClick)
+    }
+
+    override fun onBindViewHolder(holder: PracticeViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    class PracticeViewHolder(
+        itemView: View,
+        private val onItemClick: (Practice) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+
         private val tvTitle: TextView = itemView.findViewById(R.id.tvJobTitle)
         private val tvLocation: TextView = itemView.findViewById(R.id.tvJobLocation)
         private val tvApplicants: TextView = itemView.findViewById(R.id.tvApplicants)
@@ -36,19 +50,7 @@ class PracticeAdapter(
             imgLogo.setImageResource(R.drawable.ic_otp_logo_circle)
             btnApplied.visibility = if (practice.isApplied) View.VISIBLE else View.GONE
 
-            itemView.setOnClickListener {
-                onItemClick(practice)
-            }
+            itemView.setOnClickListener { onItemClick(practice) }
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PracticeViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_job, parent, false) // ili item_practice ako ga napraviš
-        return PracticeViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: PracticeViewHolder, position: Int) {
-        holder.bind(getItem(position))
     }
 }

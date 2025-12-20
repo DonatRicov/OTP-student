@@ -1,5 +1,6 @@
 package hr.foi.air.otpstudent
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -8,14 +9,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Tasks
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import hr.foi.air.otpstudent.Practice
-import hr.foi.air.otpstudent.PracticeAdapter
-
 
 class PraksaFragment : Fragment(R.layout.fragment_praksa) {
 
@@ -27,7 +23,6 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
     private lateinit var tvAllPractices: TextView
 
     private lateinit var adapter: PracticeAdapter
-
     private var allPractices: List<Practice> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,16 +36,12 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
         tvAllPractices = view.findViewById(R.id.btnFavourites)
 
         tvAllPractices.setOnClickListener {
-
         }
 
 
         adapter = PracticeAdapter { practice ->
-            Toast.makeText(
-                requireContext(),
-                "Odabrana praksa: ${practice.title}",
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = PracticeDetailsActivity.newIntent(requireContext(), practice)
+            startActivity(intent)
         }
 
 
@@ -89,11 +80,9 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
     }
 
     private fun loadPracticesWithUserStatus() {
-        val practicesTask = db.collection("practice")
+        db.collection("practice")
             .orderBy("postedAt", Query.Direction.DESCENDING)
             .get()
-
-        practicesTask
             .addOnSuccessListener { snapshot ->
                 val practices = snapshot.documents.map { doc ->
                     Practice(
