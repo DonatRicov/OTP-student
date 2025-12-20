@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Top bar -->
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="28dp"
@@ -45,7 +44,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- Scroll content -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollPracticeDetails"
         android:layout_width="0dp"
@@ -101,7 +99,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- 3 small cards -->
             <LinearLayout
                 android:id="@+id/llCards"
                 android:layout_width="0dp"
@@ -240,7 +237,6 @@
 
             </LinearLayout>
 
-            <!-- Big info card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardInfo"
                 android:layout_width="0dp"
@@ -301,6 +297,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/cbAppliedDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Prijavljeno"
+        android:checked="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnApply" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnApply"
