@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
+import androidx.navigation.fragment.findNavController
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -92,11 +93,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
-            // TO DO: Odradener prakse
+            findNavController().navigate(R.id.action_nav_profile_to_practiceFulfilledFragment)
         }
 
+
+
+
+
+
+
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
-            // TO DO: Moji poslovi
+            // TO DO: Moji poslovi //tu su bodovi sad a ne poslovi
         }
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
