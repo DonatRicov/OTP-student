@@ -11,8 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class PracticeDetailsActivity : AppCompatActivity() {
+
+    private val db = FirebaseFirestore.getInstance()
+    private var isApplied = false
 
     companion object {
         const val EXTRA_ID = "practice_id"
@@ -62,7 +69,6 @@ class PracticeDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_practice_details)
 
-        // (možeš kasnije obrisati)
         Toast.makeText(this, "Otvoreni detalji prakse", Toast.LENGTH_SHORT).show()
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
@@ -76,6 +82,39 @@ class PracticeDetailsActivity : AppCompatActivity() {
         val tvAreas = findViewById<TextView>(R.id.tvAreas)
         val btnApply = findViewById<MaterialButton>(R.id.btnApply)
 
+        val cbApplied = findViewById<com.google.android.material.checkbox.MaterialCheckBox>(R.id.cbAppliedDetails)
+
+        val practiceId = intent.getStringExtra(EXTRA_ID)
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        cbApplied.setOnClickListener {
+            if (isApplied) {
+                Toast.makeText(this, "Praksa je prijavljena.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Praksa nije prijavljena.", Toast.LENGTH_SHORT).show()
+            }
+            cbApplied.isChecked = isApplied
+        }
+
+        if (!practiceId.isNullOrBlank() && !userId.isNullOrBlank()) {
+            db.collection("users").document(userId)
+                .collection("appliedPractices")
+                .document(practiceId)
+                .get()
+                .addOnSuccessListener { doc ->
+                    isApplied = doc.exists()
+                    cbApplied.isChecked = isApplied
+
+                    if (isApplied) {
+                        btnApply.text = "Prijavljeno"
+                        btnApply.isEnabled = false
+                    }
+                }
+        } else {
+            isApplied = false
+            cbApplied.isChecked = false
+        }
+
         tvTitle.text = intent.getStringExtra(EXTRA_TITLE).orEmpty().ifBlank { "-" }
         tvCompany.text = intent.getStringExtra(EXTRA_COMPANY).orEmpty().ifBlank { "-" }
         tvComp.text = intent.getStringExtra(EXTRA_COMPENSATION).orEmpty().ifBlank { "-" }
@@ -87,11 +126,42 @@ class PracticeDetailsActivity : AppCompatActivity() {
         val url = intent.getStringExtra(EXTRA_APPLY_URL)
 
         btnApply.setOnClickListener {
+            val url = intent.getStringExtra(EXTRA_APPLY_URL)
+
             if (url.isNullOrBlank()) {
                 Toast.makeText(this, "Link za prijavu nije dostupan.", Toast.LENGTH_SHORT).show()
-            } else {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                return@setOnClickListener
             }
+
+            if (practiceId.isNullOrBlank() || userId.isNullOrBlank()) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                return@setOnClickListener
+            }
+
+            if (isApplied) {
+                Toast.makeText(this, "Već ste prijavljeni na ovu praksu.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            db.collection("users").document(userId)
+                .collection("appliedPractices")
+                .document(practiceId)
+                .set(mapOf("createdAt" to FieldValue.serverTimestamp()))
+                .addOnSuccessListener {
+                    isApplied = true
+                    cbApplied.isChecked = true
+
+                    btnApply.text = "Prijavljeno"
+                    btnApply.isEnabled = false
+
+                    Toast.makeText(this, "Praksa je prijavljena.", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Greška pri spremanju prijave: ${e.message}", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
         }
+
     }
 }
