@@ -84,11 +84,9 @@
         <!-- Filter gumb ZALJEPLJEN LIJEVO -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilter"
-            style="@style/Tekst"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_filter"
-            android:drawablePadding="6dp"
             android:gravity="center_vertical"
             android:paddingHorizontal="20dp"
             android:paddingVertical="5dp"
@@ -96,11 +94,13 @@
             android:textColor="@color/white"
             app:backgroundTint="@color/otp_green_dark"
             app:cornerRadius="5dp"
-            app:drawableTint="@color/white"
+            app:icon="@drawable/ic_filter"
+            app:iconPadding="6dp"
+            app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.133" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <!-- Favoriti -->
         <TextView
@@ -143,7 +143,7 @@
 
     <!-- popis poslova -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvJobs"
+        android:id="@+id/rvPractices"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
