@@ -9,17 +9,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Locale
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PracticeDetailsActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
+
     private var isApplied = false
+    private var isFavorite = false
+
+    private lateinit var ivFavorite: ImageView
 
     companion object {
         const val EXTRA_ID = "practice_id"
@@ -73,6 +76,8 @@ class PracticeDetailsActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
 
+        ivFavorite = findViewById(R.id.ivFavorite)
+
         val tvTitle = findViewById<TextView>(R.id.tvPracticeTitle)
         val tvCompany = findViewById<TextView>(R.id.tvCompanyName)
         val tvComp = findViewById<TextView>(R.id.tvCompensationValue)
@@ -81,21 +86,30 @@ class PracticeDetailsActivity : AppCompatActivity() {
         val tvDesc = findViewById<TextView>(R.id.tvDescription)
         val tvAreas = findViewById<TextView>(R.id.tvAreas)
         val btnApply = findViewById<MaterialButton>(R.id.btnApply)
-
         val cbApplied = findViewById<com.google.android.material.checkbox.MaterialCheckBox>(R.id.cbAppliedDetails)
 
         val practiceId = intent.getStringExtra(EXTRA_ID)
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
+        tvTitle.text = intent.getStringExtra(EXTRA_TITLE).orEmpty().ifBlank { "-" }
+        tvCompany.text = intent.getStringExtra(EXTRA_COMPANY).orEmpty().ifBlank { "-" }
+        tvComp.text = intent.getStringExtra(EXTRA_COMPENSATION).orEmpty().ifBlank { "-" }
+        tvLoc.text = intent.getStringExtra(EXTRA_LOCATION).orEmpty().ifBlank { "-" }
+        tvDur.text = intent.getStringExtra(EXTRA_DURATION).orEmpty().ifBlank { "-" }
+        tvDesc.text = intent.getStringExtra(EXTRA_DESCRIPTION).orEmpty().ifBlank { "-" }
+        tvAreas.text = intent.getStringExtra(EXTRA_AREAS).orEmpty().ifBlank { "-" }
+
+        // samo prikazuje status
         cbApplied.setOnClickListener {
-            if (isApplied) {
-                Toast.makeText(this, "Praksa je prijavljena.", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Praksa nije prijavljena.", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(
+                this,
+                if (isApplied) "Praksa je prijavljena." else "Praksa nije prijavljena.",
+                Toast.LENGTH_SHORT
+            ).show()
             cbApplied.isChecked = isApplied
         }
 
+        // dohvat applied
         if (!practiceId.isNullOrBlank() && !userId.isNullOrBlank()) {
             db.collection("users").document(userId)
                 .collection("appliedPractices")
@@ -104,7 +118,6 @@ class PracticeDetailsActivity : AppCompatActivity() {
                 .addOnSuccessListener { doc ->
                     isApplied = doc.exists()
                     cbApplied.isChecked = isApplied
-
                     if (isApplied) {
                         btnApply.text = "Prijavljeno"
                         btnApply.isEnabled = false
@@ -115,16 +128,49 @@ class PracticeDetailsActivity : AppCompatActivity() {
             cbApplied.isChecked = false
         }
 
-        tvTitle.text = intent.getStringExtra(EXTRA_TITLE).orEmpty().ifBlank { "-" }
-        tvCompany.text = intent.getStringExtra(EXTRA_COMPANY).orEmpty().ifBlank { "-" }
-        tvComp.text = intent.getStringExtra(EXTRA_COMPENSATION).orEmpty().ifBlank { "-" }
-        tvLoc.text = intent.getStringExtra(EXTRA_LOCATION).orEmpty().ifBlank { "-" }
-        tvDur.text = intent.getStringExtra(EXTRA_DURATION).orEmpty().ifBlank { "-" }
-        tvDesc.text = intent.getStringExtra(EXTRA_DESCRIPTION).orEmpty().ifBlank { "-" }
-        tvAreas.text = intent.getStringExtra(EXTRA_AREAS).orEmpty().ifBlank { "-" }
+        // favoriti
+        isFavorite = false
+        updateFavoriteIcon()
 
-        val url = intent.getStringExtra(EXTRA_APPLY_URL)
+        if (!practiceId.isNullOrBlank() && !userId.isNullOrBlank()) {
+            db.collection("users").document(userId)
+                .collection("favorites")
+                .document(practiceId)
+                .get()
+                .addOnSuccessListener { doc ->
+                    isFavorite = doc.exists()
+                    updateFavoriteIcon()
+                }
+        }
 
+        ivFavorite.setOnClickListener {
+            if (practiceId.isNullOrBlank() || userId.isNullOrBlank()) {
+                Toast.makeText(this, "Morate biti prijavljeni.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val favRef = db.collection("users").document(userId)
+                .collection("favorites")
+                .document(practiceId)
+
+            if (isFavorite) {
+                favRef.delete()
+                    .addOnSuccessListener {
+                        isFavorite = false
+                        updateFavoriteIcon()
+                        Toast.makeText(this, "Uklonjeno iz favorita.", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                favRef.set(mapOf("createdAt" to FieldValue.serverTimestamp()))
+                    .addOnSuccessListener {
+                        isFavorite = true
+                        updateFavoriteIcon()
+                        Toast.makeText(this, "Dodano u favorite.", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
+
+        // prijava
         btnApply.setOnClickListener {
             val url = intent.getStringExtra(EXTRA_APPLY_URL)
 
@@ -133,13 +179,14 @@ class PracticeDetailsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // nije prijavljen
             if (practiceId.isNullOrBlank() || userId.isNullOrBlank()) {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 return@setOnClickListener
             }
 
             if (isApplied) {
-                Toast.makeText(this, "Već ste prijavljeni na ovu praksu.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Već ste prijavljeni.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -150,18 +197,35 @@ class PracticeDetailsActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     isApplied = true
                     cbApplied.isChecked = true
-
                     btnApply.text = "Prijavljeno"
                     btnApply.isEnabled = false
-
                     Toast.makeText(this, "Praksa je prijavljena.", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Greška pri spremanju prijave: ${e.message}", Toast.LENGTH_LONG).show()
+                    // (iz koda 1) failure handling + ipak otvori link
+                    Toast.makeText(
+                        this,
+                        "Greška pri spremanju prijave: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
         }
+    }
 
+    // promjena izgleda zvezdice
+    private fun updateFavoriteIcon() {
+        ivFavorite.setImageResource(
+            if (isFavorite) android.R.drawable.btn_star_big_on
+            else android.R.drawable.btn_star_big_off
+        )
+
+        ivFavorite.setColorFilter(
+            getColor(
+                if (isFavorite) R.color.otp_green_dark
+                else R.color.otp_grey
+            )
+        )
     }
 }
