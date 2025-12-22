@@ -15,7 +15,7 @@
         android:layout_marginTop="18dp"
         android:contentDescription="@string/back"
         android:src="@drawable/ic_arrow_back"
-        android:tint="?attr/colorPrimary"
+        app:tint="?attr/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -38,10 +38,10 @@
         android:layout_height="28dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="18dp"
+        app:tint="?attr/colorPrimary"
         android:contentDescription="@string/favorite"
         android:src="@android:drawable/btn_star_big_off"
-        android:tint="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
@@ -67,7 +67,7 @@
                 android:layout_width="74dp"
                 android:layout_height="74dp"
                 android:src="@drawable/ic_construction"
-                android:tint="?attr/colorPrimary"
+                app:tint="?attr/colorPrimary"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -130,7 +130,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_practice_money"
-                            android:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -172,7 +172,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_practice_location"
-                            android:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -213,7 +213,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_practice_clock"
-                            android:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
