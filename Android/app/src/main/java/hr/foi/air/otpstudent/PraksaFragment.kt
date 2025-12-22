@@ -117,6 +117,25 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
             }
     }
 
+    private fun markExpiredPracticesLocally() {
+        val now = com.google.firebase.Timestamp.now()
+
+        val updated = allPractices.map { practice ->
+            val exp = practice.expiresAt
+            if (exp != null && exp <= now && !practice.isClosed) {
+                db.collection("practice")
+                    .document(practice.id)
+                    .update("isClosed", true)
+                practice.copy(isClosed = true)
+            } else {
+                practice
+            }
+        }
+
+        allPractices = updated
+    }
+
+
     override fun onResume() {
         super.onResume()
         loadPracticesWithUserStatus()
