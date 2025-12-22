@@ -105,6 +105,7 @@ class PraksaFragment : Fragment(R.layout.fragment_praksa) {
                 }
 
                 allPractices = practices
+                markExpiredPracticesLocally()
                 applySearch(etSearch.text?.toString().orEmpty())
             }
             .addOnFailureListener { e ->
