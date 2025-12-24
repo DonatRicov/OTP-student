@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.profile
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -16,8 +16,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import hr.foi.air.otpstudent.ui.profile.ProfileSetupActivity
+import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.StartActivity
+import hr.foi.air.otpstudent.ui.cv.MyCvActivity
 import java.io.File
-import androidx.navigation.fragment.findNavController
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -93,17 +96,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
-            findNavController().navigate(R.id.action_nav_profile_to_practiceFulfilledFragment)
+            // TO DO: Odradener prakse
         }
 
-
-
-
-
-
-
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
-            // TO DO: Moji poslovi //tu su bodovi sad a ne poslovi
+            // TO DO: Moji poslovi
         }
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
