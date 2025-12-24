@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.jobs
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import hr.foi.air.otpstudent.model.Job
+import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.domain.model.Job
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -72,6 +73,7 @@ class JobAdapter(
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(currentList[position])
     }
+
 }
