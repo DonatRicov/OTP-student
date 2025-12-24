@@ -55,13 +55,13 @@
 
     <string name="cd_back">Natrag</string>
 
-    <string name="practice_details_title">Detalji prakse</string>
-    <string name="practice_field_compensation">Naknada</string>
-    <string name="practice_field_location">Lokacija</string>
-    <string name="practice_field_duration">Trajanje</string>
-    <string name="practice_section_description">Opis prakse</string>
-    <string name="practice_section_areas">Područja</string>
-    <string name="practice_apply_button">Prijavi se</string>
+    <string name="internship_details_title">Detalji prakse</string>
+    <string name="internship_field_compensation">Naknada</string>
+    <string name="internship_field_location">Lokacija</string>
+    <string name="internship_field_duration">Trajanje</string>
+    <string name="internship_section_description">Opis prakse</string>
+    <string name="internship_section_areas">Područja</string>
+    <string name="internship_apply_button">Prijavi se</string>
 
     <string name="back">Natrag</string>
     <string name="favorite">Favorit</string>
