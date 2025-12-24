@@ -1,14 +1,16 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.data.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import hr.foi.air.otpstudent.domain.model.CvDocument
+import hr.foi.air.otpstudent.domain.repository.CvRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import android.util.Log
 
-class FirebaseCvRepository(
+class FirebaseCvRepositoryImpl(
     private val userId: String
 ) : CvRepository {
 
@@ -34,7 +36,6 @@ class FirebaseCvRepository(
 
 
     override suspend fun addCv(cv: CvDocument) {
-        // kolekcija: users/{userId}/cvs/{cv.id}
         firestore.collection("users")
             .document(userId)
             .collection("cvs")
@@ -62,7 +63,6 @@ class FirebaseCvRepository(
             .delete()
             .await()
 
-        // Brisanje filea
         try {
             storageRef.child("cvs")
                 .child(userId)
