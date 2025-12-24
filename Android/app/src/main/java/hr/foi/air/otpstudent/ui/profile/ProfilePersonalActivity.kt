@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
+import hr.foi.air.otpstudent.MainActivity
+import hr.foi.air.otpstudent.R
 
 class ProfilePersonalActivity : AppCompatActivity() {
 
