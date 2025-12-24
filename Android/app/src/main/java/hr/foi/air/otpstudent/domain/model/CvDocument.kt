@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.domain.model
 
 data class CvDocument(
     val id: String = "",

@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent.model
+package hr.foi.air.otpstudent.domain.model
 
 import com.google.firebase.Timestamp
 

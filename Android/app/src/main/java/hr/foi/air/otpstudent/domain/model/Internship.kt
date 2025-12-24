@@ -1,8 +1,8 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.domain.model
 
 import com.google.firebase.Timestamp
 
-data class Practice(
+data class Internship(
     val id: String = "",
     val title: String = "",
     val company: String = "",
