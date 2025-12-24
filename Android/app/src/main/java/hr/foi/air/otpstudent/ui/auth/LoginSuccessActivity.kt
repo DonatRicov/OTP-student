@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.auth
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -10,8 +10,12 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import hr.foi.air.otpstudent.MainActivity
+import hr.foi.air.otpstudent.QuickLoginOfferActivity
+import hr.foi.air.otpstudent.R
+
 class LoginSuccessActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
