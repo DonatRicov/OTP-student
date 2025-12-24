@@ -1,9 +1,7 @@
-package hr.foi.air.otpstudent
-
+package hr.foi.air.otpstudent.domain.repository
 
 import android.net.Uri
-
-/*Interface za bp*/
+import hr.foi.air.otpstudent.domain.model.CvDocument
 
 interface CvRepository {
     suspend fun saveFile(uri: Uri, fileName: String): String?
@@ -11,4 +9,3 @@ interface CvRepository {
     suspend fun getAllCvs(): List<CvDocument>
     suspend fun deleteCv(cv: CvDocument)
 }
-
