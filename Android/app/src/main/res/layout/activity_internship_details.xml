@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootPracticeDetails"
+    android:id="@+id/rootInternshipDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -23,7 +23,7 @@
         android:id="@+id/tvScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/practice_details_title"
+        android:text="@string/internship_details_title"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="?attr/colorPrimary"
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollPracticeDetails"
+        android:id="@+id/scrollInternshipDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -73,7 +73,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                android:id="@+id/tvPracticeTitle"
+                android:id="@+id/tvInternshipTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
@@ -95,7 +95,7 @@
                 android:textSize="14sp"
                 android:textColor="#8A8A8A"
                 android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/tvPracticeTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvInternshipTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -129,14 +129,14 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
-                            android:src="@drawable/ic_practice_money"
+                            android:src="@drawable/ic_money"
                             app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@string/practice_field_compensation"
+                            android:text="@string/internship_field_compensation"
                             android:textSize="12sp"
                             android:textColor="#8A8A8A"/>
 
@@ -171,14 +171,14 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
-                            android:src="@drawable/ic_practice_location"
+                            android:src="@drawable/ic_location"
                             app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@string/practice_field_location"
+                            android:text="@string/internship_field_location"
                             android:textSize="12sp"
                             android:textColor="#8A8A8A"/>
 
@@ -212,14 +212,14 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
-                            android:src="@drawable/ic_practice_clock"
+                            android:src="@drawable/ic_history"
                             app:tint="?attr/colorPrimary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@string/practice_field_duration"
+                            android:text="@string/internship_field_duration"
                             android:textSize="12sp"
                             android:textColor="#8A8A8A"/>
 
@@ -260,7 +260,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/practice_section_description"
+                        android:text="@string/internship_section_description"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         android:textColor="?android:attr/textColorPrimary"/>
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/practice_section_areas"
+                        android:text="@string/internship_section_areas"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         android:textColor="?android:attr/textColorPrimary"/>
@@ -316,7 +316,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="18dp"
-        android:text="@string/practice_apply_button"
+        android:text="@string/internship_apply_button"
         android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="@android:color/white"
