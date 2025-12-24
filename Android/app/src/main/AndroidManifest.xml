@@ -19,25 +19,26 @@
         android:theme="@style/Theme.OTPStudent">
 
         <activity
-            android:name=".JobDetailsActivity"
+            android:name="hr.foi.air.otpstudent.ui.jobs.JobDetailsActivity"
             android:exported="false" />
         <!-- Login Activity -->
-        <activity android:name=".LoginActivity" />
+        <activity android:name="hr.foi.air.otpstudent.ui.auth.LoginActivity" />
         <activity
-            android:name=".LoginSuccessActivity"
+            android:name="hr.foi.air.otpstudent.ui.auth.LoginSuccessActivity"
             android:exported="false"
             android:label="Prijava uspješna" /> <!-- Main Activity -->
         <activity android:name=".MainActivity" /> <!-- Register Activity -->
         <activity
-            android:name=".RegisterActivity"
-            android:exported="true"></activity>
+            android:name="hr.foi.air.otpstudent.ui.auth.RegisterActivity"
+            android:exported="true" />
+
         <activity
-            android:name=".ProfilePersonalActivity"
+            android:name="hr.foi.air.otpstudent.ui.profile.ProfilePersonalActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileFacultyActivity"
+            android:name="hr.foi.air.otpstudent.ui.profile.ProfileFacultyActivity"
             android:exported="false" />
-        <activity android:name=".ProfileSetupActivity" />
+        <activity android:name="hr.foi.air.otpstudent.ui.profile.ProfileSetupActivity" />
         <activity
             android:name=".StartActivity"
             android:exported="true"
@@ -48,9 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MyCvActivity" />
+        <activity android:name="hr.foi.air.otpstudent.ui.cv.MyCvActivity" />
         <activity android:name=".QuickLoginOfferActivity" />
-        <activity android:name=".PinUnlockActivity" />
+        <activity android:name="hr.foi.air.otpstudent.ui.auth.PinUnlockActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -61,7 +62,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".PracticeDetailsActivity" />
+        <activity android:name=".ui.internship.InternshipDetailsActivity" />
 
 
     </application>
