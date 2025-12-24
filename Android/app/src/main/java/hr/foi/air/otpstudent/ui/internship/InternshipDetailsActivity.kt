@@ -78,7 +78,6 @@ class InternshipDetailsActivity : AppCompatActivity() {
 
         ivFavorite.setOnClickListener { viewModel.toggleFavorite() }
 
-        // checkbox je samo display
         cbApplied.setOnClickListener {
             cbApplied.isChecked = viewModel.state.value.isApplied
             Toast.makeText(
@@ -105,7 +104,6 @@ class InternshipDetailsActivity : AppCompatActivity() {
                 viewModel.apply()
             }
 
-            // kao u tvom kodu: nakon apply otvori link
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
 

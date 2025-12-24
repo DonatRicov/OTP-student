@@ -36,10 +36,10 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rv = view.findViewById(R.id.rvInternships)      // ako ti je isti id kao u internship fulfilled, prilagodi
+        rv = view.findViewById(R.id.rvInternships)
         etSearch = view.findViewById(R.id.etSearch)
-        btnFilter = view.findViewById(R.id.btnFilter) // ako postoji u layoutu
-        tvActiveFilters = view.findViewById(R.id.tvActiveFilters) // ako postoji
+        btnFilter = view.findViewById(R.id.btnFilter)
+        tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
         tvEmpty = view.findViewById(R.id.tvEmpty)
 
         adapter = InternshipAdapter { internship ->
