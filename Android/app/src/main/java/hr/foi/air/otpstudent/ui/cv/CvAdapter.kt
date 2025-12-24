@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.cv
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.domain.model.CvDocument
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -32,7 +34,6 @@ class CvAdapter(
         val cv = cvList[position]
         holder.tvName.text = cv.fileName
 
-        // Za datum i vrime dio
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         holder.tvDate.text = sdf.format(Date(cv.timestamp))
 
@@ -42,7 +43,6 @@ class CvAdapter(
 
     override fun getItemCount() = cvList.size
 
-    // Helper
     fun updateData(newList: List<CvDocument>) {
         cvList = newList
         notifyDataSetChanged()
