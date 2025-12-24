@@ -1,30 +1,32 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.profile
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import hr.foi.air.otpstudent.R
 import java.io.File
 import java.util.Calendar
-import android.view.LayoutInflater
-import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ProfileSetupActivity : AppCompatActivity() {
 
@@ -33,15 +35,12 @@ class ProfileSetupActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var currentUid: String
 
-    // profilna
     private lateinit var imgAvatar: ShapeableImageView
     private lateinit var imgEditPhoto: ImageView
     private var cameraImageUri: Uri? = null
 
-    // header ime
-    private lateinit var tvFullNameHeader: android.widget.TextView
+    private lateinit var tvFullNameHeader: TextView
 
-    // polja u formi
     private lateinit var etFirstName: TextInputEditText
     private lateinit var etLastName: TextInputEditText
     private lateinit var etEmail: TextInputEditText
@@ -58,13 +57,11 @@ class ProfileSetupActivity : AppCompatActivity() {
     private lateinit var btnSave: MaterialButton
     private lateinit var btnCancel: MaterialButton
 
-    // launcher za odabir slike iz galerije
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { setAvatarImage(it) }
         }
 
-    // launcher za slikanje kamerom
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
             if (success) {
@@ -93,25 +90,21 @@ class ProfileSetupActivity : AppCompatActivity() {
         val uid = user.uid
         currentUid = uid
 
-        // back
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
             showDiscardChangesDialog()
         }
 
-        // slikica
         imgAvatar = findViewById(R.id.imgAvatar)
         imgEditPhoto = findViewById(R.id.imgEditPhoto)
 
-        val avatarClickListener = android.view.View.OnClickListener {
+        val avatarClickListener = View.OnClickListener {
             showChooseImageDialog()
         }
         imgAvatar.setOnClickListener(avatarClickListener)
         imgEditPhoto.setOnClickListener(avatarClickListener)
 
-        // header
         tvFullNameHeader = findViewById(R.id.tvFullName)
 
-        // form fields
         etFirstName       = findViewById(R.id.tvNameValue)
         etLastName        = findViewById(R.id.etLastName)
         etEmail           = findViewById(R.id.tvEmailValue)
@@ -128,12 +121,10 @@ class ProfileSetupActivity : AppCompatActivity() {
         btnSave           = findViewById(R.id.btnSave)
         btnCancel         = findViewById(R.id.btnCancel)
 
-        // UČITAJ POSTOJEĆE PODATKE IZ BAZE
         db.collection("users").document(uid).get()
             .addOnSuccessListener { doc ->
                 if (doc != null && doc.exists()) {
 
-                    // razdvajanje imena i prezimena
                     val fullName = doc.getString("fullName") ?: ""
                     if (fullName.isNotEmpty()) {
                         val parts = fullName.trim().split(" ")
@@ -145,7 +136,6 @@ class ProfileSetupActivity : AppCompatActivity() {
                         tvFullNameHeader.text = fullName
                     }
 
-                    // inace
                     doc.getString("firstName")?.let { if (it.isNotEmpty()) etFirstName.setText(it) }
                     doc.getString("lastName")?.let  { if (it.isNotEmpty()) etLastName.setText(it) }
 
@@ -181,7 +171,6 @@ class ProfileSetupActivity : AppCompatActivity() {
                         false
                     )
 
-                    // profilna iz baze gdje je ima ako je ima
                     doc.getString("avatarUrl")
                         ?.takeIf { it.isNotEmpty() }
                         ?.let { url ->
@@ -191,10 +180,8 @@ class ProfileSetupActivity : AppCompatActivity() {
                                 .into(imgAvatar)
                         }
 
-                    // Lozinka to be reworked
                     etPassword.setText("************")
                 } else {
-                    // dokument ne postoji
                     etEmail.setText(user.email ?: "")
                     tvFullNameHeader.text = "Uredi profil"
                 }
@@ -203,7 +190,6 @@ class ProfileSetupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Greška pri dohvaćanju podataka: ${e.message}", Toast.LENGTH_LONG).show()
             }
 
-        // DatePicker
         etBirthday.setOnClickListener {
             showDatePicker { formatted ->
                 etBirthday.setText(formatted)
@@ -211,7 +197,6 @@ class ProfileSetupActivity : AppCompatActivity() {
         }
 
 
-        // SPREMI PROMJENE
         btnSave.setOnClickListener {
             val firstName      = etFirstName.text?.toString()?.trim() ?: ""
             val lastName       = etLastName.text?.toString()?.trim() ?: ""
@@ -260,14 +245,12 @@ class ProfileSetupActivity : AppCompatActivity() {
                 }
         }
 
-        // Natrag gumb
         btnCancel.setOnClickListener {
             showDiscardChangesDialog()
         }
 
     }
 
-    // Galerija/KAmera za sliku
     private fun showChooseImageDialog() {
         AlertDialog.Builder(this)
             .setTitle("Profilna slika")
@@ -304,7 +287,7 @@ class ProfileSetupActivity : AppCompatActivity() {
     }
 
     private fun uploadAvatarToStorage(uid: String, imageUri: Uri) {
-        //
+
 
         val ref = storage.reference.child("avatars/$uid/profile.jpg")
 
@@ -343,10 +326,10 @@ class ProfileSetupActivity : AppCompatActivity() {
         val dialogView = LayoutInflater.from(this)
             .inflate(R.layout.dialog_discard_changes, null)
 
-        val btnDiscard = dialogView.findViewById<com.google.android.material.button.MaterialButton>(
+        val btnDiscard = dialogView.findViewById<MaterialButton>(
             R.id.btnDiscardChanges
         )
-        val btnContinue = dialogView.findViewById<com.google.android.material.button.MaterialButton>(
+        val btnContinue = dialogView.findViewById<MaterialButton>(
             R.id.btnContinueEditing
         )
 
@@ -357,12 +340,10 @@ class ProfileSetupActivity : AppCompatActivity() {
 
         btnDiscard.setOnClickListener {
             alertDialog.dismiss()
-            // confirm za odbacivanje ili ostajanje na screenu
             finish()
         }
 
         btnContinue.setOnClickListener {
-            // samo zatvori popup, ostani na ekranu
             alertDialog.dismiss()
         }
 
