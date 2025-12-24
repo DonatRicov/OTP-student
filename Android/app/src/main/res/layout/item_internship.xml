@@ -99,10 +99,6 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp"/>
 
-
-
-
-
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
