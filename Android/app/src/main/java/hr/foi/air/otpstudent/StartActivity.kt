@@ -7,6 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import hr.foi.air.core.auth.AuthRegistry
+import hr.foi.air.otpstudent.ui.auth.PinUnlockActivity
+import hr.foi.air.otpstudent.ui.auth.RegisterActivity
+import hr.foi.air.otpstudent.ui.auth.LoginActivity
 
 class StartActivity : AppCompatActivity() {
 
