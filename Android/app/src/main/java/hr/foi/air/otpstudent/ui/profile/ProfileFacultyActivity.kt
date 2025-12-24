@@ -1,11 +1,13 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.otpstudent.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import androidx.appcompat.app.AppCompatActivity
+import hr.foi.air.otpstudent.MainActivity
+import hr.foi.air.otpstudent.R
 
 class ProfileFacultyActivity : AppCompatActivity() {
 
@@ -26,7 +28,6 @@ class ProfileFacultyActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            // za firestore dio
             goToMain()
         }
     }
