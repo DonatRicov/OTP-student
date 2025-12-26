@@ -5,38 +5,155 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:gravity="top"
+    android:background="@android:color/white">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPin"
+    <!-- Top bar -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="PIN (4 znamenke)">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberPassword"
-            android:maxLength="4" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            app:tint="@color/otp_green_dark" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnOk"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:text="OK"
-        android:textAllCaps="false"
-        app:cornerRadius="90dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNotYou"
-        style="?attr/materialButtonOutlinedStyle"
+    </RelativeLayout>
+
+    <!-- Lock icon -->
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_lock"/>
+
+    <!-- Title -->
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Ovo niste vi?"
-        android:textAllCaps="false"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="Prijava unosom PIN-a"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <!-- PIN dots -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <View android:id="@+id/pin1" style="@style/PinBox"/>
+        <View android:id="@+id/pin2" style="@style/PinBox"/>
+        <View android:id="@+id/pin3" style="@style/PinBox"/>
+        <View android:id="@+id/pin4" style="@style/PinBox"/>
+        <View android:id="@+id/pin5" style="@style/PinBox"/>
+        <View android:id="@+id/pin6" style="@style/PinBox"/>
+    </LinearLayout>
+
+    <!-- Forgot PIN -->
+    <TextView
+        android:id="@+id/tvForgotPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:text="Zaboravili ste pin?"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"/>
+
+    <!-- Other login -->
+    <TextView
+        android:id="@+id/tvOtherLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:text="Drugi načini prijave"
+        android:textStyle="bold"
+        android:textColor="@color/otp_orange"/>
+
+    <!-- Keypad -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:columnCount="3"
+        android:alignmentMode="alignMargins"
+        android:useDefaultMargins="true">
+
+        <Button
+            android:id="@+id/key1"
+            style="@style/KeypadButton"
+            android:text="1"/>
+
+        <Button
+            android:id="@+id/key2"
+            style="@style/KeypadButton"
+            android:text="2"/>
+
+        <Button
+            android:id="@+id/key3"
+            style="@style/KeypadButton"
+            android:text="3"/>
+
+        <Button
+            android:id="@+id/key4"
+            style="@style/KeypadButton"
+            android:text="4"/>
+
+        <Button
+            android:id="@+id/key5"
+            style="@style/KeypadButton"
+            android:text="5"/>
+
+        <Button
+            android:id="@+id/key6"
+            style="@style/KeypadButton"
+            android:text="6"/>
+
+        <Button
+            android:id="@+id/key7"
+            style="@style/KeypadButton"
+            android:text="7"/>
+
+        <Button
+            android:id="@+id/key8"
+            style="@style/KeypadButton"
+            android:text="8"/>
+
+        <Button
+            android:id="@+id/key9"
+            style="@style/KeypadButton"
+            android:text="9"/>
+
+        <Button
+            android:id="@+id/keyOk"
+            style="@style/KeypadButton"
+            android:text="OK"
+            android:textSize="12sp"/>
+
+        <Button
+            android:id="@+id/key0"
+            style="@style/KeypadButton"
+            android:text="0"/>
+
+        <ImageButton
+            android:id="@+id/keyDel"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_backspace"
+            android:tint="@android:color/darker_gray"/>
+    </GridLayout>
+
+
 </LinearLayout>
