@@ -16,6 +16,8 @@ import hr.foi.air.otpstudent.SecureCreds
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import android.widget.Button
+
 
 class PinUnlockActivity : AppCompatActivity() {
 
@@ -27,28 +29,12 @@ class PinUnlockActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin_unlock)
 
-        // Klikabilni linkovi
         val tvOtherLogin = findViewById<android.widget.TextView>(R.id.tvOtherLogin)
         val tvForgotPin = findViewById<android.widget.TextView>(R.id.tvForgotPin)
-
-// Keypad gumbi (moraš imati ove ID-eve u XML-u)
-        val keys = listOf(
-            findViewById<android.view.View>(R.id.key1) to "1",
-            findViewById<android.view.View>(R.id.key2) to "2",
-            findViewById<android.view.View>(R.id.key3) to "3",
-            findViewById<android.view.View>(R.id.key4) to "4",
-            findViewById<android.view.View>(R.id.key5) to "5",
-            findViewById<android.view.View>(R.id.key6) to "6",
-            findViewById<android.view.View>(R.id.key7) to "7",
-            findViewById<android.view.View>(R.id.key8) to "8",
-            findViewById<android.view.View>(R.id.key9) to "9",
-            findViewById<android.view.View>(R.id.key0) to "0",
-        )
 
         val btnOk = findViewById<android.view.View>(R.id.keyOk)
         val btnDel = findViewById<android.view.View>(R.id.keyDel)
 
-// PIN kockice (6 kom)
         val pinBoxes = listOf(
             findViewById<android.view.View>(R.id.pin1),
             findViewById<android.view.View>(R.id.pin2),
@@ -61,21 +47,23 @@ class PinUnlockActivity : AppCompatActivity() {
         var pin = StringBuilder()
 
         fun renderPin() {
-            // popuni kockice (npr. promijeni alpha / background)
             pinBoxes.forEachIndexed { index, v ->
-                v.alpha = if (index < pin.length) 1f else 0.25f
+                v.setBackgroundResource(
+                    if (index < pin.length) R.drawable.pin_box_filled
+                    else R.drawable.pin_box_empty
+                )
             }
-            // po želji: OK enabled tek kad je unesen cijeli PIN
+
             btnOk.isEnabled = pin.length == 6
             btnOk.alpha = if (btnOk.isEnabled) 1f else 0.4f
         }
+
 
         fun appendDigit(d: String) {
             if (pin.length >= 6) return
             pin.append(d)
             renderPin()
             if (pin.length == 6) {
-                // Auto-submit čim je unesen PIN
                 viewModel.onPinEntered(pin.toString())
             }
         }
@@ -86,25 +74,44 @@ class PinUnlockActivity : AppCompatActivity() {
             renderPin()
         }
 
-        keys.forEach { (view, digit) ->
-            view.setOnClickListener { appendDigit(digit) }
+        val digitButtons = listOf(
+            findViewById<Button>(R.id.key1),
+            findViewById<Button>(R.id.key2),
+            findViewById<Button>(R.id.key3),
+            findViewById<Button>(R.id.key4),
+            findViewById<Button>(R.id.key5),
+            findViewById<Button>(R.id.key6),
+            findViewById<Button>(R.id.key7),
+            findViewById<Button>(R.id.key8),
+            findViewById<Button>(R.id.key9),
+        )
+        val btn0 = findViewById<Button>(R.id.key0)
+
+        fun setupRandomKeypad() {
+            val digits = (1..9).map { it.toString() }.shuffled()
+
+            digitButtons.forEachIndexed { i, btn ->
+                val d = digits[i]
+                btn.text = d
+                btn.setOnClickListener { appendDigit(d) }
+            }
+
+            btn0.text = "0"
+            btn0.setOnClickListener { appendDigit("0") }
         }
+
+        setupRandomKeypad()
 
         btnDel.setOnClickListener { deleteDigit() }
 
-// Ako želiš ručni OK (umjesto auto-submit)
         btnOk.setOnClickListener {
             if (pin.length == 6) viewModel.onPinEntered(pin.toString())
         }
 
-// “Drugi načini prijave” (mapiramo na postojeći handler)
         tvOtherLogin.setOnClickListener { viewModel.onNotYouClicked() }
-
-// Ako “Zaboravili ste pin?” vodi na isti flow:
         tvForgotPin.setOnClickListener { viewModel.onNotYouClicked() }
 
         renderPin()
-
 
         lifecycleScope.launch {
             viewModel.effects.collectLatest { eff ->
@@ -127,11 +134,13 @@ class PinUnlockActivity : AppCompatActivity() {
                     }
                     is PinUnlockEffect.ShowMessage -> {
                         Toast.makeText(this@PinUnlockActivity, eff.message, Toast.LENGTH_LONG).show()
+
                     }
                 }
             }
         }
     }
+
 
     private inner class PinVmFactory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
