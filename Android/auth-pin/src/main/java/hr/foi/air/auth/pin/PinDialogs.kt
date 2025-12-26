@@ -10,18 +10,20 @@ import com.google.android.material.textfield.TextInputLayout
 
 object PinDialogs {
 
+    private const val PIN_LENGTH = 6
+
     fun showSetup(activity: FragmentActivity, onDone: (pin1: String, pin2: String) -> Unit) {
-        val til1 = TextInputLayout(activity).apply { hint = "PIN (4 znamenke)" }
+        val til1 = TextInputLayout(activity).apply { hint = "PIN ($PIN_LENGTH znamenki)" }
         val et1 = TextInputEditText(activity).apply {
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            filters = arrayOf(InputFilter.LengthFilter(4))
+            filters = arrayOf(InputFilter.LengthFilter(PIN_LENGTH))
         }
         til1.addView(et1)
 
         val til2 = TextInputLayout(activity).apply { hint = "Ponovi PIN" }
         val et2 = TextInputEditText(activity).apply {
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            filters = arrayOf(InputFilter.LengthFilter(4))
+            filters = arrayOf(InputFilter.LengthFilter(PIN_LENGTH))
         }
         til2.addView(et2)
 
@@ -46,7 +48,7 @@ object PinDialogs {
         val til = TextInputLayout(activity).apply { hint = "Unesi PIN" }
         val et = TextInputEditText(activity).apply {
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            filters = arrayOf(InputFilter.LengthFilter(4))
+            filters = arrayOf(InputFilter.LengthFilter(PIN_LENGTH))
         }
         til.addView(et)
 
