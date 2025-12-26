@@ -7,6 +7,9 @@ import hr.foi.air.core.auth.*
 
 class PinAuthPlugin : AuthPlugin {
 
+    private companion object {
+        const val PIN_LENGTH = 6
+    }
     override fun uiSpec() = AuthUiSpec(
         id = "pin",
         title = "Prijava PIN-om",
@@ -26,7 +29,7 @@ class PinAuthPlugin : AuthPlugin {
     override fun configure(activity: FragmentActivity, callback: (AuthResult) -> Unit) {
         PinDialogs.showSetup(activity) { p1, p2 ->
             when {
-                p1.length != 4 -> callback(AuthResult.Error("PIN mora imati 4 znamenke"))
+                p1.length != PIN_LENGTH -> callback(AuthResult.Error("PIN mora imati $PIN_LENGTH znamenki"))
                 p1 != p2 -> callback(AuthResult.Error("PIN se ne podudara"))
                 else -> {
                     PinStore.savePin(activity, p1)
