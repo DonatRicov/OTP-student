@@ -42,7 +42,7 @@
         <activity
             android:name=".StartActivity"
             android:exported="true"
-            android:label="Početni zaslon">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
