@@ -22,7 +22,7 @@ import hr.foi.air.core.auth.AuthRegistry
 import hr.foi.air.core.auth.AuthRequest
 import hr.foi.air.core.auth.AuthResult
 import hr.foi.air.otpstudent.R
-import hr.foi.air.otpstudent.SecureCreds
+import hr.foi.air.core.auth.SecureCreds
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

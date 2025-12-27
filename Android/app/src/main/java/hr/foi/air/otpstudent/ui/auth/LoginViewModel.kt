@@ -2,7 +2,7 @@ package hr.foi.air.otpstudent.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import hr.foi.air.otpstudent.SecureCreds
+import hr.foi.air.core.auth.SecureCreds
 import hr.foi.air.otpstudent.domain.repository.AuthRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*

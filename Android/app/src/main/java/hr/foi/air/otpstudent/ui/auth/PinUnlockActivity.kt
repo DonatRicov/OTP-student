@@ -12,7 +12,7 @@ import com.google.android.material.button.MaterialButton
 import hr.foi.air.auth.pin.PinVerifier
 import hr.foi.air.otpstudent.MainActivity
 import hr.foi.air.otpstudent.R
-import hr.foi.air.otpstudent.SecureCreds
+import hr.foi.air.core.auth.SecureCreds
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
