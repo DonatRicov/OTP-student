@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent
+package hr.foi.air.core.auth
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
