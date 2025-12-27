@@ -45,7 +45,11 @@ dependencies {
 
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("androidx.startup:startup-runtime:1.1.1")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+    implementation("com.google.firebase:firebase-auth")
+
 }
