@@ -56,6 +56,7 @@
 
         <activity android:name="hr.foi.air.otpstudent.ui.cv.MyCvActivity" />
         <activity android:name=".QuickLoginOfferActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
 
 
         <activity android:name=".ui.internship.InternshipDetailsActivity" />
