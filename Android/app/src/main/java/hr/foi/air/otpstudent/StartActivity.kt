@@ -12,12 +12,13 @@ import com.google.android.material.button.MaterialButton
 import hr.foi.air.auth.pin.PinUnlockActivity
 import hr.foi.air.auth.pin.PinUnlockContract
 import hr.foi.air.core.auth.AuthRegistry
+import hr.foi.air.core.auth.AuthRequest
+import hr.foi.air.core.auth.AuthResult
 import hr.foi.air.core.auth.SecureCreds
 import hr.foi.air.otpstudent.di.AppModule
 import hr.foi.air.otpstudent.ui.auth.LoginActivity
 import hr.foi.air.otpstudent.ui.auth.RegisterActivity
 import kotlinx.coroutines.launch
-
 class StartActivity : AppCompatActivity() {
 
     private val pinUnlockLauncher = registerForActivityResult(
@@ -39,15 +40,69 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (shouldUsePinUnlock()) {
-            pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
+    private fun launchUnlockFlow() {
+        val hasCreds =
+            !SecureCreds.getEmail(this).isNullOrBlank() &&
+                    !SecureCreds.getPass(this).isNullOrBlank()
+        if (!hasCreds) {
+            showStartScreen()
             return
         }
 
-        showStartScreen()
+        val bioPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "bio" }
+        val bioReady = bioPlugin?.isEnabled(this) == true && bioPlugin.isConfigured(this)
+
+        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
+        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
+
+        when {
+            bioReady -> {
+                // Biometrija ima prednost
+                bioPlugin.authenticate(this, AuthRequest()) { result ->
+                    runOnUiThread {
+                        when (result) {
+                            is AuthResult.Success -> {
+                                autoLoginWithSavedCreds()
+                            }
+
+                            is AuthResult.Error -> {
+                                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                                fallbackToPinOrStart()
+                            }
+
+                            AuthResult.Cancelled -> {
+                                fallbackToPinOrStart()
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            pinReady -> {
+                pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
+            }
+
+            else -> showStartScreen()
+        }
+    }
+    private fun fallbackToPinOrStart() {
+        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
+        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
+
+        if (pinReady) {
+            pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
+        } else {
+            showStartScreen()
+        }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        launchUnlockFlow()
+
     }
 
     private fun showStartScreen() {
