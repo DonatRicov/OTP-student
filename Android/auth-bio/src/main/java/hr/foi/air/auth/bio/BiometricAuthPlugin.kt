@@ -30,45 +30,44 @@ class BiometricAuthPlugin : AuthPlugin {
     }
 
     override fun configure(activity: FragmentActivity, callback: (AuthResult) -> Unit) {
-        authenticateInternal(activity) { success ->
-            if (success) callback(AuthResult.Success())
-            else callback(AuthResult.Error("Biometrija nije potvrđena"))
-        }
+        authenticateInternal(activity) { callback(it) }
     }
 
-    override fun authenticate(
-        activity: FragmentActivity,
-        request: AuthRequest,
-        callback: (AuthResult) -> Unit
-    ) {
-        authenticateInternal(activity) { success ->
-            if (success) callback(AuthResult.Success())
-            else callback(AuthResult.Error("Biometrijska provjera nije uspjela"))
-        }
+    override fun authenticate(activity: FragmentActivity, request: AuthRequest, callback: (AuthResult) -> Unit) {
+        authenticateInternal(activity) { callback(it) }
     }
 
     private fun authenticateInternal(
         activity: FragmentActivity,
-        onResult: (Boolean) -> Unit
-    ) {
+        onResult: (AuthResult) -> Unit
+    )
+    {
         val executor = ContextCompat.getMainExecutor(activity)
 
         val prompt = BiometricPrompt(
             activity,
             executor,
             object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
-                    onResult(true)
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    onResult(AuthResult.Success())
                 }
 
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    onResult(false)
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                        errorCode == BiometricPrompt.ERROR_CANCELED
+                    ) {
+                        onResult(AuthResult.Cancelled)
+                    } else {
+                        onResult(AuthResult.Error(errString.toString()))
+                    }
                 }
+
+                override fun onAuthenticationFailed() {
+                    // biometrika nije prepoznata (nije cancel)
+                    onResult(AuthResult.Error("Biometrijska provjera nije uspjela"))
+                }
+
             }
         )
 
