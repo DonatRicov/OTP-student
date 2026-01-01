@@ -156,7 +156,8 @@
             android:layout_height="64dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_backspace"
-            android:tint="@android:color/darker_gray"/>
+            app:tint="@android:color/darker_gray"
+            />
     </GridLayout>
 
 
