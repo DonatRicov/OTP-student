@@ -21,13 +21,16 @@
         <activity
             android:name="hr.foi.air.otpstudent.ui.jobs.JobDetailsActivity"
             android:exported="false" />
-        <!-- Login Activity -->
+
         <activity android:name="hr.foi.air.otpstudent.ui.auth.LoginActivity" />
+
         <activity
             android:name="hr.foi.air.otpstudent.ui.auth.LoginSuccessActivity"
             android:exported="false"
-            android:label="Prijava uspješna" /> <!-- Main Activity -->
-        <activity android:name=".MainActivity" /> <!-- Register Activity -->
+            android:label="Prijava uspješna" />
+
+        <activity android:name=".MainActivity" />
+
         <activity
             android:name="hr.foi.air.otpstudent.ui.auth.RegisterActivity"
             android:exported="true" />
@@ -35,23 +38,27 @@
         <activity
             android:name="hr.foi.air.otpstudent.ui.profile.ProfilePersonalActivity"
             android:exported="false" />
+
         <activity
             android:name="hr.foi.air.otpstudent.ui.profile.ProfileFacultyActivity"
             android:exported="false" />
+
         <activity android:name="hr.foi.air.otpstudent.ui.profile.ProfileSetupActivity" />
+
         <activity
             android:name=".StartActivity"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="hr.foi.air.otpstudent.ui.cv.MyCvActivity" />
         <activity android:name=".QuickLoginOfferActivity" />
-        <activity android:name="hr.foi.air.otpstudent.ui.auth.PinUnlockActivity" />
+
+
+        <activity android:name=".ui.internship.InternshipDetailsActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -61,9 +68,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
         </provider>
-        <activity android:name=".ui.internship.InternshipDetailsActivity" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -79,10 +84,7 @@
             <meta-data
                 android:name="hr.foi.air.auth.bio.BiometricAuthInitializer"
                 android:value="androidx.startup" />
-
         </provider>
 
-
     </application>
-
 </manifest>
