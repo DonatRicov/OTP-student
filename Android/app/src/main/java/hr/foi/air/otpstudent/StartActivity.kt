@@ -4,31 +4,53 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
+import hr.foi.air.auth.pin.PinUnlockActivity
+import hr.foi.air.auth.pin.PinUnlockContract
 import hr.foi.air.core.auth.AuthRegistry
 import hr.foi.air.core.auth.SecureCreds
-import hr.foi.air.otpstudent.ui.auth.PinUnlockActivity
-import hr.foi.air.otpstudent.ui.auth.RegisterActivity
+import hr.foi.air.otpstudent.di.AppModule
 import hr.foi.air.otpstudent.ui.auth.LoginActivity
+import hr.foi.air.otpstudent.ui.auth.RegisterActivity
+import kotlinx.coroutines.launch
 
 class StartActivity : AppCompatActivity() {
+
+    private val pinUnlockLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { res ->
+        if (res.resultCode != RESULT_OK) {
+            showStartScreen()
+            return@registerForActivityResult
+        }
+
+        when (res.data?.getStringExtra(PinUnlockContract.EXTRA_RESULT)) {
+            PinUnlockContract.RESULT_OK -> autoLoginWithSavedCreds()
+            PinUnlockContract.RESULT_NOT_YOU -> {
+                SecureCreds.clear(this)
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+            else -> showStartScreen()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Ako je PIN omogućen stavi pin unlock
         if (shouldUsePinUnlock()) {
-            startActivity(
-                Intent(this, PinUnlockActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                }
-            )
-            finish()
+            pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
             return
         }
 
-        // Baci korisnika na start screen
+        showStartScreen()
+    }
+
+    private fun showStartScreen() {
         setContentView(R.layout.activity_start)
 
         val btnRegister = findViewById<MaterialButton>(R.id.btnStartRegister)
@@ -50,6 +72,37 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
+    private fun autoLoginWithSavedCreds() {
+        val email = SecureCreds.getEmail(this).orEmpty()
+        val pass = SecureCreds.getPass(this).orEmpty()
+
+        if (email.isBlank() || pass.isBlank()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                AppModule.authRepository.login(email, pass)
+                startActivity(
+                    Intent(this@StartActivity, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                )
+                finish()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@StartActivity,
+                    e.message ?: "Prijava nije uspjela",
+                    Toast.LENGTH_LONG
+                ).show()
+                startActivity(Intent(this@StartActivity, LoginActivity::class.java))
+                finish()
+            }
+        }
+    }
+
     private fun shouldUsePinUnlock(): Boolean {
         val hasCreds =
             !SecureCreds.getEmail(this).isNullOrBlank() &&
@@ -57,8 +110,12 @@ class StartActivity : AppCompatActivity() {
 
         if (!hasCreds) return false
 
-        return AuthRegistry.available().any {
-            it.uiSpec().id in listOf("pin", "bio")
-        }
+        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
+        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
+
+        val bioPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "bio" }
+        val bioReady = bioPlugin?.isEnabled(this) == true && bioPlugin.isConfigured(this)
+
+        return pinReady || bioReady
     }
 }
