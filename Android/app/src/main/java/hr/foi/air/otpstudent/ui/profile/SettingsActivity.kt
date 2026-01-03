@@ -86,6 +86,10 @@ class SettingsActivity : AppCompatActivity() {
 
         val rowPin = findViewById<android.view.View>(R.id.rowPin)
         val tvPinTitle = findViewById<TextView>(R.id.tvPinTitle)
+        val ivPinChevron = findViewById<android.view.View>(R.id.ivPinChevron)
+        val switchPin = findViewById<SwitchMaterial>(R.id.switchPin)
+
+        var ignorePinSwitchCallback = false
 
         fun renderPinRow() {
             val plugin = pinPlugin()
@@ -93,16 +97,26 @@ class SettingsActivity : AppCompatActivity() {
                 tvPinTitle.text = "PIN nije dostupan"
                 rowPin.isEnabled = false
                 rowPin.alpha = 0.5f
+                ivPinChevron.visibility = android.view.View.VISIBLE
+                switchPin.visibility = android.view.View.GONE
                 return
             }
 
             val configured = plugin.isConfigured(this)
             val enabled = plugin.isEnabled(this)
 
-            tvPinTitle.text = when {
-                !configured -> "Postavi PIN"
-                enabled -> "PIN omogućen"
-                else -> "Omogući PIN"
+            if (!configured) {
+                tvPinTitle.text = "Postavi PIN"
+                ivPinChevron.visibility = android.view.View.VISIBLE
+                switchPin.visibility = android.view.View.GONE
+            } else {
+                tvPinTitle.text = "PIN"
+                ivPinChevron.visibility = android.view.View.GONE
+                switchPin.visibility = android.view.View.VISIBLE
+
+                ignorePinSwitchCallback = true
+                switchPin.isChecked = enabled
+                ignorePinSwitchCallback = false
             }
 
             rowPin.isEnabled = true
@@ -119,41 +133,43 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             val configured = plugin.isConfigured(this)
-            val enabled = plugin.isEnabled(this)
-
-            when {
-                !configured -> {
-                    plugin.configure(this) { result ->
-                        runOnUiThread {
-                            when (result) {
-                                is AuthResult.Success -> {
-                                    plugin.setEnabled(this, true)
-                                    Toast.makeText(this, "PIN uključen", Toast.LENGTH_SHORT).show()
-                                    renderPinRow()
-                                }
-                                is AuthResult.Error -> {
-                                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
-                                    renderPinRow()
-                                }
-                                AuthResult.Cancelled -> {
-                                    renderPinRow()
-                                }
+            if (!configured) {
+                plugin.configure(this) { result ->
+                    runOnUiThread {
+                        when (result) {
+                            is AuthResult.Success -> {
+                                plugin.setEnabled(this, true)
+                                Toast.makeText(this, "PIN postavljen i uključen", Toast.LENGTH_SHORT).show()
                             }
-
+                            is AuthResult.Error -> {
+                                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                            }
+                            AuthResult.Cancelled -> Unit
                         }
+                        renderPinRow()
                     }
                 }
-                enabled -> {
-                    plugin.setEnabled(this, false)
-                    Toast.makeText(this, "PIN isključen", Toast.LENGTH_SHORT).show()
-                    renderPinRow()
-                }
-                else -> {
-                    plugin.setEnabled(this, true)
-                    Toast.makeText(this, "PIN uključen", Toast.LENGTH_SHORT).show()
-                    renderPinRow()
-                }
+            } else {
             }
         }
+
+        switchPin.setOnCheckedChangeListener { _, checked ->
+            if (ignorePinSwitchCallback) return@setOnCheckedChangeListener
+
+            val plugin = pinPlugin() ?: run {
+                Toast.makeText(this, "PIN nije dostupan.", Toast.LENGTH_SHORT).show()
+                return@setOnCheckedChangeListener
+            }
+
+            plugin.setEnabled(this, checked)
+            Toast.makeText(
+                this,
+                if (checked) "PIN uključen" else "PIN isključen",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            renderPinRow()
+        }
+
     }
 }
