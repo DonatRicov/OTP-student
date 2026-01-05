@@ -112,7 +112,7 @@
             android:drawableLeft="@drawable/ic_favorite_filled"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="Svi poslovi"
+            android:text="Favoriti"
             app:drawableTint="@color/otp_green_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
