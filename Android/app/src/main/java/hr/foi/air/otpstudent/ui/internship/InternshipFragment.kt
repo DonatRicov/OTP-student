@@ -29,6 +29,8 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     private lateinit var tvActiveFilters: TextView
     private lateinit var tvEmpty: TextView
 
+    private lateinit var btnFavourites: TextView
+
     private val viewModel: InternshipListViewModel by lazy {
         ViewModelProvider(this, VmFactory())[InternshipListViewModel::class.java]
     }
@@ -41,6 +43,15 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
         tvEmpty = view.findViewById(R.id.tvEmpty)
+        btnFavourites = view.findViewById(R.id.btnFavourites)
+
+
+        btnFavourites.setOnClickListener {
+            val enabled = viewModel.isFilterEnabled(InternshipFilter.FAVORITE)
+            viewModel.setFilter(InternshipFilter.FAVORITE, !enabled)
+            viewModel.applyFilters()
+        }
+
 
         adapter = InternshipAdapter { internship ->
             startActivity(InternshipDetailsActivity.newIntent(requireContext(), internship.id))
