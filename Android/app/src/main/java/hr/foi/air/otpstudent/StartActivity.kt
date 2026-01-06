@@ -57,7 +57,6 @@ class StartActivity : AppCompatActivity() {
 
         when {
             bioReady -> {
-                // Biometrija ima prednost
                 bioPlugin.authenticate(this, AuthRequest()) { result ->
                     runOnUiThread {
                         when (result) {

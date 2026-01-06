@@ -7,7 +7,7 @@
     android:padding="16dp"
     android:background="@color/white">
 
-    <!-- Gornja traka-->
+    <!-- GORNJA TRAKA -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:layout_height="32dp" />
     </LinearLayout>
 
-    <!-- Upload kartica -->
+    <!-- UPLOAD KARTICA -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardUpload"
         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Naslov sekcije i više  dio ovaj-->
+    <!-- NASLOV SEKCIJE -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
             android:paddingEnd="4dp" />
     </LinearLayout>
 
-    <!-- divider-->
+    <!-- DIVIDER -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -184,7 +184,7 @@
         android:paddingBottom="24dp"
         android:visibility="gone" />
 
-    <!-- Lista cv -->
+    <!-- CV LISTA -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCvs"
         android:layout_width="match_parent"

@@ -14,8 +14,6 @@
         android:paddingTop="32dp"
         android:paddingBottom="24dp">
 
-        <!-- Logo i ikona i figme i naslov -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +53,7 @@
 
         </LinearLayout>
 
-        <!--e.mail -->
+        <!-- EMAIL -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/OTPTextInputLayout"
             android:layout_width="match_parent"
@@ -71,7 +69,6 @@
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!---->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPass"
             style="@style/OTPTextInputLayout"
@@ -92,7 +89,6 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Potvrda-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPass2"
             style="@style/OTPTextInputLayout"
@@ -113,7 +109,7 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Gumb za tegistraciju -->
+        <!-- REGISTRACIJA -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
@@ -134,7 +130,6 @@
             android:visibility="gone"
             android:layout_marginTop="12dp" />
 
-        <!-- link za na prijavu -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

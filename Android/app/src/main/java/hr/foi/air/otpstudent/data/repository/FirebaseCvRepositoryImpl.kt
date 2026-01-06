@@ -55,7 +55,6 @@ class FirebaseCvRepositoryImpl(
     }
 
     override suspend fun deleteCv(cv: CvDocument) {
-        // Brisanje
         firestore.collection("users")
             .document(userId)
             .collection("cvs")

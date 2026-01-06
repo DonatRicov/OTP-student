@@ -14,7 +14,7 @@
         android:paddingTop="32dp"
         android:paddingBottom="24dp">
 
-        <!-- NASLOVILOGO-->
+        <!-- NASLOV I LOGO-->
         <LinearLayout
             android:id="@+id/headerLayout"
             android:layout_width="0dp"
@@ -49,7 +49,7 @@
                 android:src="@drawable/logo" />
         </LinearLayout>
 
-        <!-- EMAIL-->
+        <!-- EMAIL -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
             style="@style/OTPTextInputLayout"
@@ -72,7 +72,7 @@
                 android:autofillHints="emailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- LOZINKA-->
+        <!-- LOZINKA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             style="@style/OTPTextInputLayout"
@@ -170,8 +170,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-
-        <!-- -->
         <LinearLayout
             android:id="@+id/registerLayout"
             android:layout_width="0dp"

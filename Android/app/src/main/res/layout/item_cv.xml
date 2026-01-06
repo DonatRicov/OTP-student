@@ -8,7 +8,6 @@
 
     android:gravity="center_vertical">
 
-    <!-- This ID fixes 'imgPdfIcon' -->
     <ImageView
         android:id="@+id/imgPdfIcon"
         android:layout_width="40dp"
@@ -23,7 +22,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <!-- This ID fixes 'tvFileName' -->
         <TextView
             android:id="@+id/tvFileName"
             android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
             android:textStyle="bold"
             android:textColor="#000000"/>
 
-        <!-- This ID fixes 'tvUploaderName' -->
         <TextView
             android:id="@+id/tvUploaderName"
             android:layout_width="wrap_content"
@@ -42,7 +39,6 @@
             android:textColor="#666666"/>
     </LinearLayout>
 
-    <!-- This ID fixes 'btnDelete' -->
     <ImageView
         android:id="@+id/btnDelete"
         android:layout_width="36dp"

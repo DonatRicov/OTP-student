@@ -35,7 +35,7 @@
 
     </LinearLayout>
 
-    <!-- trazilica -->
+    <!-- TRAZILICA -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutSearch"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -60,7 +60,7 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- filteri i povijest -->
+    <!-- FILTERI I POVIJESTI -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/filterRow"
         android:layout_width="0dp"
@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Filter gumb  -->
+        <!-- FILTER GUMB  -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilter"
             style="@style/Tekst"
@@ -90,7 +90,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Moji favoriti  -->
+        <!-- MOJI FAVORITI  -->
         <TextView
             android:id="@+id/btnFavourites"
             style="@style/TekstInterakcija"
@@ -108,7 +108,7 @@
 
 
 
-        <!-- Tekst aktivnih filtera  -->
+        <!-- TEKST AKTIVNIH FILTERA  -->
         <TextView
             android:id="@+id/tvActiveFilters"
             style="@style/Tekst"
@@ -127,7 +127,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- popis poslova -->
+    <!-- POPIS POSLOVA -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvJobs"
         android:layout_width="0dp"

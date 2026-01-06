@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/otp_green_light">
 
-    <!-- preskok gumb -->
+    <!-- GUMB PRESKOK -->
     <TextView
         android:id="@+id/tvSkipFaculty"
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
             android:fontFamily="sans-serif-italic" />
     </LinearLayout>
 
-    <!-- PODNASLOV: centriran kao na slici -->
+    <!-- PODNASLOV -->
     <TextView
         android:id="@+id/tvSubtitleFaculty"
         android:layout_width="0dp"
@@ -66,7 +66,6 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp" />
 
-    <!---->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardFaculty"
         android:layout_width="0dp"
@@ -124,7 +123,6 @@
                 android:layout_gravity="center_horizontal"
                 />
 
-            <!-- faks-->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -140,7 +138,6 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- smjer na faksu-->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -157,7 +154,6 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!---->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -174,7 +170,6 @@
                     android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--godina studija -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -191,7 +186,6 @@
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--spremanje-->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveFaculty"
                 android:layout_width="match_parent"

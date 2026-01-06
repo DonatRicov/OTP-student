@@ -16,7 +16,6 @@
         android:paddingBottom="24dp">
 
         <!-- HEADER -->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
@@ -53,8 +52,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- slike i ima -->
-
+        <!-- SLIKE I IME -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,7 +108,6 @@
         </LinearLayout>
 
         <!-- KARTICA-->
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfile"
             android:layout_width="match_parent"
@@ -132,7 +129,6 @@
                 android:paddingBottom="4dp">
 
                 <!-- OSOBNI PODACI -->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,7 +163,7 @@
                         tools:ignore="SpeakableTextPresentCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Prezime -->
+                <!-- PREZIME -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutLastName"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -190,7 +186,7 @@
                         android:inputType="textPersonName" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Email -->
+                <!-- EMAIL -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutEmail"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -213,7 +209,7 @@
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Lozinka -->
+                <!-- LOZINKA -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPassword"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -237,7 +233,7 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Telefon -->
+                <!-- TELEFON -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPhone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -260,7 +256,7 @@
                         android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Spol -->
+                <!-- SPOL -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutGender"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -285,7 +281,7 @@
                         tools:ignore="SpeakableTextPresentCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Lokacija-->
+                <!-- LOKACIJA -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutLocation"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -308,7 +304,7 @@
                         android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Datum rođenja -->
+                <!-- DATUM RODENJA -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutBirthday"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -338,8 +334,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="16dp" />
 
-                <!-- PODACI O FAKSU (foi?)-->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -349,7 +343,7 @@
                     android:textColor="@color/otp_green_dark"
                     android:paddingBottom="4dp" />
 
-                <!-- Fakultet -->
+                <!-- FAKULTET -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutFaculty"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -376,7 +370,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Smjer -->
+                <!-- SMJER -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutMajor"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -399,7 +393,7 @@
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Razina obrazovanja -->
+                <!-- RAZINA OBRAZOVANJA -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutEducationLevel"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"

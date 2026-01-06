@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/otp_green_light">
 
-    <!--Gumb za preskociti -->
+    <!--GUMB ZA PRESKOCITI -->
     <TextView
         android:id="@+id/tvSkipPersonal"
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp" />
 
-    <!-- Naslov-->
+    <!-- NASLOV -->
     <LinearLayout
         android:id="@+id/titleContainer"
         android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp" />
 
-    <!--prva - osobni podaci studenta-->
+    <!-- OSOBNI PODACI -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardPersonal"
         android:layout_width="0dp"
@@ -128,7 +128,7 @@
                 android:layout_marginBottom="12dp"
                 />
 
-            <!--ime -->
+            <!-- IME -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -144,7 +144,7 @@
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--pr-->
+            <!-- PREZIME -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
@@ -161,7 +161,7 @@
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--spol -->
+            <!-- SPOL -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilGender"
                 style="@style/OTPTextInputLayout"
@@ -189,7 +189,7 @@
 
 
 
-            <!--dalje screen -->
+            <!-- DALJE  -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnNextPersonal"
                 android:layout_width="match_parent"

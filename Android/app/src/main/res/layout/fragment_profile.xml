@@ -17,7 +17,7 @@
             android:paddingTop="24dp"
             android:paddingBottom="24dp">
 
-            <!-- Top bar -->
+            <!-- TOP BAR -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,6 @@
 
             </LinearLayout>
 
-            <!-- lik i ime -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +45,6 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp">
 
-                <!-- slikica i ikonica edit -->
                 <FrameLayout
                     android:layout_width="80dp"
                     android:layout_height="80dp">
@@ -72,7 +70,6 @@
                         android:background="@android:color/transparent"/>
                 </FrameLayout>
 
-                <!-- Ime -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -104,7 +101,6 @@
                 android:layout_height="1dp"
                 android:background="#DDDDDD" />
 
-            <!-- Opcije na profilu. Mozemo dodati jos ak treba-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -212,7 +208,6 @@
                 android:layout_height="1dp"
                 android:background="#DDDDDD" />
 
-            <!-- logout-->
             <LinearLayout
                 android:id="@+id/rowLogout"
                 android:layout_width="match_parent"
@@ -236,7 +231,5 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

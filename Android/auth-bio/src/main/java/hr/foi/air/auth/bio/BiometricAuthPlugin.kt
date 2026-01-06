@@ -64,7 +64,6 @@ class BiometricAuthPlugin : AuthPlugin {
                 }
 
                 override fun onAuthenticationFailed() {
-                    // biometrika nije prepoznata (nije cancel)
                     onResult(AuthResult.Error("Biometrijska provjera nije uspjela"))
                 }
 
