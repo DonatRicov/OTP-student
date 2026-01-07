@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="32dp"
@@ -17,15 +17,17 @@
         <!-- NASLOV I LOGO-->
         <LinearLayout
             android:id="@+id/headerLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="359dp"
+            android:layout_height="132dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/emailPassContainer"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1.0">
+            app:layout_constraintVertical_bias="0.20"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <TextView
                 android:id="@+id/tvWelcome"
@@ -42,66 +44,76 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
                 android:maxWidth="114dp"
                 android:maxHeight="96dp"
-                android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
         </LinearLayout>
 
-        <!-- EMAIL -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilEmail"
-            style="@style/OTPTextInputLayout"
+        <!-- EMAIL + LOZINKA (GRUPIRANO U JEDAN PARENT) -->
+        <LinearLayout
+            android:id="@+id/emailPassContainer"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/email"
-            app:placeholderText="@string/email_placeholder"
-            app:boxBackgroundMode="outline"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="182dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/btnLogin"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
+            <!-- EMAIL -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:imeOptions="actionNext"
-                android:autofillHints="emailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="@string/email"
+                app:boxBackgroundMode="outline"
+                app:placeholderText="@string/email_placeholder">
 
-        <!-- LOZINKA -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPassword"
-            style="@style/OTPTextInputLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/password"
-            app:placeholderText="Unesi lozinku..."
-            app:boxBackgroundMode="outline"
-            app:endIconMode="password_toggle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilEmail">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="emailAddress"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPass"
+            <!-- LOZINKA -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutPassword"
+                style="@style/OTPTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone"
-                android:autofillHints="password" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:hint="@string/password"
+                app:boxBackgroundMode="outline"
+                app:endIconMode="password_toggle"
+                app:placeholderText="Unesi lozinku...">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="password"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <!-- GLAVNI GUMB -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
@@ -110,21 +122,23 @@
             app:cornerRadius="90dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword"
+            app:layout_constraintTop_toBottomOf="@id/emailPassContainer"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.90" />
+            app:layout_constraintWidth_percent="0.90"
+            app:layout_constraintBottom_toTopOf="@id/dividerLayout"/>
 
         <!-- DIVDER -->
         <LinearLayout
             android:id="@+id/dividerLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="152dp"
+            android:layout_marginTop="12dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/authMethodsContainer"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnLogin">
 
             <View
@@ -150,14 +164,15 @@
 
         <LinearLayout
             android:id="@+id/authMethodsContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dividerLayout" />
-
+            app:layout_constraintTop_toBottomOf="@id/dividerLayout"
+            app:layout_constraintBottom_toTopOf="@id/progress"/>
 
         <!-- PROGRESS BAR -->
         <ProgressBar
@@ -167,25 +182,29 @@
             android:layout_marginTop="8dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/authMethodsContainer"
+            app:layout_constraintBottom_toTopOf="@id/registerLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!--REGISREACIJA-->
         <LinearLayout
             android:id="@+id/registerLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:paddingTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progress"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
                 android:text="@string/no_account"
                 android:textSize="14sp" />
 
@@ -193,6 +212,7 @@
                 android:id="@+id/tvGoRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
                 android:text="@string/become_otp_student"
                 android:textStyle="bold"
                 android:textColor="@color/otp_orange"
@@ -201,3 +221,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
