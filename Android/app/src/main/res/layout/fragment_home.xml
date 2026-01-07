@@ -43,15 +43,14 @@
                     android:scaleType="fitStart"
                     android:contentDescription="@string/cd_app_logo" />
 
-
+                <!-- Chatbot gumb (zamjena za power) -->
                 <ImageButton
-                    android:id="@+id/btnPower"
+                    android:id="@+id/btnChatbot"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="5dp"
-                    android:contentDescription="@string/cd_power"
-                    android:src="@drawable/power_icon"
+                    android:src="@drawable/ic_chat"
                     app:tint="@color/otp_green_dark" />
             </LinearLayout>
 
