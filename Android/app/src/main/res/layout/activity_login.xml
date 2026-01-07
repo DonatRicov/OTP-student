@@ -51,7 +51,7 @@
                 android:src="@drawable/logo" />
         </LinearLayout>
 
-        <!-- EMAIL + LOZINKA (GRUPIRANO U JEDAN PARENT) -->
+        <!-- EMAIL + LOZINKA-->
         <LinearLayout
             android:id="@+id/emailPassContainer"
             android:layout_width="0dp"
