@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="24dp">
 
         <!-- HEADER -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,15 +39,14 @@
                 style="@style/NaslovStranice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Uredi profil"
+                android:text="@string/edit_profile"
                 app:layout_constraintBottom_toBottomOf="@id/btnBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/btnBack" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- KARTICA: PROFIL HEADER -->
+        <!-- PROFIL HEADER -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfileHeader"
             android:layout_width="match_parent"
@@ -62,9 +62,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="14dp"
-                android:gravity="center_horizontal">
+                android:padding="14dp">
 
                 <FrameLayout
                     android:layout_width="120dp"
@@ -96,7 +96,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="OTPStudent" />
+                    android:text=""
+                    tools:text="@string/profile_name_placeholder" />
 
                 <TextView
                     android:id="@+id/tvSubtitle"
@@ -104,18 +105,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Uredi svoje podatke"
+                    android:text="@string/edit_your_data"
                     android:textColor="@color/otp_grey" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-        <!-- KARTICA: PODACI O PROFILU (EMAIL, LOZINKA, TELEFON) -->
+
+        <!-- PODACI O PROFILU -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfileData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
@@ -128,27 +130,18 @@
                 android:padding="14dp">
 
                 <TextView
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/PodnaslovInterakcija"
-                    android:text="Podaci o profilu"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/profile_data" />
 
-
-                <!-- Email -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutEmail"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvEmailValue"
@@ -157,22 +150,14 @@
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Lozinka -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPassword"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Lozinka"
-                    app:passwordToggleEnabled="true"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/password"
+                    app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvPasswordValue"
@@ -181,21 +166,13 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Telefon -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPhone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Telefon"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/phone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvPhoneValue"
@@ -207,14 +184,14 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- KARTICA: OSOBNI PODACI (IME, PREZIME, LOKACIJA, SPOL, DATUM) -->
+        <!-- OSOBNI PODACI -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardPersonal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
@@ -227,52 +204,35 @@
                 android:padding="14dp">
 
                 <TextView
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/PodnaslovInterakcija"
-                    android:text="Osobni podaci"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/personal_data" />
 
-
-                <!-- Ime -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutFirstName"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ime"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/first_name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvNameValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
                         android:importantForAccessibility="no"
+                        android:inputType="textPersonName"
                         tools:ignore="SpeakableTextPresentCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Prezime -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutLastName"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Prezime"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/last_name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etLastName"
@@ -281,21 +241,13 @@
                         android:inputType="textPersonName" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Lokacija -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutLocation"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Lokacija"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/location">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvLocationValue"
@@ -304,51 +256,38 @@
                         android:inputType="textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Spol -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutGender"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Spol"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/gender"
+                    app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
                         android:id="@+id/tvGenderValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
+                        android:paddingHorizontal="15dp"
                         android:importantForAccessibility="no"
                         tools:ignore="SpeakableTextPresentCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Datum rođenja -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutBirthday"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Datum rođenja"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/date_of_birth">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvBirthdayValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
                         android:focusable="false"
                         android:inputType="none"
                         tools:text="01.01.2000." />
@@ -357,16 +296,14 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
-
-        <!-- KARTICA: PODACI O STUDIJU -->
+        <!-- PODACI O STUDIJU -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardStudy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
@@ -379,90 +316,72 @@
                 android:padding="14dp">
 
                 <TextView
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/PodnaslovInterakcija"
-                    android:text="Podaci o studiju"
-                    android:layout_marginBottom="10dp" />
-
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/study_data" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutFaculty"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Fakultet"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/faculty"
+                    app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
                         android:id="@+id/tvFacultyValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:importantForAccessibility="no"
-                        tools:ignore="SpeakableTextPresentCheck" />
+                        android:paddingHorizontal="15dp"
+                        android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutMajor"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Smjer"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/major"
+                    app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
                         android:id="@+id/tvMajorValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="15dp"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutEducationLevel"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Razina obrazovanja"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxStrokeColor="@color/otp_green"
-                    app:boxStrokeWidth="1dp"
-                    app:boxBackgroundColor="@color/white">
+                    android:hint="@string/education_level"
+                    app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
                         android:id="@+id/tvEducationLevelValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="15dp"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ACTION BUTTONS (kao “sekcija” pri dnu) -->
+        <!-- ACTION -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
-            android:text="Spremi promjene"
+            android:text="@string/save_changes"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
@@ -475,7 +394,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
-            android:text="Odustani"
+            android:layout_marginBottom="24dp"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textColor="@color/otp_green"
@@ -485,4 +405,3 @@
 
     </LinearLayout>
 </ScrollView>
-

@@ -108,6 +108,22 @@
         <item name ="android:textStyle">bold</item>
     </style>
 
+    <style name="PlaceholderLabel"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+
+        <item name="boxStrokeColor">@color/otp_green</item>
+        <item name="boxStrokeWidth">1dp</item>
+
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="hintTextColor">@color/otp_green_dark</item>
+    </style>
+
+
 
 </resources>
 
