@@ -38,7 +38,7 @@
 
     <string name="my_cv">Moj Životopis</string>
     <string name="choose_file_for_upload">Odaberi datoteku za prijenos</string>
-    <string name="supported_format_pdf">Podržani format: PDF</string>
+    <string name="supported_format_pdf">Podržani format: PDF (do 10MB)</string>
     <string name="choose_file">Odaberi datoteku</string>
     <string name="recent">Nedavno</string>
     <string name="upload_icon_desc">Ikona prijenosa datoteke</string>

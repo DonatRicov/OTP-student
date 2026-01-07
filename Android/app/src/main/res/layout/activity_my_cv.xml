@@ -1,148 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:fillViewport="true"
     android:background="@color/white">
 
-    <!-- GORNJA TRAKA -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_back"
-            android:contentDescription="@string/back_button"
-            app:tint="@color/otp_green_dark"
-            />
-
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerSection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/my_cv"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/otp_green_dark" />
-
-        <View
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
-    </LinearLayout>
-
-    <!-- UPLOAD KARTICA -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardUpload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        app:cardCornerRadius="16dp"
-        app:cardUseCompatPadding="false"
-        app:cardPreventCornerOverlap="false"
-        app:cardBackgroundColor="@android:color/white"
-        app:strokeColor="@color/otp_green"
-        app:strokeWidth="2dp">
-
-
-    <LinearLayout
-            android:id="@+id/layoutUploadArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="20dp"
-            android:background="@drawable/upload_area"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_file_upload"
-                android:layout_marginBottom="10dp"
-                android:contentDescription="@string/upload_icon_desc" />
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="@string/back_button"
+                app:tint="@color/otp_green_dark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_file_for_upload"
+                android:text="@string/my_cv"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp" />
+                android:textColor="@color/otp_green_dark"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/userInfoSection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/headerSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardUserTop"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/supported_format_pdf"
-                android:textColor="#888888"
-                android:textSize="12sp" />
+                app:cardCornerRadius="14dp"
+                app:cardElevation="6dp"
+                app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@android:color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/max_file_size_10mb"
-                android:textColor="#888888"
-                android:textSize="12sp"
-                android:layout_marginBottom="12dp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
 
-            <!-- objašnjenje-->
-            <TextView
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Ime korisnika"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#111827"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ivUserAvatar" />
+
+                    <TextView
+                        android:id="@+id/tvUserStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="FOI student"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#6B7280"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvUserName"
+                        app:layout_constraintEnd_toStartOf="@id/ivUserAvatar" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivUserAvatar"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:src="@drawable/ic_profile_placeholder"
+                        android:scaleType="centerInside"
+                        app:tint="#9CA3AF"
+                        app:shapeAppearanceOverlay="@style/CircleImageView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardUserDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cv_usage_info"
-                android:textColor="#888888"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="6dp"
+                app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/cardUserTop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnUploadPdf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/choose_file"
-                android:textColor="@android:color/white"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                app:cornerRadius="999dp"
-                app:backgroundTint="@color/otp_green" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp">
 
-    <!-- NASLOV SEKCIJE -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+                        <TextView
+                            android:id="@+id/tvLabelEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <LinearLayout
+                        <TextView
+                            android:id="@+id/tvUserEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="mail@foi.hr"
+                            android:textSize="16sp"
+                            android:textColor="#111827"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E5E7EB" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp">
+
+                        <TextView
+                            android:id="@+id/tvLabelPosition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pozicija"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvUserPosition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Data Analist"
+                            android:textSize="16sp"
+                            android:textColor="#111827"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E5E7EB" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp">
+
+                        <TextView
+                            android:id="@+id/tvLabelLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Lokacija"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvUserLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Varaždin"
+                            android:textSize="16sp"
+                            android:textColor="#111827"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/uploadSection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="32dp"
+            app:layout_constraintTop_toBottomOf="@id/userInfoSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_upload_dashed"
+                    android:padding="18dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:id="@+id/ivUpload"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_file_upload"
+                        android:contentDescription="@string/upload_icon_desc"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvChooseTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/choose_file_for_upload"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintTop_toBottomOf="@id/ivUpload"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSupported"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/supported_format_pdf"
+                        android:textSize="12sp"
+                        android:alpha="0.6"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/tvChooseTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnUploadPdf"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/choose_file"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="22dp"
+                        android:paddingEnd="22dp"
+                        app:cornerRadius="999dp"
+                        app:layout_constraintTop_toBottomOf="@id/tvSupported"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recentHeaderSection"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@id/uploadSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
+                android:id="@+id/ivRecentIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_history"
-                android:layout_marginEnd="6dp"
                 android:contentDescription="@string/recent_files"
                 app:tint="@color/otp_grey"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
                 android:id="@+id/tvRecentTitle"
@@ -151,45 +363,73 @@
                 android:text="@string/recent_files"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/otp_grey" />
-        </LinearLayout>
+                android:textColor="@color/otp_grey"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/ivRecentIcon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/tvShowMore"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvShowMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_more"
+                android:textSize="14sp"
+                android:textColor="@color/otp_green_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/otp_grey"
+            app:layout_constraintTop_toBottomOf="@id/recentHeaderSection"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentSection"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/show_more"
-            android:textSize="14sp"
-            android:textColor="@color/otp_green_dark"
-            android:paddingStart="8dp"
-            android:paddingEnd="4dp" />
-    </LinearLayout>
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- DIVIDER -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/otp_grey"
-        android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/tvEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/empty_state_no_cvs"
+                android:textColor="@color/otp_grey"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:padding="24dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/tvEmptyState"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/empty_state_no_cvs"
-        android:textColor="@color/otp_grey"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        android:visibility="gone" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCvs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingVertical="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- CV LISTA -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCvs"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="4dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
