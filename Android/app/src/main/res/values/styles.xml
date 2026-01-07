@@ -123,7 +123,5 @@
         <item name="hintTextColor">@color/otp_green_dark</item>
     </style>
 
-
-
 </resources>
 

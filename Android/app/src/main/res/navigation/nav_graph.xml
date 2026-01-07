@@ -5,27 +5,53 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_home">
 
-    <fragment android:id="@+id/nav_home" android:name="hr.foi.air.otpstudent.HomeFragment" tools:layout="@layout/fragment_home" />
-    <fragment android:id="@+id/nav_praksa" android:name="hr.foi.air.otpstudent.ui.internship.InternshipFragment" tools:layout="@layout/fragment_internship" />
-    <fragment android:id="@+id/nav_poslovi" android:name="hr.foi.air.otpstudent.ui.jobs.JobsFragment" tools:layout="@layout/fragment_jobs" />
-    <fragment android:id="@+id/nav_chatbot" android:name="hr.foi.air.otpstudent.ChatbotFragment" tools:layout="@layout/fragment_chatbot" />
-    <fragment android:id="@+id/nav_profile" android:name="hr.foi.air.otpstudent.ui.profile.ProfileFragment" tools:layout="@layout/fragment_profile" >
-    <action
-        android:id="@+id/action_nav_profile_to_practiceFulfilledFragment"
-        app:destination="@id/practiceFulfilledFragment" />
+    <!-- HOME -->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="hr.foi.air.otpstudent.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <!-- PRAKSA -->
+    <fragment
+        android:id="@+id/nav_praksa"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipFragment"
+        tools:layout="@layout/fragment_internship" />
+
+    <!-- POSLOVI -->
+    <fragment
+        android:id="@+id/nav_poslovi"
+        android:name="hr.foi.air.otpstudent.ui.jobs.JobsFragment"
+        tools:layout="@layout/fragment_jobs" />
+
+    <!-- BODOVI (umjesto Chatbot) -->
+    <fragment
+        android:id="@+id/nav_points"
+        android:name="hr.foi.air.otpstudent.PointsFragment"
+        android:label="Bodovi"
+        tools:layout="@layout/fragment_points" />
+
+    <!-- PROFIL -->
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="hr.foi.air.otpstudent.ui.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/action_nav_profile_to_practiceFulfilledFragment"
+            app:destination="@id/practiceFulfilledFragment" />
     </fragment>
 
+    <!-- FAVORITES -->
     <fragment
         android:id="@+id/nav_jobs_favorites"
         android:name="hr.foi.air.otpstudent.ui.jobs.JobsFavoritesFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_jobs_favorites" />
 
+    <!-- PRAKSA FULLFILLED -->
     <fragment
         android:id="@+id/practiceFulfilledFragment"
         android:name="hr.foi.air.otpstudent.ui.internship.InternshipFulfilledFragment"
         tools:layout="@layout/fragment_internship_fullfiled" />
 
-
 </navigation>
-
