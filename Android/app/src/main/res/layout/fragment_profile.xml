@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,114 +8,159 @@
     android:background="@color/white"
     tools:context="ui.profile.ProfileFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-<LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:paddingTop="24dp"
             android:paddingBottom="24dp">
 
-            <!-- TOP BAR -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back"
+                android:contentDescription="@string/back_button"
+                app:tint="@color/otp_green"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:src="@drawable/otp_student_logo"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintEnd_toStartOf="@id/btnChat"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"/>
+
+            <ImageView
+                android:id="@+id/btnChat"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chat"
+                app:tint="@color/otp_green"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardProfile"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#BDBDBD"
+                app:cardBackgroundColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/imgLogo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-
-                <ImageView
-                    android:id="@+id/imgLogo"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/otp_student_logo"
-                    android:scaleType="fitCenter"
-                    android:contentDescription="@string/app_name" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp">
-
-                <FrameLayout
-                    android:layout_width="80dp"
-                    android:layout_height="80dp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgAvatar"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/ic_profile_placeholder"
-                        android:background="@android:color/transparent"
-                        android:padding="0dp"
-                        android:clickable="true"
-                        android:focusable="true" />
-
-                    <ImageView
-                        android:id="@+id/imgEditPhoto"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_photo_edit"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="4dp"
-                        android:padding="0dp"
-                        android:background="@android:color/transparent"/>
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:layout_marginVertical="20dp"
+                    android:padding="16dp">
+
+                    <FrameLayout
+                        android:id="@+id/avatarFrame"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/imgAvatar"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:src="@drawable/ic_profile_placeholder"
+                            android:background="@android:color/transparent"
+                            android:padding="0dp"
+                            android:clickable="true"
+                            android:focusable="true"/>
+
+                        <ImageView
+                            android:id="@+id/imgEditPhoto"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_photo_edit"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="2dp"
+                            android:background="@android:color/transparent"/>
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/tvProfileName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Test"
+                        android:text="Lana Maček"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:textColor="@color/otp_green" />
+                        android:textColor="#111827"
+                        app:layout_constraintStart_toEndOf="@id/avatarFrame"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/avatarFrame"
+                        android:layout_marginStart="16dp"/>
 
                     <TextView
                         android:id="@+id/tvProfileSubtitle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="FOI student"
                         android:textSize="14sp"
-                        android:textColor="#666666" />
-                </LinearLayout>
-            </LinearLayout>
+                        android:textColor="#666666"
+                        app:layout_constraintStart_toStartOf="@id/tvProfileName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvProfileName"
+                        android:layout_marginTop="6dp"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <View
-                android:layout_width="match_parent"
+                android:id="@+id/dividerTop"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="#DDDDDD" />
+                android:layout_marginTop="18dp"
+                android:background="#BDBDBD"
+                app:layout_constraintTop_toBottomOf="@id/cardProfile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <LinearLayout
+                android:id="@+id/menuContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp">
-
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/dividerTop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <LinearLayout
                     android:id="@+id/rowCv"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    >
+                    android:layout_marginVertical="5dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -126,18 +172,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="Moj životopis"
+                        android:text="@string/my_cv"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/rowPractice"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    >
+                    android:layout_marginVertical="5dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -152,15 +197,14 @@
                         android:text="Odrađene prakse"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/rowJobs"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    >
+                    android:layout_marginVertical="5dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -175,15 +219,14 @@
                         android:text="Moji bodovi"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
-                    />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/rowProfileSettings"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    >
+                    android:layout_marginVertical="5dp"
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -195,25 +238,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="Postavke"
+                        android:text="Postavke profila"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
-                    />
                 </LinearLayout>
-
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
+                android:id="@+id/dividerBottom"
+                android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="#DDDDDD" />
+                android:layout_marginTop="8dp"
+                android:background="#BDBDBD"
+                app:layout_constraintTop_toBottomOf="@id/menuContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <LinearLayout
                 android:id="@+id/rowLogout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:gravity="center_vertical"
-                >
+                android:layout_marginVertical="5dp"
+                app:layout_constraintTop_toBottomOf="@id/dividerBottom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -225,11 +274,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Odjava"
+                    android:text="Odjavi se"
                     android:textSize="16sp"
                     android:textColor="@color/red" />
             </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="78dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="6dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:labelVisibilityMode="labeled"
+            app:itemIconTint="@color/otp_green"
+            app:itemTextColor="@color/otp_grey"
+            app:menu="@menu/bottom_nav_menu" />
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
