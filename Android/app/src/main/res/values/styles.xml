@@ -32,6 +32,12 @@
         <item name="android:fontFamily">@font/sf_pro_display_regular</item>
     </style>
 
+    <style name="NaslovInterakcija">
+        <item name="android:textColor">@color/otp_green_dark</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_bold</item>
+    </style>
+
     <style name="PodnaslovInterakcija">
         <item name="android:textColor">@color/otp_green_dark</item>
         <item name="android:textSize">18sp</item>
@@ -53,7 +59,7 @@
 
     <style name="CircleImageView">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
+        <item name="cornerSize">5%</item>
     </style>
 
     <style name="RoundedDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
