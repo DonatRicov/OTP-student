@@ -89,4 +89,16 @@
         <string name="major">Smjer</string>
         <string name="education_level">Razina obrazovanja</string>
 
-    </resources>
+    <!-- Postavke -->
+    <string name="account">Račun</string>
+    <string name="change_password">Promijeni lozinku</string>
+    <string name="notifications">Obavijesti</string>
+    <string name="push_notifications">Push obavijesti</string>
+    <string name="security">Sigurnost</string>
+    <string name="biometric_login">Biometrijska prijava</string>
+    <string name="set_pin">Postavi PIN</string>
+    <string name="privacy">Privatnost</string>
+    <string name="privacy_policy">Politika privatnosti</string>
+    <string name="delete_account">Obriši račun</string>
+
+</resources>

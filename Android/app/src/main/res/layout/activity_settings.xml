@@ -6,16 +6,19 @@
     android:fillViewport="true"
     android:background="@color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
+        <!-- HEADER -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="12dp">
+            android:layout_height="wrap_content">
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -24,26 +27,28 @@
                 android:background="@android:color/transparent"
                 android:padding="8dp"
                 android:src="@drawable/ic_back"
+                android:contentDescription="@string/back_button"
                 app:tint="@color/otp_green_dark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvTitle"
+                style="@style/NaslovStranice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Postavke"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:text="Postavke profila"
                 app:layout_constraintBottom_toBottomOf="@id/btnBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/btnBack" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- racun -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            android:id="@+id/cardAccount"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
@@ -51,90 +56,133 @@
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintBottom_toTopOf="@id/cardNotifications"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1.0">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="14dp">
 
                 <TextView
+                    android:id="@+id/tvAccountTitle"
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Račun"
+                    android:text="@string/account"
                     android:textStyle="bold"
-                    android:textColor="@color/otp_green_dark"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowEditProfile"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivEditProfile"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_profile_settings"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvEditProfile"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Uredi profil"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/edit_profile"
+                        app:layout_constraintStart_toEndOf="@id/ivEditProfile"
+                        app:layout_constraintEnd_toStartOf="@id/ivEditProfileChevron"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <ImageView
+                        android:id="@+id/ivEditProfileChevron"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/otp_green" />
-                </LinearLayout>
+                        app:tint="@color/otp_green"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
-                    android:layout_width="match_parent"
+                    android:id="@+id/divAccount1"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="#14000000" />
+                    android:background="#14000000"
+                    app:layout_constraintTop_toBottomOf="@id/rowEditProfile"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowChangePassword"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/divAccount1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivChangePassword"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvChangePassword"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Promijeni lozinku"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/change_password"
+                        app:layout_constraintStart_toEndOf="@id/ivChangePassword"
+                        app:layout_constraintEnd_toStartOf="@id/ivChangePasswordChevron"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <ImageView
+                        android:id="@+id/ivChangePasswordChevron"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/otp_green" />
-                </LinearLayout>
+                        app:tint="@color/otp_green"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- notifs -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            android:id="@+id/cardNotifications"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
@@ -142,55 +190,76 @@
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/cardAccount"
+            app:layout_constraintBottom_toTopOf="@id/cardSecurity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="14dp">
 
                 <TextView
+                    android:id="@+id/tvNotificationsTitle"
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Obavijesti"
-                    android:textStyle="bold"
-                    android:textColor="@color/otp_green_dark"
-                    android:layout_marginBottom="10dp" />
+                    android:text="@string/notifications"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowNotifications"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvNotificationsTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivNotifications"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_notifications"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvPushNotifications"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Push obavijesti"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/push_notifications"
+                        app:layout_constraintStart_toEndOf="@id/ivNotifications"
+                        app:layout_constraintEnd_toStartOf="@id/switchPush"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchPush"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- sigurnost -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            android:id="@+id/cardSecurity"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:cardCornerRadius="16dp"
@@ -198,186 +267,263 @@
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/cardNotifications"
+            app:layout_constraintBottom_toTopOf="@id/cardPrivacy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="14dp">
 
                 <TextView
+                    android:id="@+id/tvSecurityTitle"
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sigurnost"
-                    android:textStyle="bold"
-                    android:textColor="@color/otp_green_dark"
-                    android:layout_marginBottom="10dp" />
+                    android:text="@string/security"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowBiometric"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvSecurityTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivBiometric"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_fingerprint"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvBiometric"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Biometrijska prijava"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/biometric_login"
+                        app:layout_constraintStart_toEndOf="@id/ivBiometric"
+                        app:layout_constraintEnd_toStartOf="@id/switchBiometric"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchBiometric"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
-                    android:layout_width="match_parent"
+                    android:id="@+id/divSecurity1"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="#14000000" />
+                    android:background="#14000000"
+                    app:layout_constraintTop_toBottomOf="@id/rowBiometric"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowPin"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/divSecurity1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivPin"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_pin"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
                         android:id="@+id/tvPinTitle"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Postavi PIN"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/set_pin"
+                        app:layout_constraintStart_toEndOf="@id/ivPin"
+                        app:layout_constraintEnd_toStartOf="@id/ivPinChevron"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <ImageView
                         android:id="@+id/ivPinChevron"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/otp_green" />
-
+                        app:tint="@color/otp_green"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchPin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone" />
-                </LinearLayout>
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
-            </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- privatnost -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
+            android:id="@+id/cardPrivacy"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@color/white"
             app:strokeWidth="1dp"
             app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@id/cardSecurity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:padding="14dp">
 
                 <TextView
+                    android:id="@+id/tvPrivacyTitle"
+                    style="@style/PodnaslovInterakcija"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Privatnost"
-                    android:textStyle="bold"
-                    android:textColor="@color/otp_green_dark"
-                    android:layout_marginBottom="10dp" />
+                    android:text="@string/privacy"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowPrivacyPolicy"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvPrivacyTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivPrivacyPolicy"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_info"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvPrivacyPolicy"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Politika privatnosti"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/privacy_policy"
+                        app:layout_constraintStart_toEndOf="@id/ivPrivacyPolicy"
+                        app:layout_constraintEnd_toStartOf="@id/ivPrivacyPolicyChevron"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <ImageView
+                        android:id="@+id/ivPrivacyPolicyChevron"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/otp_green" />
-                </LinearLayout>
+                        app:tint="@color/otp_green"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
-                    android:layout_width="match_parent"
+                    android:id="@+id/divPrivacy1"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="#14000000" />
+                    android:background="#14000000"
+                    app:layout_constraintTop_toBottomOf="@id/rowPrivacyPolicy"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/rowDeleteAccount"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="6dp">
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    app:layout_constraintTop_toBottomOf="@id/divPrivacy1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
+                        android:id="@+id/ivDeleteAccount"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_back"
-                        app:tint="@color/otp_green" />
+                        app:tint="@color/otp_green"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvDeleteAccount"
+                        style="@style/TekstInterakcija"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Obriši račun"
-                        android:textColor="@color/otp_green"
-                        android:textSize="16sp" />
+                        android:text="@string/delete_account"
+                        app:layout_constraintStart_toEndOf="@id/ivDeleteAccount"
+                        app:layout_constraintEnd_toStartOf="@id/ivDeleteAccountChevron"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <ImageView
+                        android:id="@+id/ivDeleteAccountChevron"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/otp_green" />
-                </LinearLayout>
+                        app:tint="@color/otp_green"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
