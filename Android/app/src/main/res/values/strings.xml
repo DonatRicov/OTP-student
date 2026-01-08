@@ -101,4 +101,13 @@
     <string name="privacy_policy">Politika privatnosti</string>
     <string name="delete_account">Obriši račun</string>
 
+    <!--Postavi brzu prijavu -->
+    <string name="enable_fast_login_title">Omogući brzu prijavu</string>
+    <string name="enable_fast_login">Uključite prijavu PIN-om i/ili biometrijom kako bi se ubuduće prijavili brže.</string>
+    <string name="enable_fast_login_action">Uključi brzu prijavu</string>
+    <string name="remind_me_later">Podsjeti me kasnije</string>
+
+
+
+
 </resources>

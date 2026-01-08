@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+//bug* - dok se unese pin od 6 znameni se automatski ulogira bez da se klikne potvrda (OK), fali ekran za uspješnu prijavu
 class PinUnlockActivity : AppCompatActivity() {
 
     private fun finishOk() {
