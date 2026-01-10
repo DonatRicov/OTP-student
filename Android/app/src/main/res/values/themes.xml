@@ -5,7 +5,8 @@
         <item name="colorSecondary">@color/otp_green_dark</item>
         <item name="colorControlHighlight">@android:color/transparent</item>
         <item name="colorSecondaryContainer">@android:color/transparent</item>
-
+        <item name="colorSurface">@android:color/white</item>
+        <item name="android:colorBackground">@android:color/white</item>
     </style>
 
 </resources>

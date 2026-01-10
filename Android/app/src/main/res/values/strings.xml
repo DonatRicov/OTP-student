@@ -1,5 +1,10 @@
 <resources>
 
+    <string name="internship_title_placeholder">Praksa</string>
+    <string name="company_name_placeholder">OTP banka</string>
+    <string name="internship_applied_label">Prijavljeno</string>
+    <string name="placeholder_dash">-</string>
+
 
     <string name="app_name">OTP-Student</string>
     <string name="show_password">Prikaži lozinku</string>
@@ -7,7 +12,7 @@
     <string name="cd_app_logo">OTP Student logo</string>
     <string name="cd_settings">Settings</string>
     <string name="cd_power">Power button</string>
-    <string name="welcome_text">Dobrodošli ime</string>
+    <string name="welcome_text">Dobrodošli </string>
     <string name="cd_waving_hand">Waving hand</string>
     <string name="btn_set_profile">Postavi profil</string>
     <string name="news_title">Novosti</string>
@@ -16,6 +21,7 @@
     <string name="cd_news_card">Otvori novost</string>
     <string name="back_button">Natrag</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cd_open_chatbot">Otvori chatbot</string>
 
 
     <string name="welcome_back">Dobrodošli natrag!</string>
