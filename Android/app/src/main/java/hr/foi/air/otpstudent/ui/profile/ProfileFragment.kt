@@ -21,7 +21,8 @@ import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.StartActivity
 import hr.foi.air.otpstudent.ui.cv.MyCvActivity
 import java.io.File
-
+import android.widget.ImageButton
+import androidx.navigation.fragment.findNavController
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private lateinit var auth: FirebaseAuth
@@ -73,6 +74,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         imgAvatar.setOnClickListener(avatarClickListener)
         imgEdit.setOnClickListener(avatarClickListener)
+
+        view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
 
         // učitaj podatke
         loadProfileData()
