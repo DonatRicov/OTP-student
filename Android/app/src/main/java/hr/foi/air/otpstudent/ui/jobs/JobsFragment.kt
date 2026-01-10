@@ -20,7 +20,8 @@ import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import android.widget.ImageButton
+import androidx.navigation.fragment.findNavController
 class JobsFragment : Fragment(R.layout.fragment_jobs) {
 
     private lateinit var adapter: JobAdapter
@@ -50,6 +51,9 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
 
+        view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
         tvMyApplications.setOnClickListener {
             findNavController().navigate(R.id.nav_jobs_favorites)
         }
