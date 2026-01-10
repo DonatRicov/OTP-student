@@ -7,12 +7,21 @@
     android:background="@color/white"
     tools:context=".HomeFragment">
 
+    <include
+        android:id="@+id/header"
+        layout="@layout/view_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
         android:id="@+id/scrollContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -24,36 +33,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <LinearLayout
-                android:id="@+id/topBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingBottom="16dp"
-                tools:ignore="UselessParent">
-
-                <ImageView
-                    android:id="@+id/imgLogo"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/otp_student_logo"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitStart"
-                    android:contentDescription="@string/cd_app_logo" />
-
-                <!-- Chatbot gumb (zamjena za power) -->
-                <ImageButton
-                    android:id="@+id/btnChatbot"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_chat"
-                    app:tint="@color/otp_green_dark" />
-            </LinearLayout>
-
+            <!-- WELCOME -->
             <LinearLayout
                 android:id="@+id/welcomeRow"
                 android:layout_width="match_parent"
@@ -81,46 +61,7 @@
                     android:contentDescription="@string/cd_waving_hand" />
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp">
-
-                    <ImageView
-                        android:id="@+id/imgProfileCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/card1_image"
-                        android:contentDescription="@null"
-                        tools:ignore="ImageContrastCheck" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSetProfile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|start"
-                        android:layout_margin="16dp"
-                        android:text="@string/btn_set_profile"
-                        android:textAllCaps="false"
-                        app:cornerRadius="50dp"
-                        app:backgroundTint="@color/otp_orange"
-                        app:icon="@drawable/profile_icon"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        tools:ignore="TextContrastCheck" />
-
-                </FrameLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
+            <!-- NOVOSTI -->
             <TextView
                 android:id="@+id/tvNewsTitle"
                 android:layout_width="match_parent"
@@ -147,8 +88,41 @@
                 android:paddingBottom="16dp"
                 android:layout_marginBottom="24dp" />
 
-        </LinearLayout>
+            <!-- ZA TEBE -->
+            <TextView
+                android:id="@+id/tvForYou"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Za tebe"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="8dp" />
 
+            <!-- RANDOM POSAO -->
+            <FrameLayout
+                android:id="@+id/containerRandomJob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/includeRandomJob"
+                    layout="@layout/item_job" />
+            </FrameLayout>
+
+            <!-- RANDOM PRAKSA -->
+            <FrameLayout
+                android:id="@+id/containerRandomInternship"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <include
+                    android:id="@+id/includeRandomInternship"
+                    layout="@layout/item_job" />
+            </FrameLayout>
+
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
