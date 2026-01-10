@@ -66,18 +66,20 @@
                 android:id="@+id/ivCompanyLogo"
                 android:layout_width="74dp"
                 android:layout_height="74dp"
-                android:src="@drawable/ic_construction"
+                android:src="@drawable/ic_otp_logo_circle"
                 app:tint="?attr/colorPrimary"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@null"
+                />
 
             <TextView
                 android:id="@+id/tvInternshipTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:text="Praksa"
+                android:text="@string/internship_title_placeholder"
                 android:textStyle="bold"
                 android:textSize="22sp"
                 android:textColor="?android:attr/textColorPrimary"
@@ -91,9 +93,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="Tvrtka"
+                android:text="@string/company_name_placeholder"
                 android:textSize="14sp"
-                android:textColor="#8A8A8A"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:gravity="center"
                 app:layout_constraintTop_toBottomOf="@id/tvInternshipTitle"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,6 +113,9 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_width="0dp"
                     android:layout_height="92dp"
                     android:layout_weight="1"
@@ -118,7 +123,9 @@
                     app:cardCornerRadius="16dp"
                     app:cardElevation="0dp"
                     app:strokeWidth="1dp"
-                    app:strokeColor="#E7E7E7">
+                    app:strokeColor="?attr/colorOutline"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -130,7 +137,9 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_money"
-                            app:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="@null"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -138,14 +147,15 @@
                             android:layout_marginTop="6dp"
                             android:text="@string/internship_field_compensation"
                             android:textSize="12sp"
-                            android:textColor="#8A8A8A"/>
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            />
 
                         <TextView
                             android:id="@+id/tvCompensationValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="-"
+                            android:text="@string/placeholder_dash"
                             android:textStyle="bold"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorPrimary"/>
@@ -153,6 +163,9 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_width="0dp"
                     android:layout_height="92dp"
                     android:layout_weight="1"
@@ -160,7 +173,9 @@
                     app:cardCornerRadius="16dp"
                     app:cardElevation="0dp"
                     app:strokeWidth="1dp"
-                    app:strokeColor="#E7E7E7">
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeColor="?attr/colorOutline"
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -172,7 +187,9 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_location"
-                            app:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="@null"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -180,14 +197,15 @@
                             android:layout_marginTop="6dp"
                             android:text="@string/internship_field_location"
                             android:textSize="12sp"
-                            android:textColor="#8A8A8A"/>
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            />
 
                         <TextView
                             android:id="@+id/tvLocationValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="-"
+                            android:text="@string/placeholder_dash"
                             android:textStyle="bold"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorPrimary"/>
@@ -195,13 +213,18 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_width="0dp"
                     android:layout_height="92dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="0dp"
                     app:strokeWidth="1dp"
-                    app:strokeColor="#E7E7E7">
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeColor="?attr/colorOutline"
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -213,7 +236,9 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:src="@drawable/ic_history"
-                            app:tint="?attr/colorPrimary"/>
+                            app:tint="?attr/colorPrimary"
+                            android:contentDescription="@null"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -221,14 +246,15 @@
                             android:layout_marginTop="6dp"
                             android:text="@string/internship_field_duration"
                             android:textSize="12sp"
-                            android:textColor="#8A8A8A"/>
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            />
 
                         <TextView
                             android:id="@+id/tvDurationValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="-"
+                            android:text="@string/placeholder_dash"
                             android:textStyle="bold"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorPrimary"/>
@@ -246,7 +272,8 @@
                 app:cardCornerRadius="18dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="#E7E7E7"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeColor="?attr/colorOutline"
                 app:layout_constraintTop_toBottomOf="@id/llCards"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -270,9 +297,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="-"
+                        android:text="@string/placeholder_dash"
                         android:textSize="14sp"
-                        android:textColor="#8A8A8A"/>
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -288,9 +316,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="-"
+                        android:text="@string/placeholder_dash"
                         android:textSize="14sp"
-                        android:textColor="#8A8A8A"/>
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -304,7 +333,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"
-        android:text="Prijavljeno"
+        android:text="@string/internship_applied_label"
         android:checked="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btnApply" />
