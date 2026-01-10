@@ -54,4 +54,9 @@
         android:name="hr.foi.air.otpstudent.ui.internship.InternshipFulfilledFragment"
         tools:layout="@layout/fragment_internship_fullfiled" />
 
+    <fragment
+        android:id="@+id/chatbotFragment"
+        android:name="hr.foi.air.otpstudent.ChatbotFragment"
+        android:label="Chatbot" />
+
 </navigation>
