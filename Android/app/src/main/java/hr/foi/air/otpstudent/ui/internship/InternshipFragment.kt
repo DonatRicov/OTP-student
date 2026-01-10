@@ -19,6 +19,8 @@ import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import android.widget.ImageButton
+import androidx.navigation.fragment.findNavController
 
 class InternshipFragment : Fragment(R.layout.fragment_internship) {
 
@@ -52,6 +54,9 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
             viewModel.applyFilters()
         }
 
+        view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
 
         adapter = InternshipAdapter { internship ->
             startActivity(InternshipDetailsActivity.newIntent(requireContext(), internship.id))
