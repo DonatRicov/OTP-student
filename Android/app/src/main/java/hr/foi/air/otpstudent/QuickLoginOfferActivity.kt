@@ -41,7 +41,6 @@ class QuickLoginOfferActivity : AppCompatActivity() {
                                 goToHome()
                             }
                             is AuthResult.Error -> {
-                                // Toast mozda?
                             }
                             AuthResult.Cancelled -> Unit
                         }
