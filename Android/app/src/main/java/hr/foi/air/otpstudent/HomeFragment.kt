@@ -156,7 +156,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                     jobInclude.setOnClickListener {
                         val intent = Intent(requireContext(), JobDetailsActivity::class.java)
-                        intent.putExtra("JOB_ID", randomJob.id)   // <-- OVO
+                        intent.putExtra("JOB_ID", randomJob.id)
                         startActivity(intent)
                     }
 
