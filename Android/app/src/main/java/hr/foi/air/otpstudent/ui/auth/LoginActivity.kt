@@ -26,6 +26,9 @@ import hr.foi.air.core.auth.SecureCreds
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 class LoginActivity : AppCompatActivity() {
 
@@ -39,7 +42,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        Toast.makeText(this, "Auth plugins: ${AuthRegistry.available().size}", Toast.LENGTH_LONG).show()
+        val root = findViewById<View>(android.R.id.content)
+        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = bars.top)
+            insets
+        }
+
 
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPass = findViewById<EditText>(R.id.etPass)

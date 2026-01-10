@@ -21,7 +21,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var items: List<NewsItem>
 
     private var autoScrollTimer: CountDownTimer? = null
-    private val slideDuration = 5000L   // 5 sekundi
+    private val slideDuration = 5000L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

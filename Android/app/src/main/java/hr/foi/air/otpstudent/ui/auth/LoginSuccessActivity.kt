@@ -63,7 +63,6 @@ class LoginSuccessActivity : AppCompatActivity() {
             } else {
                 Intent(this, MainActivity::class.java)
             }
-            Toast.makeText(this, "Next: ${next.component?.className}", Toast.LENGTH_LONG).show()
 
             startActivity(next)
             finish()
