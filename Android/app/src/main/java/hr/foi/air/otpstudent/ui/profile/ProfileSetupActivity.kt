@@ -274,8 +274,9 @@ class ProfileSetupActivity : AppCompatActivity() {
             "${packageName}.fileprovider",
             imageFile
         )
-        takePictureLauncher.launch(cameraImageUri)
+        takePictureLauncher.launch(cameraImageUri!!)
     }
+
 
     private fun setAvatarImage(uri: Uri) {
         Glide.with(this)
