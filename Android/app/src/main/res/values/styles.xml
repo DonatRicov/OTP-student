@@ -89,6 +89,13 @@
         <item name="cornerRadius">26dp</item>
     </style>
 
+    <style name="OrangeAccentCard">
+        <item name="cardBackgroundColor">@color/otp_orange</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cornerRadius">26dp</item>
+    </style>
+
     <style name="SegmentCard">
         <item name="cardBackgroundColor">@color/otp_green_light</item>
         <item name="cardElevation">0dp</item>
