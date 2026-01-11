@@ -7,6 +7,7 @@
     <color name="otp_green_light">#EFF7EA</color>
     <color name="otp_orange">#F07B1A</color>
     <color name="otp_grey">#898989</color>
+    <color name="segment_selected">#C8E6B3</color>
 
     <color name="red">#E2001A</color>
     <color name="divider_light">#14000000</color>

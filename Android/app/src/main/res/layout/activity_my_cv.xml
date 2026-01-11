@@ -11,6 +11,7 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foregroundTint="@color/white"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
@@ -61,12 +62,9 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardUserTop"
+                style="@style/SettingsCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
-                app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@android:color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -123,13 +121,10 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardUserDetails"
+                style="@style/SettingsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
-                app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@id/cardUserTop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -430,6 +425,5 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

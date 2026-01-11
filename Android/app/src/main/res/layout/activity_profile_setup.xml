@@ -49,15 +49,10 @@
         <!-- PROFIL HEADER -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfileHeader"
+            style="@style/SettingsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeWidth="1dp"
-            app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,19 +108,15 @@
         <!-- PODACI O PROFILU -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardProfileData"
+            style="@style/SettingsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeWidth="1dp"
-            app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/SettingsCard"
                 android:orientation="vertical"
                 android:padding="14dp">
 
@@ -187,15 +178,10 @@
         <!-- OSOBNI PODACI -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardPersonal"
+            style="@style/SettingsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeWidth="1dp"
-            app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -299,15 +285,10 @@
         <!-- PODACI O STUDIJU -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardStudy"
+            style="@style/SettingsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/white"
-            app:strokeWidth="1dp"
-            app:strokeColor="#14000000"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
