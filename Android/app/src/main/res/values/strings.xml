@@ -118,10 +118,13 @@
     <string name="chat_history">Povijest razgovora</string>
     <string name="chat_hint">Pitaju Ota...</string>
     <string name="chat_add_symbol">+</string>
-    <string name="chat_send_symbol">↑</string>
+    <string name="chat_send_symbol">S</string>
 
     <string name="chat_preview_user">Kako da se zaposlim u OTP kao student?</string>
-    <string name="chat_preview_bot">Ako se želiš zaposliti u OTP banci kao student, možeš to učiniti i unutar njihove mobilne aplikacije na kartici Poslovi ili preko službene web stranice...</string>
+    <string name="chat_preview_bot">Tekst Chatbota</string>
+
+    <string name="cd_home">Početna</string>
+
 
 
 

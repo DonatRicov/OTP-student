@@ -30,5 +30,12 @@
     <dimen name="chat_suggestion_margin_top">14dp</dimen>
     <dimen name="chat_suggestion_margin_bottom">6dp</dimen>
 
+    <dimen name="header_padding_top">12dp</dimen>
+    <dimen name="header_padding_bottom">16dp</dimen>
+    <dimen name="header_padding_horizontal">12dp</dimen>
+    <dimen name="header_logo_height">40dp</dimen>
+    <dimen name="header_icon_size">48dp</dimen>
+
+
 
 </resources>
