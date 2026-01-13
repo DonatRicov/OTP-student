@@ -113,6 +113,17 @@
     <string name="enable_fast_login_action">Uključi brzu prijavu</string>
     <string name="remind_me_later">Podsjeti me kasnije</string>
 
+    <!-- ChatBot -->
+    <string name="chat_title">Pitaj Ota!</string>
+    <string name="chat_history">Povijest razgovora</string>
+    <string name="chat_hint">Pitaju Ota...</string>
+    <string name="chat_add_symbol">+</string>
+    <string name="chat_send_symbol">↑</string>
+
+    <string name="chat_preview_user">Kako da se zaposlim u OTP kao student?</string>
+    <string name="chat_preview_bot">Ako se želiš zaposliti u OTP banci kao student, možeš to učiniti i unutar njihove mobilne aplikacije na kartici Poslovi ili preko službene web stranice...</string>
+
+
 
 
 

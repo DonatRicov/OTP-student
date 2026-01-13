@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomBar"
+    style="@style/Widget.OTPStudent.Chat.InputBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/screen_padding"
+    android:paddingEnd="@dimen/screen_padding"
+    android:paddingTop="@dimen/chat_input_padding_vertical"
+    android:paddingBottom="@dimen/chat_input_padding_vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAdd"
+        style="@style/Widget.OTPStudent.Chat.IconButton.Add"
+        android:layout_width="@dimen/chat_icon_btn_size"
+        android:layout_height="@dimen/chat_icon_btn_size"
+        android:text="@string/chat_add_symbol"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        style="@style/Widget.OTPStudent.Chat.Input"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/chat_input_height"
+        android:layout_marginStart="@dimen/chat_input_gap"
+        android:layout_marginEnd="@dimen/chat_input_gap"
+        android:hint="@string/chat_hint"
+        android:inputType="text"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@id/btnAdd"
+        app:layout_constraintEnd_toStartOf="@id/btnSend"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@id/btnAdd" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSend"
+        style="@style/Widget.OTPStudent.Chat.IconButton.Send"
+        android:layout_width="@dimen/chat_icon_btn_size"
+        android:layout_height="@dimen/chat_icon_btn_size"
+        android:text="@string/chat_send_symbol"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintBottom_toBottomOf="@id/btnAdd" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
