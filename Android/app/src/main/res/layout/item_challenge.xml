@@ -51,6 +51,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Aktivno"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/otp_green"
+            app:layout_constraintTop_toBottomOf="@id/tvStatus"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClaim"
             android:layout_width="0dp"
@@ -63,7 +76,7 @@
             app:cornerRadius="24dp"
             app:backgroundTint="@color/otp_green"
             android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tvDesc"
+            app:layout_constraintTop_toBottomOf="@id/tvStatus"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
