@@ -113,7 +113,9 @@
     <string name="enable_fast_login_action">Uključi brzu prijavu</string>
     <string name="remind_me_later">Podsjeti me kasnije</string>
 
-
-
+    <!--Filter-->
+    <string name="filter">Filtriraj</string>
+    <!--Broj bodova korisnika-->
+    <string name="have_points">Imaš %1$d bodova</string>
 
 </resources>
