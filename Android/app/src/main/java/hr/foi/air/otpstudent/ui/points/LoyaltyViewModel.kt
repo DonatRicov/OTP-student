@@ -1,0 +1,46 @@
+package hr.foi.air.otpstudent.ui.points
+
+import androidx.lifecycle.*
+import hr.foi.air.otpstudent.domain.model.ChallengeWithState
+import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
+import kotlinx.coroutines.launch
+
+sealed class LoyaltyUiState {
+    object Loading : LoyaltyUiState()
+    data class Success(val items: List<ChallengeWithState>) : LoyaltyUiState()
+    data class Error(val message: String) : LoyaltyUiState()
+}
+
+class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
+
+    private val _state = MutableLiveData<LoyaltyUiState>()
+    val state: LiveData<LoyaltyUiState> = _state
+
+    fun load() {
+        _state.value = LoyaltyUiState.Loading
+        viewModelScope.launch {
+            runCatching { repo.getActiveChallengesForCurrentUser() }
+                .onSuccess { _state.value = LoyaltyUiState.Success(it) }
+                .onFailure { _state.value = LoyaltyUiState.Error(it.message ?: "Greška") }
+        }
+    }
+
+    fun claim(challengeId: String) {
+        viewModelScope.launch {
+            runCatching { repo.markChallengeClaimed(challengeId) }
+            load()
+        }
+    }
+}
+
+class LoyaltyViewModelFactory(
+    private val repo: LoyaltyRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoyaltyViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoyaltyViewModel(repo) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
