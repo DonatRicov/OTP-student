@@ -115,7 +115,7 @@
                 android:paddingEnd="14dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="@string/have_points"
+                android:text=""
                 android:textColor="@color/otp_orange"
                 android:textSize="13sp" />
         </com.google.android.material.card.MaterialCardView>

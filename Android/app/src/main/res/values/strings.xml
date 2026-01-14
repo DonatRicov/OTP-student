@@ -115,7 +115,7 @@
 
     <!--Filter-->
     <string name="filter">Filtriraj</string>
-    <!--Broj bodova korisnika-->
-    <string name="have_points">Imaš %1$d bodova</string>
+
+    <string name="points_total">Imaš %1$d bodova</string>
 
 </resources>
