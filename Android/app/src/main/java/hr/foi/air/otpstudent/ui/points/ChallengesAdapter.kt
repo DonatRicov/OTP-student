@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.domain.model.ChallengeWithState
+import android.widget.ImageView
 
 class ChallengesAdapter(
     private val onClaim: (challengeId: String) -> Unit
@@ -36,37 +37,79 @@ class ChallengesAdapter(
     class VH(itemView: View, private val onClaim: (String) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
 
-        private val title: TextView = itemView.findViewById(R.id.tvTitle)
-        private val points: TextView = itemView.findViewById(R.id.tvPoints)
-        private val status: TextView = itemView.findViewById(R.id.tvStatus)
+        private val btnStart: Button = itemView.findViewById(R.id.btnStart)
+        private val cardLocked: View = itemView.findViewById(R.id.cardLocked)
+        private val cardClaim: View = itemView.findViewById(R.id.cardClaim)
+
+        private val tvTitleLocked: TextView = itemView.findViewById(R.id.tvTitleLocked)
+        private val tvDescLocked: TextView = itemView.findViewById(R.id.tvDescLocked)
+        private val tvBadgePoints: TextView = itemView.findViewById(R.id.tvBadgePoints)
+        private val ivIconLocked: ImageView = itemView.findViewById(R.id.ivIconLocked)
+
+        private val tvTitleClaim: TextView = itemView.findViewById(R.id.tvTitleClaim)
+        private val tvDescClaim: TextView = itemView.findViewById(R.id.tvDescClaim)
+        private val tvPointsOnButton: TextView = itemView.findViewById(R.id.tvPointsOnButton)
+        private val ivIconClaim: ImageView = itemView.findViewById(R.id.ivIconClaim)
         private val btnClaim: Button = itemView.findViewById(R.id.btnClaim)
 
         fun bind(item: ChallengeWithState) {
             val ch = item.challenge
-            val st = item.state?.status ?: "ACTIVE"
 
-            title.text = ch.title
-            points.text = "Bodovi: ${ch.rewardPoints}"
+            val stRaw = item.state?.status
+            val st = (stRaw ?: "ACTIVE").trim().uppercase()
+
+            val pointsText = "+ ${ch.rewardPoints}"
+            val iconRes = iconFromKey(ch.iconKey)
+
+            tvTitleLocked.text = ch.title
+            tvBadgePoints.text = pointsText
+            ivIconLocked.setImageResource(iconRes)
+
+            tvTitleClaim.text = ch.title
+            tvPointsOnButton.text = pointsText
+            ivIconClaim.setImageResource(iconRes)
+
+            val desc = ch.description?.trim().orEmpty()
+            tvDescLocked.text = desc
+            tvDescClaim.text = desc
+
+            tvDescLocked.visibility = if (desc.isBlank()) View.GONE else View.VISIBLE
+            tvDescClaim.visibility = if (desc.isBlank()) View.GONE else View.VISIBLE
+
+            cardLocked.visibility = View.GONE
+            cardClaim.visibility = View.GONE
+            btnStart.visibility = View.GONE
+            btnClaim.visibility = View.GONE
 
             when (st) {
                 "COMPLETED_PENDING_CLAIM" -> {
-                    status.text = "Završeno - čeka preuzimanje"
+                    cardClaim.visibility = View.VISIBLE
                     btnClaim.visibility = View.VISIBLE
                     btnClaim.setOnClickListener { onClaim(ch.id) }
                 }
+
                 "CLAIMED" -> {
-                    status.text = "Preuzeto ✅"
-                    btnClaim.visibility = View.GONE
+                    cardClaim.visibility = View.VISIBLE
                 }
+
                 "EXPIRED" -> {
-                    status.text = "Isteklo ⏳"
-                    btnClaim.visibility = View.GONE
+                    cardLocked.visibility = View.VISIBLE
                 }
+
                 else -> {
-                    status.text = "Aktivno"
-                    btnClaim.visibility = View.GONE
+                    cardLocked.visibility = View.VISIBLE
+                    btnStart.visibility = View.GONE
                 }
+            }
+
+        }
+
+        private fun iconFromKey(key: String): Int {
+            return when (key.lowercase()) {
+                "pig" -> R.drawable.ic_challenge_default
+                else -> R.drawable.ic_challenge_default
             }
         }
     }
+
 }
