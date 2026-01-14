@@ -1,98 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="22dp"
-    app:cardElevation="10dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="@color/otp_green"
-    app:cardUseCompatPadding="true">
+    android:layout_marginBottom="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- PRIJE (izazov nije završen / nije claimable) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardLocked"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        app:cardCornerRadius="22dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/otp_border_green"
+        app:cardBackgroundColor="@color/white">
 
-        <ImageView
-            android:id="@+id/ivIcon"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:contentDescription="@null"
-            app:tint="@color/otp_green"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Postavi podatke računa"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@color/otp_green"
-            app:layout_constraintStart_toEndOf="@id/ivIcon"
-            app:layout_constraintTop_toTopOf="@id/ivIcon"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:padding="18dp">
 
-        <TextView
-            android:id="@+id/tvDesc"
-            android:layout_width="0dp"
+            <!-- Ikona u krugu -->
+            <FrameLayout
+                android:id="@+id/iconWrapLocked"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/bg_icon_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivIconLocked"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_challenge_default"
+                    app:tint="@color/otp_green" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvTitleLocked"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/otp_green"
+                app:layout_constraintStart_toEndOf="@id/iconWrapLocked"
+                app:layout_constraintTop_toTopOf="@id/iconWrapLocked"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDescLocked"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/otp_text_primary"
+                app:layout_constraintTop_toBottomOf="@id/tvTitleLocked"
+                app:layout_constraintStart_toStartOf="@id/tvTitleLocked"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Bodovi kao mali badge (može i bez ovoga) -->
+            <TextView
+                android:id="@+id/tvBadgePoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_points_badge"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="+20"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/otp_green"
+                app:layout_constraintTop_toBottomOf="@id/tvDescLocked"
+                app:layout_constraintStart_toStartOf="@id/tvTitleLocked" />
+
+            <!-- (Opcionalno) Outline CTA u "prije" stanju -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStart"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="IZVRŠI IZAZOV"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/otp_green"
+                android:background="@drawable/bg_button_outline"
+                app:cornerRadius="28dp"
+                app:rippleColor="@color/otp_green_light"
+                app:layout_constraintTop_toBottomOf="@id/tvBadgePoints"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!-- POSLIJE (izazov završen / claimable) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardClaim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/otp_border_green"
+        app:cardBackgroundColor="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Ispunio si sve podatke..."
-            android:textSize="13sp"
-            android:textColor="#5B5B5B"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:padding="18dp">
 
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Aktivno"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:textColor="@color/otp_green"
-            app:layout_constraintTop_toBottomOf="@id/tvDesc"
-            app:layout_constraintStart_toStartOf="@id/tvDesc"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <!-- Ikona u krugu (isto kao gore) -->
+            <FrameLayout
+                android:id="@+id/iconWrapClaim"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/bg_icon_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClaim"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:text="PREUZMI BODOVE"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            app:cornerRadius="24dp"
-            app:backgroundTint="@color/otp_green"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tvStatus"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+                <ImageView
+                    android:id="@+id/ivIconClaim"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_challenge_default"
+                    app:tint="@color/otp_green" />
+            </FrameLayout>
 
-        <TextView
-            android:id="@+id/tvPoints"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ 20"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@id/btnClaim"
-            app:layout_constraintTop_toTopOf="@id/btnClaim"
-            app:layout_constraintBottom_toBottomOf="@id/btnClaim"
-            android:layout_marginEnd="16dp"/>
+            <TextView
+                android:id="@+id/tvTitleClaim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/otp_green"
+                app:layout_constraintStart_toEndOf="@id/iconWrapClaim"
+                app:layout_constraintTop_toTopOf="@id/iconWrapClaim"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvDescClaim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/otp_text_primary"
+                app:layout_constraintTop_toBottomOf="@id/tvTitleClaim"
+                app:layout_constraintStart_toStartOf="@id/tvTitleClaim"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-</com.google.android.material.card.MaterialCardView>
+            <!-- Button kao na slici -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClaim"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="PREUZMI BODOVE"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                app:cornerRadius="28dp"
+                app:backgroundTint="@color/otp_green"
+                app:rippleColor="@color/otp_green_light"
+                app:layout_constraintTop_toBottomOf="@id/tvDescClaim"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- +20 desno u buttonu -->
+            <TextView
+                android:id="@+id/tvPointsOnButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+ 20"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="18dp"
+                app:layout_constraintEnd_toEndOf="@id/btnClaim"
+                app:layout_constraintTop_toTopOf="@id/btnClaim"
+                app:layout_constraintBottom_toBottomOf="@id/btnClaim" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

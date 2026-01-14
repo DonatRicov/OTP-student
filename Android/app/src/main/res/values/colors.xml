@@ -12,5 +12,11 @@
     <color name="red">#E2001A</color>
     <color name="divider_light">#14000000</color>
 
+    <color name="otp_text_primary">#212934</color>
+    <color name="otp_text_secondary">#5F6B7A</color>
+
+    <color name="otp_border_green">#0A7B47</color>
+
+    <color name="otp_green_glow">#220A7B47</color>
 
 </resources>
