@@ -10,6 +10,9 @@ import hr.foi.air.otpstudent.data.auth.FirebaseAuthRepositoryImpl
 import hr.foi.air.otpstudent.domain.repository.AuthRepository
 import hr.foi.air.otpstudent.data.repository.FirebaseInternshipRepositoryImpl
 import hr.foi.air.otpstudent.data.source.remote.InternshipsRemoteDataSource
+import hr.foi.air.otpstudent.data.repository.FirebaseLoyaltyRepositoryImpl
+import hr.foi.air.otpstudent.data.source.remote.FirebaseLoyaltyRemoteDataSource
+import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 
 
 object AppModule {
@@ -34,6 +37,11 @@ object AppModule {
     private val internshipsRemote by lazy { InternshipsRemoteDataSource(firestore) }
     val internshipRepository by lazy { FirebaseInternshipRepositoryImpl(internshipsRemote) }
 
+    private val loyaltyRemote by lazy { FirebaseLoyaltyRemoteDataSource(firestore) }
+
+    val loyaltyRepository: LoyaltyRepository by lazy {
+        FirebaseLoyaltyRepositoryImpl(firebaseAuth, loyaltyRemote)
+    }
 
 
 }
