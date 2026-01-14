@@ -179,35 +179,9 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Widget.OTPStudent.Chat.IconButton.Base" parent="Widget.MaterialComponents.Button">
-        <item name="android:insetLeft">0dp</item>
-        <item name="android:insetRight">0dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="cornerRadius">@dimen/chat_icon_btn_size</item>
-        <item name="strokeWidth">@dimen/chat_stroke_width</item>
-    </style>
-
-    <style name="Widget.OTPStudent.Chat.IconButton.Add" parent="Widget.OTPStudent.Chat.IconButton.Base">
-        <item name="android:textColor">@color/otp_green</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
-        <item name="backgroundTint">@color/otp_green_light</item>
-        <item name="strokeColor">@color/otp_green</item>
-    </style>
-
-    <style name="Widget.OTPStudent.Chat.IconButton.Send" parent="Widget.OTPStudent.Chat.IconButton.Base">
-        <item name="android:textColor">@color/otp_grey</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
-        <item name="backgroundTint">@color/white</item>
-        <item name="strokeColor">@color/divider_light</item>
-    </style>
-
     <style name="Widget.OTPStudent.Chat" />
     <style name="Widget.OTPStudent" />
     <style name="Widget" />
-
 
 
 </resources>

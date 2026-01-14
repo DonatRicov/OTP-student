@@ -124,10 +124,7 @@
     <string name="chat_preview_bot">Tekst Chatbota</string>
 
     <string name="cd_home">Početna</string>
-
-
-
-
-
+    <string name="cd_add">Dodaj</string>
+    <string name="cd_send">Pošalji</string>
 
 </resources>
