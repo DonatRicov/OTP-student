@@ -16,12 +16,24 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
     private val _state = MutableLiveData<LoyaltyUiState>()
     val state: LiveData<LoyaltyUiState> = _state
 
+    private val _points = MutableLiveData<Long>()
+    val points: LiveData<Long> = _points
+
     fun load() {
         _state.value = LoyaltyUiState.Loading
         viewModelScope.launch {
-            runCatching { repo.getActiveChallengesForCurrentUser() }
-                .onSuccess { _state.value = LoyaltyUiState.Success(it) }
-                .onFailure { _state.value = LoyaltyUiState.Error(it.message ?: "Greška") }
+            runCatching {
+                val challenges = repo.getActiveChallengesForCurrentUser()
+                val points = repo.getPointsBalanceForCurrentUser()
+                challenges to points
+            }
+                .onSuccess { (items, points) ->
+                    _points.value = points
+                    _state.value = LoyaltyUiState.Success(items)
+                }
+                .onFailure {
+                    _state.value = LoyaltyUiState.Error(it.message ?: "Greška")
+                }
         }
     }
 
@@ -32,6 +44,7 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         }
     }
 }
+
 
 class LoyaltyViewModelFactory(
     private val repo: LoyaltyRepository
