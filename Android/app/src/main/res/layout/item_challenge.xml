@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp">
 
-    <!-- PRIJE (izazov nije završen / nije claimable) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardLocked"
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             android:layout_height="wrap_content"
             android:padding="18dp">
 
-            <!-- Ikona u krugu -->
             <FrameLayout
                 android:id="@+id/iconWrapLocked"
                 android:layout_width="64dp"
@@ -64,7 +62,6 @@
                 app:layout_constraintStart_toStartOf="@id/tvTitleLocked"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Bodovi kao mali badge (može i bez ovoga) -->
             <TextView
                 android:id="@+id/tvBadgePoints"
                 android:layout_width="wrap_content"
@@ -80,7 +77,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvDescLocked"
                 app:layout_constraintStart_toStartOf="@id/tvTitleLocked" />
 
-            <!-- (Opcionalno) Outline CTA u "prije" stanju -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnStart"
                 android:visibility="gone"
@@ -103,7 +99,6 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-    <!-- POSLIJE (izazov završen / claimable) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardClaim"
         android:layout_width="match_parent"
@@ -121,7 +116,6 @@
             android:layout_height="wrap_content"
             android:padding="18dp">
 
-            <!-- Ikona u krugu (isto kao gore) -->
             <FrameLayout
                 android:id="@+id/iconWrapClaim"
                 android:layout_width="64dp"
@@ -163,7 +157,6 @@
                 app:layout_constraintStart_toStartOf="@id/tvTitleClaim"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Button kao na slici -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnClaim"
                 android:layout_width="0dp"
@@ -181,7 +174,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- +20 desno u buttonu -->
             <TextView
                 android:id="@+id/tvPointsOnButton"
                 android:layout_width="wrap_content"
