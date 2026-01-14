@@ -23,10 +23,10 @@
         android:name="hr.foi.air.otpstudent.ui.jobs.JobsFragment"
         tools:layout="@layout/fragment_jobs" />
 
-    <!-- BODOVI (umjesto Chatbot) -->
+    <!-- BODOVI -->
     <fragment
         android:id="@+id/nav_points"
-        android:name="hr.foi.air.otpstudent.PointsFragment"
+        android:name="hr.foi.air.otpstudent.ui.points.PointsFragment"
         android:label="Bodovi"
         tools:layout="@layout/fragment_points" />
 

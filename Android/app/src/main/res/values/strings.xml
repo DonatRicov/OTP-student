@@ -119,6 +119,8 @@
     <string name="chat_hint">Pitaju Ota...</string>
     <string name="chat_add_symbol">+</string>
     <string name="chat_send_symbol">S</string>
+    <!--Filter-->
+    <string name="filter">Filtriraj</string>
 
     <string name="chat_preview_user">Kako da se zaposlim u OTP kao student?</string>
     <string name="chat_preview_bot">Tekst Chatbota</string>
@@ -126,5 +128,6 @@
     <string name="cd_home">Početna</string>
     <string name="cd_add">Dodaj</string>
     <string name="cd_send">Pošalji</string>
+    <string name="points_total">Imaš %1$d bodova</string>
 
 </resources>

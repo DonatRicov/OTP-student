@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <!-- HEADER -->
     <include
         android:id="@+id/header"
         layout="@layout/view_header"
@@ -16,14 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- SEGMENTED NAV -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/segmentNav"
-        style="@style/SegmentCard"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
+        style="@style/SegmentCard"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -45,9 +47,9 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@color/otp_green"
-                android:background="@drawable/bg_segment_selected"
+                android:background="@drawable/bg_segment_unselected"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="false" />
 
             <TextView
                 android:id="@+id/tabRewards"
@@ -61,11 +63,12 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@color/otp_green"
-                android:background="@drawable/bg_segment_unselected"
+                android:background="@drawable/bg_segment_selected"
                 android:clickable="true"
-                android:focusable="false" />
+                android:focusable="true" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/filterRow"
@@ -76,6 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/segmentNav">
 
+        <!-- FILTER GUMB -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilter"
             style="@style/FilterButton"
@@ -92,6 +96,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <!-- POINTS CHIP -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/pointsChip"
             style="@style/AccentCard"
@@ -117,14 +122,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <FrameLayout
-        android:id="@+id/pointsFragmentContainer"
+
+    <!-- Scrollabilne nagrade -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRewards"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/filterRow"
+        android:clipToPadding="true"
+        android:overScrollMode="always"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@id/pointsChip" />
+        <!-->tools:listitem="@layout/item_reward"<-->
 </androidx.constraintlayout.widget.ConstraintLayout>

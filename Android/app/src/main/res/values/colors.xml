@@ -7,10 +7,17 @@
     <color name="otp_green_light">#EFF7EA</color>
     <color name="otp_orange">#F07B1A</color>
     <color name="otp_grey">#898989</color>
+    <color name="segment_selected">#C8E6B3</color>
 
     <color name="red">#E2001A</color>
     <color name="divider_light">#14000000</color>
 
+    <color name="otp_text_primary">#212934</color>
+    <color name="otp_text_secondary">#5F6B7A</color>
+
+    <color name="otp_border_green">#0A7B47</color>
+
+    <color name="otp_green_glow">#220A7B47</color>
     <color name="chat_border">#D7D7D7</color>
     <color name="chat_text_muted">#7A7A7A</color>
 
