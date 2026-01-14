@@ -1,11 +1,12 @@
 package hr.foi.air.otpstudent.data.source.remote
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import hr.foi.air.otpstudent.domain.model.Challenge
 import hr.foi.air.otpstudent.domain.model.ChallengeState
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.functions.functions
+import com.google.firebase.Firebase
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -47,17 +48,12 @@ class FirebaseLoyaltyRemoteDataSource(
         }
     }
 
-    override suspend fun updateChallengeStateClaimed(uid: String, challengeId: String) {
-        db.collection("users")
-            .document(uid)
-            .collection("challengeStates")
-            .document(challengeId)
-            .update(
-                mapOf(
-                    "status" to "CLAIMED",
-                    "claimedAt" to FieldValue.serverTimestamp()
-                )
-            )
+    override suspend fun claimChallenge(challengeId: String) {
+        val data = hashMapOf("challengeId" to challengeId)
+        Firebase.functions
+            .getHttpsCallable("claimChallenge")
+            .call(data)
             .await()
     }
+
 }

@@ -25,7 +25,8 @@ class FirebaseLoyaltyRepositoryImpl(
     }
 
     override suspend fun markChallengeClaimed(challengeId: String) {
-        val uid = auth.currentUser?.uid ?: return
-        remote.updateChallengeStateClaimed(uid, challengeId)
+        auth.currentUser?.uid ?: return 
+        remote.claimChallenge(challengeId)
     }
+
 }
