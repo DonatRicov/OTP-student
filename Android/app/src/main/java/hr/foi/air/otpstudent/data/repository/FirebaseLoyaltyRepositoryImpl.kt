@@ -29,4 +29,9 @@ class FirebaseLoyaltyRepositoryImpl(
         remote.claimChallenge(challengeId)
     }
 
+    override suspend fun getPointsBalanceForCurrentUser(): Long {
+        val uid = auth.currentUser?.uid ?: return 0L
+        return remote.fetchPointsBalance(uid)
+    }
+
 }

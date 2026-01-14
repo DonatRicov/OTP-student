@@ -25,7 +25,9 @@ class FirebaseLoyaltyRemoteDataSource(
                 rewardPoints = doc.getLong("rewardPoints") ?: 0L,
                 claimWindowDay = doc.getLong("claimWindowDay") ?: 0L,
                 active = doc.getBoolean("active") ?: true,
-                type = doc.getString("type") ?: ""
+                type = doc.getString("type") ?: "",
+                description = doc.getString("description") ?: "",
+                iconKey = doc.getString("iconKey") ?: "default"
             )
         }
     }
@@ -55,5 +57,11 @@ class FirebaseLoyaltyRemoteDataSource(
             .call(data)
             .await()
     }
+
+    override suspend fun fetchPointsBalance(uid: String): Long {
+        val doc = db.collection("users").document(uid).get().await()
+        return doc.getLong("pointsBalance") ?: 0L
+    }
+
 
 }

@@ -7,4 +7,7 @@ interface LoyaltyRemoteDataSource {
     suspend fun fetchActiveChallenges(): List<Challenge>
     suspend fun fetchChallengeStates(uid: String): List<ChallengeState>
     suspend fun claimChallenge(challengeId: String)
+
+    suspend fun fetchPointsBalance(uid: String): Long
+
 }

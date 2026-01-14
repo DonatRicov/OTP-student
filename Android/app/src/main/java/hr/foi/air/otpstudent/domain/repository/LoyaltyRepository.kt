@@ -6,4 +6,7 @@ interface LoyaltyRepository {
     suspend fun getActiveChallengesForCurrentUser(): List<ChallengeWithState>
 
     suspend fun markChallengeClaimed(challengeId: String)
+
+    suspend fun getPointsBalanceForCurrentUser(): Long
+
 }
