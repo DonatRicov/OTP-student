@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.analytics)
+    implementation("com.google.firebase:firebase-common")
+    implementation("com.google.firebase:firebase-functions")
+
 
 
     implementation(libs.viewpager2)
