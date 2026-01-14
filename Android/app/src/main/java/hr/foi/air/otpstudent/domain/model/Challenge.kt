@@ -6,5 +6,7 @@ data class Challenge(
     val rewardPoints: Long,
     val claimWindowDay: Long,
     val active: Boolean,
-    val type: String
+    val type: String,
+    val description: String = "",
+    val iconKey: String = "default"
 )
