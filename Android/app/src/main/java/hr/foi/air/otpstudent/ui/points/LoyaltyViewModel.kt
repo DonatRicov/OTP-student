@@ -29,7 +29,13 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
             }
                 .onSuccess { (items, points) ->
                     _points.value = points
-                    _state.value = LoyaltyUiState.Success(items)
+
+                    val filtered = items.filter { item ->
+                        val st = item.state?.status?.trim()?.uppercase() ?: "ACTIVE"
+                        st != "CLAIMED"
+                    }
+
+                    _state.value = LoyaltyUiState.Success(filtered)
                 }
                 .onFailure {
                     _state.value = LoyaltyUiState.Error(it.message ?: "Greška")
@@ -37,12 +43,20 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         }
     }
 
+
     fun claim(challengeId: String) {
+        _state.value = LoyaltyUiState.Loading
         viewModelScope.launch {
             runCatching { repo.markChallengeClaimed(challengeId) }
-            load()
+                .onSuccess {
+                    load()
+                }
+                .onFailure {
+                    _state.value = LoyaltyUiState.Error(it.message ?: "Greška pri preuzimanju bodova")
+                }
         }
     }
+
 }
 
 
