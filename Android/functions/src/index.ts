@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { SessionsClient } from "@google-cloud/dialogflow";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -172,3 +173,41 @@ export const claimChallenge = onCall(async (request) => {
 
   return { ok: true };
 });
+
+export const dialogflowDetectIntent = onCall(
+  { region: "us-central1", timeoutSeconds: 60 },
+  async (request) => {
+
+    const uid = request.auth?.uid;
+    if (!uid) {
+      throw new HttpsError("unauthenticated", "User must be signed in.");
+    }
+
+    const message = (request.data?.message ?? "").toString().trim();
+    if (!message) {
+      throw new HttpsError("invalid-argument", "message is required.");
+    }
+
+    const projectId = process.env.GCLOUD_PROJECT;
+    if (!projectId) {
+      throw new HttpsError("internal", "Missing GCLOUD_PROJECT env.");
+    }
+
+    const client = new SessionsClient();
+    const sessionPath = client.projectAgentSessionPath(projectId, uid);
+
+    const [response] = await client.detectIntent({
+      session: sessionPath,
+      queryInput: {
+        text: { text: message, languageCode: "hr" },
+      },
+    });
+
+    const result: any = response.queryResult || {};
+    const fulfillment = (result.fulfillmentText || "").trim();
+    const kb = (result.knowledgeAnswers?.answers?.[0]?.answer || "").trim();
+
+    return { reply: fulfillment || kb || "Ne znam odgovor na to." };
+  }
+);
+
