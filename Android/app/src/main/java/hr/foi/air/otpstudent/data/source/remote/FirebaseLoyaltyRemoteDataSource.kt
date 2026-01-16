@@ -38,7 +38,7 @@ class FirebaseLoyaltyRemoteDataSource(
                 id = doc.id,
                 title = doc.getString("title") ?: "",
                 rewardPoints = doc.getLong("rewardPoints") ?: 0L,
-                claimWindowDay = claimWindow, // ✅ OVDJE ide
+                claimWindowDay = claimWindow,
                 active = doc.getBoolean("active") ?: true,
                 type = type,
                 description = description,

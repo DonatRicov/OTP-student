@@ -11,7 +11,9 @@ import hr.foi.air.otpstudent.domain.model.ChallengeWithState
 import android.widget.ImageView
 
 class ChallengesAdapter(
-    private val onClaim: (challengeId: String) -> Unit
+    private val onClaim: (challengeId: String) -> Unit,
+    private val onOpenQuiz: (challengeId: String) -> Unit
+
 ) : RecyclerView.Adapter<ChallengesAdapter.VH>() {
 
     private val items = mutableListOf<ChallengeWithState>()
@@ -25,7 +27,7 @@ class ChallengesAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_challenge, parent, false)
-        return VH(v, onClaim)
+        return VH(v, onClaim, onOpenQuiz)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -34,7 +36,8 @@ class ChallengesAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class VH(itemView: View, private val onClaim: (String) -> Unit) :
+    class VH(itemView: View, private val onClaim: (String) -> Unit, private val onOpenQuiz: (String) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
 
         private val btnStart: Button = itemView.findViewById(R.id.btnStart)
@@ -54,6 +57,7 @@ class ChallengesAdapter(
 
         fun bind(item: ChallengeWithState) {
             val ch = item.challenge
+            val isQuiz = ch.type.trim().uppercase() == "QUIZ_WEEKLY"
 
             val stRaw = item.state?.status
             val st = (stRaw ?: "ACTIVE").trim().uppercase()
@@ -98,8 +102,16 @@ class ChallengesAdapter(
 
                 else -> {
                     cardLocked.visibility = View.VISIBLE
-                    btnStart.visibility = View.GONE
+
+                    if (isQuiz) {
+                        btnStart.visibility = View.VISIBLE
+                        btnStart.text = "RIJEŠI KVIZ"
+                        btnStart.setOnClickListener { onOpenQuiz(ch.id) }
+                    } else {
+                        btnStart.visibility = View.GONE
+                    }
                 }
+
             }
 
         }
@@ -107,6 +119,11 @@ class ChallengesAdapter(
         private fun iconFromKey(key: String): Int {
             return when (key.lowercase()) {
                 "pig" -> R.drawable.ic_challenge_default
+                "quiz" -> R.drawable.ic_challenge_quiz
+                "profile" -> R.drawable.ic_challenge_profile
+                "explore" -> R.drawable.ic_challenge_explore
+                "apply" -> R.drawable.ic_challenge_apply
+                "login" -> R.drawable.ic_challenge_login
                 else -> R.drawable.ic_challenge_default
             }
         }
