@@ -4,6 +4,8 @@ import com.google.firebase.auth.FirebaseAuth
 import hr.foi.air.otpstudent.data.source.remote.LoyaltyRemoteDataSource
 import hr.foi.air.otpstudent.domain.model.ChallengeWithState
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
+import hr.foi.air.otpstudent.domain.model.QuizQuestion
+import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 
 class FirebaseLoyaltyRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -32,6 +34,16 @@ class FirebaseLoyaltyRepositoryImpl(
     override suspend fun getPointsBalanceForCurrentUser(): Long {
         val uid = auth.currentUser?.uid ?: return 0L
         return remote.fetchPointsBalance(uid)
+    }
+
+
+    override suspend fun getQuizQuestion(challengeId: String): QuizQuestion? {
+        return remote.fetchQuizQuestion(challengeId)
+    }
+
+    override suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult {
+        auth.currentUser?.uid ?: return QuizSubmitResult(correct = false, pointsAwarded = 0L)
+        return remote.submitQuizAnswer(challengeId, selectedIndex)
     }
 
 }
