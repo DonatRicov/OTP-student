@@ -5,20 +5,22 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import hr.foi.air.otpstudent.R
-import hr.foi.air.otpstudent.data.repository.FirebaseLoyaltyRepositoryImpl
-import hr.foi.air.otpstudent.data.source.remote.FirebaseLoyaltyRemoteDataSource
-import hr.foi.air.otpstudent.ui.points.ChallengesAdapter
+import androidx.fragment.app.viewModels
+import hr.foi.air.otpstudent.di.AppModule
 
 class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
 
-    private lateinit var vm: LoyaltyViewModel
+    private val vm: LoyaltyViewModel by viewModels(
+        ownerProducer = { requireParentFragment() }
+    ) {
+        LoyaltyViewModelFactory(AppModule.loyaltyRepository)
+    }
+
     private lateinit var adapter: ChallengesAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,16 +29,17 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
         val error = view.findViewById<TextView>(R.id.tvError)
         val rv = view.findViewById<RecyclerView>(R.id.rvChallenges)
 
-        adapter = ChallengesAdapter(onClaim = { vm.claim(it) })
+        adapter = ChallengesAdapter(
+            onClaim = { vm.claim(it) },
+            onOpenQuiz = { challengeId ->
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.pointsFragmentContainer, QuizFragment.newInstance(challengeId))
+                    .addToBackStack("quiz")
+                    .commit()
+            }
+        )
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
-
-        val repo = FirebaseLoyaltyRepositoryImpl(
-            FirebaseAuth.getInstance(),
-            FirebaseLoyaltyRemoteDataSource(FirebaseFirestore.getInstance())
-        )
-
-        vm = ViewModelProvider(this, LoyaltyViewModelFactory(repo))[LoyaltyViewModel::class.java]
 
 
         vm.state.observe(viewLifecycleOwner) { state ->
@@ -60,4 +63,5 @@ class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
 
         vm.load()
     }
+
 }
