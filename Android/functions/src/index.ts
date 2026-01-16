@@ -177,12 +177,6 @@ export const claimChallenge = onCall(async (request) => {
 export const dialogflowDetectIntent = onCall(
   { region: "us-central1", timeoutSeconds: 60 },
   async (request) => {
-
-    const uid = request.auth?.uid;
-    if (!uid) {
-      throw new HttpsError("unauthenticated", "User must be signed in.");
-    }
-
     const message = (request.data?.message ?? "").toString().trim();
     if (!message) {
       throw new HttpsError("invalid-argument", "message is required.");
@@ -193,8 +187,13 @@ export const dialogflowDetectIntent = onCall(
       throw new HttpsError("internal", "Missing GCLOUD_PROJECT env.");
     }
 
+    // DOZVOLI i anon korisnike
+    const uid = request.auth?.uid ?? "anon";
+    const clientSession = (request.data?.sessionId ?? "default").toString();
+    const sessionId = `${uid}_${clientSession}`;
+
     const client = new SessionsClient();
-    const sessionPath = client.projectAgentSessionPath(projectId, uid);
+    const sessionPath = client.projectAgentSessionPath(projectId, sessionId);
 
     const [response] = await client.detectIntent({
       session: sessionPath,
