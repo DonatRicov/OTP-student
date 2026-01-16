@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import hr.foi.air.otpstudent.domain.model.ChallengeWithState
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 import kotlinx.coroutines.launch
+import hr.foi.air.otpstudent.domain.model.QuizQuestion
+import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 
 sealed class LoyaltyUiState {
     object Loading : LoyaltyUiState()
@@ -18,6 +20,12 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
 
     private val _points = MutableLiveData<Long>()
     val points: LiveData<Long> = _points
+
+    private val _quizQuestion = MutableLiveData<QuizQuestion?>()
+    val quizQuestion: LiveData<QuizQuestion?> = _quizQuestion
+
+    private val _quizSubmitResult = MutableLiveData<QuizSubmitResult?>()
+    val quizSubmitResult: LiveData<QuizSubmitResult?> = _quizSubmitResult
 
     fun load() {
         _state.value = LoyaltyUiState.Loading
@@ -56,6 +64,36 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 }
         }
     }
+
+
+    fun loadQuizQuestion(challengeId: String) {
+        viewModelScope.launch {
+            runCatching { repo.getQuizQuestion(challengeId) }
+                .onSuccess { q -> _quizQuestion.value = q }
+                .onFailure { _quizQuestion.value = null }
+        }
+    }
+
+
+    fun submitQuizAnswer(challengeId: String, selectedIndex: Int) {
+        _state.value = LoyaltyUiState.Loading
+        viewModelScope.launch {
+            runCatching { repo.submitQuizAnswer(challengeId, selectedIndex) }
+                .onSuccess { result ->
+                    _quizSubmitResult.value = result
+                    load()
+                }
+                .onFailure {
+                    _state.value = LoyaltyUiState.Error(it.message ?: "Greška pri slanju kviza")
+                }
+        }
+    }
+
+    fun clearQuizSubmitResult() {
+        _quizSubmitResult.value = null
+    }
+
+
 
 }
 
