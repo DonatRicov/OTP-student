@@ -195,7 +195,6 @@ export const submitQuizResult = onCall(async (request) => {
   const userRef = db.collection("users").doc(uid);
   const stateRef = userRef.collection("challengeStates").doc(challengeId);
 
-  // 1) Ucitaj challenge (izvan transakcije) da znamo rewardPoints i provjerimo type
   const chDocOutside = await challengeRef.get();
   if (!chDocOutside.exists) {
     throw new HttpsError("not-found", "Challenge not found.");
@@ -208,7 +207,6 @@ export const submitQuizResult = onCall(async (request) => {
 
   const rewardPointsOutside = (chDocOutside.get("rewardPoints") as number | undefined) ?? 0;
 
-  // 2) Ucitaj 1. pitanje
   const qSnap = await challengeRef
     .collection("quizQuestions")
     .orderBy("order")
@@ -228,7 +226,6 @@ export const submitQuizResult = onCall(async (request) => {
 
   const isCorrect = selectedIndex === correctIndex;
 
-  // 3) Transakcija: upis state + (ako tocno) ledger + points
   await db.runTransaction(async (tx) => {
     const [stateSnap, userSnap] = await Promise.all([
       tx.get(stateRef),
@@ -237,7 +234,6 @@ export const submitQuizResult = onCall(async (request) => {
 
     const now = admin.firestore.Timestamp.now();
 
-    // sprijeci dupli pokusaj
     if (stateSnap.exists) {
       const status = stateSnap.get("status") as string | undefined;
       if (status === "CLAIMED") {
@@ -248,7 +244,6 @@ export const submitQuizResult = onCall(async (request) => {
       }
     }
 
-    // uvijek markiraj kao CLAIMED da se sakrije u listi
     tx.set(
       stateRef,
       {
