@@ -11,6 +11,18 @@ function computeDeadline(now: FirebaseFirestore.Timestamp, claimWindowDays: numb
   return admin.firestore.Timestamp.fromMillis(ms);
 }
 
+function generateVoucherCode(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const part = (len: number) =>
+    Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return `OTPSTU-${part(4)}-${part(4)}`;
+}
+
+function addDays(now: FirebaseFirestore.Timestamp, days: number) {
+  const ms = now.toMillis() + days * 24 * 60 * 60 * 1000;
+  return admin.firestore.Timestamp.fromMillis(ms);
+}
+
 
 export const onAppliedJobCreated = onDocumentCreated(
   "users/{uid}/applied/{jobId}",
@@ -286,4 +298,114 @@ export const submitQuizResult = onCall(async (request) => {
   });
 
   return { ok: true, correct: isCorrect, pointsAwarded: isCorrect ? rewardPointsOutside : 0 };
+});
+
+export const redeemReward = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) throw new HttpsError("unauthenticated", "User must be signed in.");
+
+  const rewardId = request.data?.rewardId as string | undefined;
+  if (!rewardId) throw new HttpsError("invalid-argument", "rewardId is required.");
+
+  const rewardRef = db.collection("rewards").doc(rewardId);
+  const userRef = db.collection("users").doc(uid);
+
+  const now = admin.firestore.Timestamp.now();
+
+  const redemptionRef = userRef.collection("redemptions").doc();
+  const redemptionId = redemptionRef.id;
+
+  await db.runTransaction(async (tx) => {
+    const [rewardSnap, userSnap] = await Promise.all([
+      tx.get(rewardRef),
+      tx.get(userRef),
+    ]);
+
+    if (!rewardSnap.exists) throw new HttpsError("not-found", "Reward not found.");
+    const active = (rewardSnap.get("active") as boolean | undefined) ?? false;
+    if (!active) throw new HttpsError("failed-precondition", "Reward is not active.");
+
+    const costPoints = (rewardSnap.get("costPoints") as number | undefined) ?? 0;
+    if (costPoints <= 0) throw new HttpsError("failed-precondition", "Invalid costPoints.");
+
+    const validDays = (rewardSnap.get("validDays") as number | undefined) ?? 7;
+    const channel = (rewardSnap.get("channel") as string | undefined) ?? "BOTH";
+    const barcodeFormat = (rewardSnap.get("barcodeFormat") as string | undefined) ?? "QR";
+
+    const stock = rewardSnap.get("stock") as number | null | undefined;
+    if (typeof stock === "number" && stock <= 0) {
+      throw new HttpsError("failed-precondition", "Out of stock.");
+    }
+
+    const currentBalance = (userSnap.get("pointsBalance") as number | undefined) ?? 0;
+    if (currentBalance < costPoints) {
+      throw new HttpsError("failed-precondition", "Not enough points.");
+    }
+
+    const code = generateVoucherCode();
+    const expiresAt = addDays(now, validDays);
+
+    tx.set(redemptionRef, {
+      rewardId,
+      costPoints,
+      status: "ACTIVE",
+      code,
+      barcodeValue: code,
+      barcodeFormat,
+      channel,
+      issuedAt: now,
+      expiresAt,
+      usedAt: null,
+    });
+
+    const ledgerRef = userRef.collection("pointsLedger").doc();
+    tx.set(ledgerRef, {
+      type: "REDEEM",
+      amount: -costPoints,
+      refType: "reward",
+      refId: rewardId,
+      createdAt: now,
+    });
+
+    tx.set(userRef, { pointsBalance: currentBalance - costPoints, updatedAt: now }, { merge: true });
+
+    if (typeof stock === "number") {
+      tx.update(rewardRef, { stock: stock - 1, updatedAt: now });
+    }
+  });
+
+  return { ok: true, redemptionId };
+});
+
+export const useVoucher = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) throw new HttpsError("unauthenticated", "User must be signed in.");
+
+  const redemptionId = request.data?.redemptionId as string | undefined;
+  if (!redemptionId) throw new HttpsError("invalid-argument", "redemptionId is required.");
+
+  const userRef = db.collection("users").doc(uid);
+  const redemptionRef = userRef.collection("redemptions").doc(redemptionId);
+
+  const now = admin.firestore.Timestamp.now();
+
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(redemptionRef);
+    if (!snap.exists) throw new HttpsError("not-found", "Redemption not found.");
+
+    const status = snap.get("status") as string | undefined;
+    if (status !== "ACTIVE") {
+      throw new HttpsError("failed-precondition", `Voucher not usable. Status: ${status}`);
+    }
+
+    const expiresAt = snap.get("expiresAt") as FirebaseFirestore.Timestamp | undefined;
+    if (expiresAt && expiresAt.toMillis() < now.toMillis()) {
+      tx.update(redemptionRef, { status: "EXPIRED", updatedAt: now });
+      throw new HttpsError("failed-precondition", "Voucher expired.");
+    }
+
+    tx.update(redemptionRef, { status: "USED", usedAt: now, updatedAt: now });
+  });
+
+  return { ok: true };
 });
