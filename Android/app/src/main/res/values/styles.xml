@@ -155,5 +155,13 @@
         <item name="hintTextColor">@color/otp_green_dark</item>
     </style>
 
+    <style name="OtpDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="backgroundInsetStart">0dp</item>
+        <item name="backgroundInsetEnd">0dp</item>
+        <item name="backgroundInsetTop">0dp</item>
+        <item name="backgroundInsetBottom">0dp</item>
+    </style>
+
 </resources>
 
