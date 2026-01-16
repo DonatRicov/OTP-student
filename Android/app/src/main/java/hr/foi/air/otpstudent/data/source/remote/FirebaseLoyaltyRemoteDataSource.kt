@@ -7,6 +7,8 @@ import hr.foi.air.otpstudent.domain.model.ChallengeState
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.functions.functions
 import com.google.firebase.Firebase
+import hr.foi.air.otpstudent.domain.model.QuizQuestion
+import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -19,18 +21,33 @@ class FirebaseLoyaltyRemoteDataSource(
             .await()
 
         return snap.documents.map { doc ->
+            val type = doc.getString("type") ?: ""
+
+            val claimWindow = doc.getLong("claimWindowDays")
+                ?: doc.getLong("claimWindowDay")
+                ?: 0L
+
+            val description = when (type.trim().uppercase()) {
+                "QUIZ_WEEKLY" -> (doc.getString("quizDescription") ?: "")
+                    .trim()
+                    .ifBlank { "Riješi kviz i osvoji bodove." }
+                else -> (doc.getString("description") ?: "").trim()
+            }
+
             Challenge(
                 id = doc.id,
                 title = doc.getString("title") ?: "",
                 rewardPoints = doc.getLong("rewardPoints") ?: 0L,
-                claimWindowDay = doc.getLong("claimWindowDay") ?: 0L,
+                claimWindowDay = claimWindow, // ✅ OVDJE ide
                 active = doc.getBoolean("active") ?: true,
-                type = doc.getString("type") ?: "",
-                description = doc.getString("description") ?: "",
+                type = type,
+                description = description,
                 iconKey = doc.getString("iconKey") ?: "default"
             )
         }
     }
+
+
 
     override suspend fun fetchChallengeStates(uid: String): List<ChallengeState> {
         val snap = db.collection("users")
@@ -63,5 +80,52 @@ class FirebaseLoyaltyRemoteDataSource(
         return doc.getLong("pointsBalance") ?: 0L
     }
 
+
+    override suspend fun fetchQuizQuestion(challengeId: String): QuizQuestion? {
+        val snap = db.collection("challenges")
+            .document(challengeId)
+            .collection("quizQuestions")
+            .orderBy("order")
+            .limit(1)
+            .get()
+            .await()
+
+        val doc = snap.documents.firstOrNull() ?: return null
+
+        val optionsAny = doc.get("options") as? List<*>
+        val options = optionsAny
+            ?.mapNotNull { it as? String }
+            ?: emptyList()
+
+        val correctIndexLong = doc.getLong("correctIndex") ?: 0L
+
+        return QuizQuestion(
+            id = doc.id,
+            text = doc.getString("text") ?: "",
+            options = options,
+            correctIndex = correctIndexLong.toInt(),
+            order = doc.getLong("order") ?: 0L
+        )
+    }
+
+
+    override suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult {
+        val data = hashMapOf(
+            "challengeId" to challengeId,
+            "selectedIndex" to selectedIndex
+        )
+
+        val res = Firebase.functions
+            .getHttpsCallable("submitQuizResult")
+            .call(data)
+            .await()
+
+        val map = res.data as? Map<*, *> ?: emptyMap<String, Any>()
+
+        val correct = (map["correct"] as? Boolean) ?: false
+        val pointsAwarded = (map["pointsAwarded"] as? Number)?.toLong() ?: 0L
+
+        return QuizSubmitResult(correct = correct, pointsAwarded = pointsAwarded)
+    }
 
 }
