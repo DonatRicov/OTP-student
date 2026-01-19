@@ -7,123 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- HEADER -->
-    <include
-        android:id="@+id/header"
-        layout="@layout/view_header"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- SEGMENTED NAV -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/segmentNav"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        style="@style/SegmentCard"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="6dp">
-
-            <TextView
-                android:id="@+id/tabChallenges"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="IZAZOVI"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/otp_green"
-                android:background="@drawable/bg_segment_unselected"
-                android:clickable="true"
-                android:focusable="false" />
-
-            <TextView
-                android:id="@+id/tabRewards"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:gravity="center"
-                android:text="NAGRADE"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/otp_green"
-                android:background="@drawable/bg_segment_selected"
-                android:clickable="true"
-                android:focusable="true" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/filterRow"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/segmentNav">
-
-        <!-- FILTER GUMB -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFilter"
-            style="@style/FilterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/filter"
-            android:drawableLeft="@drawable/ic_filter"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <!-- POINTS CHIP -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/pointsChip"
-            style="@style/AccentCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnFilter"
-            app:layout_constraintBottom_toBottomOf="@id/btnFilter">
-
-            <TextView
-                android:id="@+id/tvPoints"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:text=""
-                android:textColor="@color/otp_orange"
-                android:textSize="13sp" />
-        </com.google.android.material.card.MaterialCardView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!-- Scrollabilne nagrade -->
+    <!-- Scrollabilne nagrade - ostatak je dinamicki -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRewards"
         android:layout_width="0dp"
@@ -135,9 +19,9 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pointsChip" />
-        <!-->tools:listitem="@layout/item_reward"<-->
+        app:layout_constraintEnd_toEndOf="parent" />
+    <!-->tools:listitem="@layout/item_reward"<-->
 </androidx.constraintlayout.widget.ConstraintLayout>

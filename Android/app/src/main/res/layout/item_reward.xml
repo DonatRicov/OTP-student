@@ -11,6 +11,8 @@
     app:cardCornerRadius="14dp"
     app:cardElevation="6dp">
 
+    <!-- Jos bu se dinamicki vuklo, ovo je prototip za testiranje-->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,7 +29,7 @@
 
         <!-- sivi overlay donji dio -->
         <View
-            android:id="@+id/overlay"
+            android:id="@+id/btnRedeem"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:background="@color/otp_grey"
@@ -46,12 +48,12 @@
             android:text="Male stvari"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/overlay"
+            app:layout_constraintTop_toTopOf="@id/btnRedeem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/tvSubtitle"
+            android:id="@+id/tvDesc"
             style="@style/Tekst"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,7 +64,7 @@
             android:text="15% popusta"
             android:textColor="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            app:layout_constraintBottom_toBottomOf="@id/overlay"
+            app:layout_constraintBottom_toBottomOf="@id/btnRedeem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -79,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/tvBadge"
+                android:id="@+id/tvCost"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/Tekst"
