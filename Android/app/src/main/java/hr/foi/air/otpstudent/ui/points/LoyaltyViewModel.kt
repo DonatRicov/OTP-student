@@ -27,6 +27,9 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
     private val _quizSubmitResult = MutableLiveData<QuizSubmitResult?>()
     val quizSubmitResult: LiveData<QuizSubmitResult?> = _quizSubmitResult
 
+    private val _rewardsState = MutableLiveData<RewardsUiState>()
+    val rewardsState: LiveData<RewardsUiState> = _rewardsState
+
     fun load() {
         _state.value = LoyaltyUiState.Loading
         viewModelScope.launch {
@@ -51,7 +54,6 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         }
     }
 
-
     fun claim(challengeId: String) {
         _state.value = LoyaltyUiState.Loading
         viewModelScope.launch {
@@ -65,7 +67,6 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         }
     }
 
-
     fun loadQuizQuestion(challengeId: String) {
         viewModelScope.launch {
             runCatching { repo.getQuizQuestion(challengeId) }
@@ -73,7 +74,6 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 .onFailure { _quizQuestion.value = null }
         }
     }
-
 
     fun submitQuizAnswer(challengeId: String, selectedIndex: Int) {
         _state.value = LoyaltyUiState.Loading
@@ -93,10 +93,37 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         _quizSubmitResult.value = null
     }
 
+    fun loadRewards() {
+        _rewardsState.value = RewardsUiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                val rewards = repo.getRewards()
+                val points = repo.getPointsBalanceForCurrentUser()
+                rewards to points
+            }.onSuccess { (rewards, points) ->
+                _points.value = points
+                _rewardsState.value = RewardsUiState.Success(rewards)
+            }.onFailure {
+                _rewardsState.value = RewardsUiState.Error(it.message ?: "Greška")
+            }
+        }
+    }
+
+    fun redeemReward(rewardId: String) {
+        _rewardsState.value = RewardsUiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                repo.redeemReward(rewardId)
+            }.onSuccess {
+                loadRewards()
+            }.onFailure {
+                _rewardsState.value = RewardsUiState.Error(it.message ?: "Redeem nije uspio")
+            }
+        }
+    }
 
 
 }
-
 
 class LoyaltyViewModelFactory(
     private val repo: LoyaltyRepository
