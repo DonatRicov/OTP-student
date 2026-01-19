@@ -6,6 +6,7 @@ import hr.foi.air.otpstudent.domain.model.ChallengeWithState
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
+import hr.foi.air.otpstudent.domain.model.Reward
 
 class FirebaseLoyaltyRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -27,7 +28,7 @@ class FirebaseLoyaltyRepositoryImpl(
     }
 
     override suspend fun markChallengeClaimed(challengeId: String) {
-        auth.currentUser?.uid ?: return 
+        auth.currentUser?.uid ?: return
         remote.claimChallenge(challengeId)
     }
 
@@ -36,7 +37,6 @@ class FirebaseLoyaltyRepositoryImpl(
         return remote.fetchPointsBalance(uid)
     }
 
-
     override suspend fun getQuizQuestion(challengeId: String): QuizQuestion? {
         return remote.fetchQuizQuestion(challengeId)
     }
@@ -44,6 +44,14 @@ class FirebaseLoyaltyRepositoryImpl(
     override suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult {
         auth.currentUser?.uid ?: return QuizSubmitResult(correct = false, pointsAwarded = 0L)
         return remote.submitQuizAnswer(challengeId, selectedIndex)
+    }
+
+    override suspend fun getRewards(): List<Reward> =
+        remote.fetchActiveRewards()
+
+    override suspend fun redeemReward(rewardId: String): String {
+        auth.currentUser?.uid ?: throw IllegalStateException("Not logged in")
+        return remote.redeemReward(rewardId)
     }
 
 }

@@ -9,6 +9,7 @@ import com.google.firebase.functions.functions
 import com.google.firebase.Firebase
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
+import hr.foi.air.otpstudent.domain.model.Reward
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -46,7 +47,6 @@ class FirebaseLoyaltyRemoteDataSource(
             )
         }
     }
-
 
 
     override suspend fun fetchChallengeStates(uid: String): List<ChallengeState> {
@@ -126,6 +126,38 @@ class FirebaseLoyaltyRemoteDataSource(
         val pointsAwarded = (map["pointsAwarded"] as? Number)?.toLong() ?: 0L
 
         return QuizSubmitResult(correct = correct, pointsAwarded = pointsAwarded)
+    }
+
+    override suspend fun fetchActiveRewards(): List<Reward> {
+        val snap = db.collection("rewards")
+            .whereEqualTo("active", true)
+            .get()
+            .await()
+
+        return snap.documents.map { doc ->
+            Reward(
+                id = doc.id,
+                title = doc.getString("title") ?: "",
+                description = doc.getString("description") ?: "",
+                costPoints = doc.getLong("costPoints") ?: 0L,
+                active = doc.getBoolean("active") ?: true,
+                validDays = doc.getLong("validDays") ?: 7L,
+                channel = doc.getString("channel") ?: "BOTH",
+                barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
+                imageUrl = doc.getString("imageUrl")
+            )
+        }
+    }
+
+    override suspend fun redeemReward(rewardId: String): String {
+        val data = hashMapOf<String, Any>("rewardId" to rewardId)
+        val res = Firebase.functions
+            .getHttpsCallable("redeemReward")
+            .call(data)
+            .await()
+
+        val map = res.data as Map<*, *>
+        return map["redemptionId"] as String
     }
 
 }
