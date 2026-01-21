@@ -64,6 +64,10 @@ class FirebaseInternshipRepositoryImpl(
     override suspend fun markApplied(userId: String, internshipId: String) {
         remote.markApplied(userId, internshipId)
     }
+
+    override suspend fun markViewed(userId: String, internshipId: String) {
+        remote.markViewed(userId, internshipId)
+    }
 }
 
 private fun InternshipDoc.toDomain(isApplied: Boolean, isFavorite: Boolean): Internship {
