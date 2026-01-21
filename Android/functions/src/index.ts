@@ -1,9 +1,172 @@
 import * as admin from "firebase-admin";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 
 admin.initializeApp();
 const db = admin.firestore();
+
+function isNonEmptyString(v: unknown) {
+  return typeof v === "string" && v.trim().length > 0;
+}
+
+function computeProfileComplete(userData: FirebaseFirestore.DocumentData) {
+  const required = [
+    "firstName",
+    "lastName",
+    "fullName",
+    "location",
+    "phone",
+    "faculty",
+    "major",
+    "educationLevel",
+    "birthday",
+    "gender",
+    "avatarUrl",
+  ];
+
+  return required.every((k) => isNonEmptyString(userData[k]));
+}
+
+export const onUserProfileUpdated = onDocumentUpdated(
+  "users/{uid}",
+  async (event) => {
+    const uid = event.params.uid as string;
+    const before = event.data?.before?.data();
+    const after = event.data?.after?.data();
+    if (!before || !after) return;
+
+    const beforeComplete = (before.profileComplete as boolean | undefined) ?? false;
+
+    if (beforeComplete) return;
+
+    const computedComplete = computeProfileComplete(after);
+
+    if (!computedComplete) return;
+
+    const userRef = db.collection("users").doc(uid);
+    const now = admin.firestore.Timestamp.now();
+
+    await userRef.set(
+      { profileComplete: true, profileCompletedAt: now, updatedAt: now },
+      { merge: true }
+    );
+
+    await completeAllActiveChallengesOfType(uid, "PROFILE_COMPLETE_ONCE");
+  }
+);
+
+export const onUserReviewCreated = onDocumentCreated(
+  "users/{uid}/reviews/{reviewId}",
+  async (event) => {
+    const uid = event.params.uid as string;
+    await completeAllActiveChallengesOfType(uid, "REVIEW_ONCE");
+  }
+);
+
+async function markChallengeCompletedForUser(params: {
+  uid: string;
+  challengeId: string;
+  claimWindowDaysDefault?: number;
+}) {
+  const { uid, challengeId, claimWindowDaysDefault = 30 } = params;
+
+  const now = admin.firestore.Timestamp.now();
+  const challengeRef = db.collection("challenges").doc(challengeId);
+  const stateRef = db.collection("users").doc(uid).collection("challengeStates").doc(challengeId);
+
+  await db.runTransaction(async (tx) => {
+    const [chSnap, stateSnap] = await Promise.all([tx.get(challengeRef), tx.get(stateRef)]);
+    if (!chSnap.exists) return;
+
+    const active = (chSnap.get("active") as boolean | undefined) ?? false;
+    if (!active) return;
+
+    const claimWindowDays =
+      (chSnap.get("claimWindowDays") as number | undefined) ??
+      (chSnap.get("claimWindowDay") as number | undefined) ??
+      claimWindowDaysDefault;
+
+    if (stateSnap.exists) {
+      const status = stateSnap.get("status") as string | undefined;
+      if (status === "CLAIMED") return;
+      if (status === "COMPLETED_PENDING_CLAIM") return;
+    }
+
+    tx.set(
+      stateRef,
+      {
+        status: "COMPLETED_PENDING_CLAIM",
+        completedAt: now,
+        claimDeadlineAt: computeDeadline(now, claimWindowDays),
+        updatedAt: now,
+      },
+      { merge: true }
+    );
+  });
+}
+
+async function completeAllActiveChallengesOfType(uid: string, type: string) {
+  const snap = await db
+    .collection("challenges")
+    .where("active", "==", true)
+    .where("type", "==", type)
+    .get();
+
+  if (snap.empty) return;
+
+  await Promise.all(
+    snap.docs.map((d) => markChallengeCompletedForUser({ uid, challengeId: d.id }))
+  );
+}
+
+export const onViewedJobCreated = onDocumentCreated(
+  "users/{uid}/viewedJobs/{jobId}",
+  async (event) => {
+    const uid = event.params.uid as string;
+    await completeAllActiveViewChallenges(uid, "job");
+  }
+);
+
+export const onViewedInternshipCreated = onDocumentCreated(
+  "users/{uid}/viewedInternships/{internshipId}",
+  async (event) => {
+    const uid = event.params.uid as string;
+    await completeAllActiveViewChallenges(uid, "internship");
+  }
+);
+
+
+
+
+
+
+async function completeAllActiveViewChallenges(uid: string, target: "job" | "internship") {
+  const snap = await db
+    .collection("challenges")
+    .where("active", "==", true)
+    .where("type", "==", "VIEW_CONTENT")
+    .where("criteria.target", "==", target)
+    .get();
+
+  if (snap.empty) return;
+
+  await Promise.all(
+    snap.docs.map((d) => markChallengeCompletedForUser({ uid, challengeId: d.id }))
+  );
+}
+
+
+export const onLoginEventCreated = onDocumentCreated(
+  "users/{uid}/loginEvents/{eventId}",
+  async (event) => {
+    const uid = event.params.uid as string;
+
+    await completeAllActiveChallengesOfType(uid, "LOGIN_DAILY");
+
+    await completeAllActiveChallengesOfType(uid, "LOGIN_MONTHLY");
+  }
+);
 
 
 function computeDeadline(now: FirebaseFirestore.Timestamp, claimWindowDays: number) {
@@ -28,43 +191,7 @@ export const onAppliedJobCreated = onDocumentCreated(
   "users/{uid}/applied/{jobId}",
   async (event) => {
     const uid = event.params.uid as string;
-
-    const chSnap = await db
-      .collection("challenges")
-      .where("active", "==", true)
-      .where("type", "==", "APPLY_ONCE")
-      .get();
-
-    if (chSnap.empty) return;
-
-    const now = admin.firestore.Timestamp.now();
-    const batch = db.batch();
-
-    chSnap.docs.forEach((chDoc) => {
-      const claimWindowDays =
-        (chDoc.get("claimWindowDays") as number | undefined) ??
-        (chDoc.get("claimWindowDay") as number | undefined) ??
-        30;
-
-      const stateRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("challengeStates")
-        .doc(chDoc.id);
-
-      batch.set(
-        stateRef,
-        {
-          status: "COMPLETED_PENDING_CLAIM",
-          completedAt: now,
-          claimDeadlineAt: computeDeadline(now, claimWindowDays),
-          updatedAt: now,
-        },
-        { merge: true }
-      );
-    });
-
-    await batch.commit();
+    await completeAllActiveChallengesOfType(uid, "APPLY_ONCE");
   }
 );
 
@@ -73,43 +200,7 @@ export const onAppliedInternshipCreated = onDocumentCreated(
   "users/{uid}/appliedInternships/{internshipId}",
   async (event) => {
     const uid = event.params.uid as string;
-
-    const chSnap = await db
-      .collection("challenges")
-      .where("active", "==", true)
-      .where("type", "==", "APPLY_ONCE")
-      .get();
-
-    if (chSnap.empty) return;
-
-    const now = admin.firestore.Timestamp.now();
-    const batch = db.batch();
-
-    chSnap.docs.forEach((chDoc) => {
-      const claimWindowDays =
-        (chDoc.get("claimWindowDays") as number | undefined) ??
-        (chDoc.get("claimWindowDay") as number | undefined) ??
-        30;
-
-      const stateRef = db
-        .collection("users")
-        .doc(uid)
-        .collection("challengeStates")
-        .doc(chDoc.id);
-
-      batch.set(
-        stateRef,
-        {
-          status: "COMPLETED_PENDING_CLAIM",
-          completedAt: now,
-          claimDeadlineAt: computeDeadline(now, claimWindowDays),
-          updatedAt: now,
-        },
-        { merge: true }
-      );
-    });
-
-    await batch.commit();
+    await completeAllActiveChallengesOfType(uid, "APPLY_ONCE");
   }
 );
 
