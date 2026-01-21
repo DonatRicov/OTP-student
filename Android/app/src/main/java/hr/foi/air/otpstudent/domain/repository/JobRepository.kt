@@ -9,6 +9,8 @@ interface JobRepository {
     suspend fun setFavorite(userId: String, jobId: String, favorite: Boolean)
     suspend fun markApplied(userId: String, jobId: String)
 
+    suspend fun markViewed(userId: String, jobId: String)
+
     suspend fun isFavorite(userId: String, jobId: String): Boolean
     suspend fun getJobDetailsForUser(userId: String?, jobId: String): Job?
 
