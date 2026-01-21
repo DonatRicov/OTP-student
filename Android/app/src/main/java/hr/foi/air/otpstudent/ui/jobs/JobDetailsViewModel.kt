@@ -28,8 +28,21 @@ class JobDetailsViewModel(
         currentJobId = jobId
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
+
+            val uid = userIdProvider()
+
+            // 🔒 VIEW EVENT NE SMIJE BLOKIRATI UI
+            if (uid != null) {
+                try {
+                    repo.markViewed(uid, jobId)
+                } catch (e: Exception) {
+                    // samo log, NIKAD crash
+                    e.printStackTrace()
+                }
+            }
+
             try {
-                val job = repo.getJobDetailsForUser(userIdProvider(), jobId)
+                val job = repo.getJobDetailsForUser(uid, jobId)
                 if (job == null) {
                     _effects.trySend(JobDetailsEffect.ShowMessage("Posao nije pronađen."))
                     _effects.trySend(JobDetailsEffect.Close)
@@ -37,10 +50,12 @@ class JobDetailsViewModel(
                 }
                 _state.update { it.copy(isLoading = false, job = job) }
             } catch (e: Exception) {
-                _state.update { it.copy(isLoading = false, error = e.message ?: "Greška") }
+                _state.update { it.copy(isLoading = false, error = e.message) }
             }
         }
     }
+
+
 
     fun toggleFavorite() {
         val uid = userIdProvider() ?: run {
