@@ -119,6 +119,12 @@
     <string name="chat_hint">Pitaju Ota...</string>
     <string name="chat_add_symbol">+</string>
     <string name="chat_send_symbol">S</string>
+
+    <!-- ChatBot povijest-->
+    <string name="chat_history_title_page">Povijest razgovora</string>
+    <string name="chat_history_empty_title">Novi razgovor</string>
+
+
     <!--Filter-->
     <string name="filter">Filtriraj</string>
 
