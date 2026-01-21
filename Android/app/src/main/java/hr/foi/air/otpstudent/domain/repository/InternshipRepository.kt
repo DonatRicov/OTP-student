@@ -11,5 +11,6 @@ interface InternshipRepository {
 
     suspend fun isFavorite(userId: String, internshipId: String): Boolean
     suspend fun isApplied(userId: String, internshipId: String): Boolean
+    suspend fun markViewed(userId: String, internshipId: String)
 
 }
