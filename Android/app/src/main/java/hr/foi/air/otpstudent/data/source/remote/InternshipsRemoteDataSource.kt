@@ -88,6 +88,14 @@ class InternshipsRemoteDataSource(
 
         ref.set(mapOf("createdAt" to FieldValue.serverTimestamp())).await()
     }
+    suspend fun markViewed(userId: String, internshipId: String) {
+        val ref = db.collection("users")
+            .document(userId)
+            .collection("viewedInternships")
+            .document(internshipId)
+
+        ref.set(mapOf("createdAt" to FieldValue.serverTimestamp())).await()
+    }
 }
 
 data class InternshipDoc(
