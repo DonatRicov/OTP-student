@@ -14,10 +14,17 @@ import hr.foi.air.otpstudent.ui.chat.ChatbotViewModel
 import hr.foi.air.otpstudent.ui.chat.ChatbotViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
 
-    private val vm: ChatbotViewModel by viewModels { ChatbotViewModelFactory() }
+
+    private val sessionId = UUID.randomUUID().toString()
+
+    private val vm: ChatbotViewModel by viewModels {
+        ChatbotViewModelFactory(requireActivity().application)
+    }
+
     private val adapter = ChatAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,9 +50,10 @@ class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
         val btnAdd = inputRoot.findViewById<ImageButton>(R.id.btnAdd)
 
         btnSend.setOnClickListener {
-            vm.sendMessage(etMessage.text?.toString().orEmpty())
+            vm.sendMessage(etMessage.text?.toString().orEmpty(), sessionId)
             etMessage.setText("")
         }
+
 
         btnAdd.setOnClickListener {
             // funkcionalnost za dodavanje datoteka

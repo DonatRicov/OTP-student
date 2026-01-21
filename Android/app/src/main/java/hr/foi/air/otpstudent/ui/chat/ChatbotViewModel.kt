@@ -3,28 +3,54 @@ package hr.foi.air.otpstudent.ui.chat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.foi.air.otpstudent.data.chat.ChatbotRepository
+import hr.foi.air.otpstudent.ui.chat.model.ChatConversation
 import hr.foi.air.otpstudent.ui.chat.model.ChatMessage
 import hr.foi.air.otpstudent.ui.chat.model.ChatbotUiState
-import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChatbotViewModel(
-    private val repo: ChatbotRepository
+    private val repo: ChatbotRepository,
+    private val store: ChatConversationsStore,
+    private val historyKey: String
 ) : ViewModel() {
 
-    private val sessionId = UUID.randomUUID().toString()
+    private var activeConversationId: String
 
-    private val _state = MutableStateFlow(
-        ChatbotUiState(
-            messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
-        )
-    )
+    private val _state = MutableStateFlow(ChatbotUiState())
     val state: StateFlow<ChatbotUiState> = _state
 
-    fun sendMessage(raw: String) {
+    init {
+        // kreiraj novi razgovor pri ulasku u chat
+        val conv = store.createNew(historyKey)
+        activeConversationId = conv.id
+
+        _state.value = ChatbotUiState(
+            messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
+        )
+        persist()
+    }
+
+    private fun persist(titleIfEmpty: String? = null) {
+        val existing = store.getById(historyKey, activeConversationId)
+            ?: ChatConversation(id = activeConversationId)
+
+        val newTitle =
+            if (existing.title.isBlank() && !titleIfEmpty.isNullOrBlank()) titleIfEmpty
+            else existing.title
+
+        store.upsert(
+            historyKey,
+            existing.copy(
+                title = newTitle,
+                messages = _state.value.messages
+            )
+        )
+    }
+
+    fun sendMessage(raw: String, sessionId: String) {
         val text = raw.trim()
         if (text.isBlank()) return
 
@@ -35,6 +61,8 @@ class ChatbotViewModel(
                 error = null
             )
         }
+        // prva user poruka postaje naslov razgovora
+        persist(titleIfEmpty = text)
 
         viewModelScope.launch {
             try {
@@ -45,6 +73,7 @@ class ChatbotViewModel(
                         isSending = false
                     )
                 }
+                persist()
             } catch (e: Exception) {
                 _state.update {
                     it.copy(
@@ -56,7 +85,16 @@ class ChatbotViewModel(
                         error = e.message
                     )
                 }
+                persist()
             }
         }
+    }
+
+    fun clearAllHistoryForThisUser() {
+        store.clearAll(historyKey)
+        val conv = store.createNew(historyKey)
+        activeConversationId = conv.id
+        _state.value = ChatbotUiState(messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false)))
+        persist()
     }
 }
