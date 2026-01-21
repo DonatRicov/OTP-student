@@ -75,6 +75,10 @@ class FirebaseJobRepositoryImpl(
 
         return doc.toDomain(isApplied = applied, isFavorite = fav)
     }
+    override suspend fun markViewed(userId: String, jobId: String) {
+        remote.markViewed(userId, jobId)
+    }
+
 
 }
 
