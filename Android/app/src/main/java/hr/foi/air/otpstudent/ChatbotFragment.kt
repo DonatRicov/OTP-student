@@ -62,12 +62,11 @@ class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
         }
 
 
-        btnSend.setOnClickListener {
-            // trebala biti funkcionalnost za dodavanje datoteka, sada novi chat
-
-            vm.sendMessage(etMessage.text?.toString().orEmpty(), sessionId)
+        btnAdd.setOnClickListener {
+            vm.startNewConversation()
             etMessage.setText("")
         }
+
 
         view.findViewById<View>(R.id.tvHistory).setOnClickListener {
             findNavController().navigate(R.id.action_chatbotFragment_to_chatHistoryFragment)

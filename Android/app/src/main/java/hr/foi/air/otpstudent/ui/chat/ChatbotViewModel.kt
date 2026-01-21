@@ -18,45 +18,46 @@ class ChatbotViewModel(
     private val initialConversationId: String?
 ) : ViewModel() {
 
-    private var activeConversationId: String
+    private var activeConversationId: String? = null
 
     private val _state = MutableStateFlow(ChatbotUiState())
     val state: StateFlow<ChatbotUiState> = _state
 
     init {
-        val id = initialConversationId?.takeIf { it.isNotBlank() }
-        val loaded = if (id != null) store.getById(historyKey, id) else null
-
-        if (loaded != null) {
-            activeConversationId = loaded.id
-            _state.value = ChatbotUiState(messages = loaded.messages)
-        } else {
-            val conv = store.createNew(historyKey)
-            activeConversationId = conv.id
-            _state.value = ChatbotUiState(
-                messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
-            )
-            persist()
-        }
+        _state.value = ChatbotUiState(
+            messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
+        )
     }
 
+    private fun ensureConversation(firstUserText: String) {
+        if (activeConversationId != null) return
 
-    private fun persist(titleIfEmpty: String? = null) {
-        val existing = store.getById(historyKey, activeConversationId)
-            ?: ChatConversation(id = activeConversationId)
+        val conv = store.createNew(historyKey)
+        activeConversationId = conv.id
 
-        val newTitle =
-            if (existing.title.isBlank() && !titleIfEmpty.isNullOrBlank()) titleIfEmpty
-            else existing.title
 
+        val existing = store.getById(historyKey, conv.id) ?: conv
         store.upsert(
             historyKey,
             existing.copy(
-                title = newTitle,
+                title = firstUserText,
                 messages = _state.value.messages
             )
         )
     }
+
+
+    private fun persist(titleIfEmpty: String? = null) {
+        val id = activeConversationId ?: return
+
+        val existing = store.getById(historyKey, id) ?: return
+        val newTitle =
+            if (existing.title.isBlank() && !titleIfEmpty.isNullOrBlank()) titleIfEmpty
+            else existing.title
+
+        store.upsert(historyKey, existing.copy(title = newTitle, messages = _state.value.messages))
+    }
+
 
     fun sendMessage(raw: String, sessionId: String) {
         val text = raw.trim()
@@ -69,9 +70,11 @@ class ChatbotViewModel(
                 error = null
             )
         }
-        // prva user poruka postaje naslov razgovora
-        persist(titleIfEmpty = text)
 
+
+        ensureConversation(firstUserText = text)
+
+        persist(titleIfEmpty = text)
         viewModelScope.launch {
             try {
                 val reply = repo.send(text, sessionId)
@@ -105,4 +108,16 @@ class ChatbotViewModel(
         _state.value = ChatbotUiState(messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false)))
         persist()
     }
+
+    fun startNewConversation() {
+        activeConversationId = null
+        _state.value = ChatbotUiState(
+            messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
+        )
+    }
+
+
+
+
+
 }
