@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 class ChatbotViewModel(
     private val repo: ChatbotRepository,
     private val store: ChatConversationsStore,
-    private val historyKey: String
+    private val historyKey: String,
+    private val initialConversationId: String?
 ) : ViewModel() {
 
     private var activeConversationId: String
@@ -23,15 +24,22 @@ class ChatbotViewModel(
     val state: StateFlow<ChatbotUiState> = _state
 
     init {
-        // kreiraj novi razgovor pri ulasku u chat
-        val conv = store.createNew(historyKey)
-        activeConversationId = conv.id
+        val id = initialConversationId?.takeIf { it.isNotBlank() }
+        val loaded = if (id != null) store.getById(historyKey, id) else null
 
-        _state.value = ChatbotUiState(
-            messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
-        )
-        persist()
+        if (loaded != null) {
+            activeConversationId = loaded.id
+            _state.value = ChatbotUiState(messages = loaded.messages)
+        } else {
+            val conv = store.createNew(historyKey)
+            activeConversationId = conv.id
+            _state.value = ChatbotUiState(
+                messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
+            )
+            persist()
+        }
     }
+
 
     private fun persist(titleIfEmpty: String? = null) {
         val existing = store.getById(historyKey, activeConversationId)

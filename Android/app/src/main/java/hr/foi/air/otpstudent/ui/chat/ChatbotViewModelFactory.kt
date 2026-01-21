@@ -9,7 +9,8 @@ import hr.foi.air.otpstudent.data.chat.ChatbotRepository
 import hr.foi.air.otpstudent.data.chat.DialogflowRemoteDataSource
 
 class ChatbotViewModelFactory(
-    private val app: Application
+    private val app: Application,
+    private val conversationId: String?
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,6 +25,6 @@ class ChatbotViewModelFactory(
         val store = ChatConversationsStore(app.applicationContext)
 
         @Suppress("UNCHECKED_CAST")
-        return ChatbotViewModel(repo, store, historyKey) as T
+        return ChatbotViewModel(repo, store, historyKey, conversationId) as T
     }
 }

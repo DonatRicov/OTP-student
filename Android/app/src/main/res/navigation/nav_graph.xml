@@ -59,4 +59,20 @@
         android:name="hr.foi.air.otpstudent.ChatbotFragment"
         android:label="Chatbot" />
 
+    <fragment
+        android:id="@+id/chatHistoryFragment"
+        android:name="hr.foi.air.otpstudent.ui.chat.history.ChatHistoryFragment"
+        android:label="ChatHistoryFragment"
+        tools:layout="@layout/fragment_chat_history" />
+
+    <argument
+        android:name="conversationId"
+        app:argType="string"
+        android:defaultValue="" />
+
+    <action
+        android:id="@+id/action_chatbotFragment_to_chatHistoryFragment"
+        app:destination="@id/chatHistoryFragment" />
+
+
 </navigation>

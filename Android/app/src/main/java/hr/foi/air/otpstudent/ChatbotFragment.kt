@@ -19,11 +19,18 @@ import java.util.UUID
 class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
 
 
-    private val sessionId = UUID.randomUUID().toString()
+    private val conversationIdArg by lazy {
+        arguments?.getString("conversationId").orEmpty()
+    }
 
     private val vm: ChatbotViewModel by viewModels {
-        ChatbotViewModelFactory(requireActivity().application)
+        ChatbotViewModelFactory(requireActivity().application, conversationIdArg)
     }
+
+    private val sessionId by lazy {
+        if (conversationIdArg.isNotBlank()) conversationIdArg else java.util.UUID.randomUUID().toString()
+    }
+
 
     private val adapter = ChatAdapter()
 
@@ -55,9 +62,18 @@ class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
         }
 
 
-        btnAdd.setOnClickListener {
-            // funkcionalnost za dodavanje datoteka
+        btnSend.setOnClickListener {
+            // trebala biti funkcionalnost za dodavanje datoteka, sada novi chat
+
+            vm.sendMessage(etMessage.text?.toString().orEmpty(), sessionId)
+            etMessage.setText("")
         }
+
+        view.findViewById<View>(R.id.tvHistory).setOnClickListener {
+            findNavController().navigate(R.id.action_chatbotFragment_to_chatHistoryFragment)
+        }
+
+
 
 
         viewLifecycleOwner.lifecycleScope.launch {
