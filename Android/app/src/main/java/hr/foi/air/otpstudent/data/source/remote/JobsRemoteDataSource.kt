@@ -116,6 +116,16 @@ class JobsRemoteDataSource(
         return doc.exists()
     }
 
+    suspend fun markViewed(userId: String, jobId: String) {
+        val ref = db.collection("users")
+            .document(userId)
+            .collection("viewedJobs")
+            .document(jobId)
+
+        ref.set(mapOf("createdAt" to FieldValue.serverTimestamp())).await()
+    }
+
+
 }
 
 
