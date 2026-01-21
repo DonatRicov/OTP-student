@@ -22,6 +22,17 @@ class InternshipDetailsViewModel(
         internshipId = id
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
+
+            val uid = userIdProvider()
+
+            if (uid != null) {
+                try {
+                    repo.markViewed(uid, id)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
             try {
                 val internship = repo.getInternshipById(id)
                 if (internship == null) {
@@ -29,7 +40,6 @@ class InternshipDetailsViewModel(
                     return@launch
                 }
 
-                val uid = userIdProvider()
                 val fav = if (!uid.isNullOrBlank()) repo.isFavorite(uid, id) else false
                 val applied = if (!uid.isNullOrBlank()) repo.isApplied(uid, id) else false
 
@@ -46,6 +56,7 @@ class InternshipDetailsViewModel(
             }
         }
     }
+
 
     fun toggleFavorite() {
         val id = internshipId ?: return
