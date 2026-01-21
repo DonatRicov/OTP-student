@@ -19,6 +19,14 @@ import hr.foi.air.otpstudent.di.AppModule
 import hr.foi.air.otpstudent.ui.auth.LoginActivity
 import hr.foi.air.otpstudent.ui.auth.RegisterActivity
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import android.util.Log
+import com.google.firebase.FirebaseApp
+
 class StartActivity : AppCompatActivity() {
 
     private val pinUnlockLauncher = registerForActivityResult(
@@ -99,10 +107,10 @@ class StartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        FirebaseApp.initializeApp(this)
         launchUnlockFlow()
-
     }
+
 
     private fun showStartScreen() {
         setContentView(R.layout.activity_start)
@@ -139,6 +147,8 @@ class StartActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 AppModule.authRepository.login(email, pass)
+                logDailyLoginEvent()
+
                 startActivity(
                     Intent(this@StartActivity, MainActivity::class.java).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -154,6 +164,26 @@ class StartActivity : AppCompatActivity() {
                 startActivity(Intent(this@StartActivity, LoginActivity::class.java))
                 finish()
             }
+        }
+    }
+
+    private suspend fun logDailyLoginEvent() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        val dateId = LocalDate.now().toString()
+        val ref = db.collection("users")
+            .document(uid)
+            .collection("loginEvents")
+            .document(dateId)
+
+        try {
+            val snap = ref.get().await()
+            if (!snap.exists()) {
+                ref.set(mapOf("createdAt" to FieldValue.serverTimestamp())).await()
+            }
+        } catch (e: Exception) {
+            Log.e("StartActivity", "Failed to log loginEvent", e)
         }
     }
 

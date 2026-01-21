@@ -29,6 +29,12 @@ import kotlinx.coroutines.launch
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import android.util.Log
 
 class LoginActivity : AppCompatActivity() {
 
@@ -82,13 +88,18 @@ class LoginActivity : AppCompatActivity() {
             viewModel.effects.collectLatest { eff ->
                 when (eff) {
                     LoginEffect.GoToSuccess -> {
-                        startActivity(
-                            Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            }
-                        )
-                        finish()
+                        lifecycleScope.launch {
+                            logDailyLoginEvent()
+
+                            startActivity(
+                                Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                }
+                            )
+                            finish()
+                        }
                     }
+
                     is LoginEffect.ShowMessage -> {
                         Toast.makeText(this@LoginActivity, eff.message, Toast.LENGTH_LONG).show()
                     }
@@ -116,6 +127,27 @@ class LoginActivity : AppCompatActivity() {
             )
         }
     }
+
+    private suspend fun logDailyLoginEvent() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        val dateId = LocalDate.now().toString()
+        val ref = db.collection("users")
+            .document(uid)
+            .collection("loginEvents")
+            .document(dateId)
+
+        try {
+            val snap = ref.get().await()
+            if (!snap.exists()) {
+                ref.set(mapOf("createdAt" to FieldValue.serverTimestamp())).await()
+            }
+        } catch (e: Exception) {
+            Log.e("LoginActivity", "Failed to log loginEvent", e)
+        }
+    }
+
 
     private fun setupAuthPlugins(container: LinearLayout, etEmail: EditText) {
         container.removeAllViews()
