@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    kotlin("kapt")
 }
 
 android {
@@ -60,6 +61,7 @@ dependencies {
     implementation("com.google.firebase:firebase-functions")
 
 
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     implementation(libs.viewpager2)
     implementation(libs.circleimageview)
