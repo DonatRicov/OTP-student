@@ -1,1 +1,0 @@
-//TODO: filter vrsti nagrada

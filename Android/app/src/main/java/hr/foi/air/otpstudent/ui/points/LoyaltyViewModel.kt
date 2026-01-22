@@ -1,11 +1,16 @@
 package hr.foi.air.otpstudent.ui.points
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import hr.foi.air.otpstudent.domain.model.ChallengeWithState
-import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
-import kotlinx.coroutines.launch
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
+import hr.foi.air.otpstudent.domain.model.RewardsFilter
+import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
+import kotlinx.coroutines.launch
 
 sealed class LoyaltyUiState {
     object Loading : LoyaltyUiState()
@@ -37,20 +42,18 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 val challenges = repo.getActiveChallengesForCurrentUser()
                 val points = repo.getPointsBalanceForCurrentUser()
                 challenges to points
+            }.onSuccess { (items, points) ->
+                _points.value = points
+
+                val filtered = items.filter { item ->
+                    val st = item.state?.status?.trim()?.uppercase() ?: "ACTIVE"
+                    st != "CLAIMED"
+                }
+
+                _state.value = LoyaltyUiState.Success(filtered)
+            }.onFailure {
+                _state.value = LoyaltyUiState.Error(it.message ?: "Greška")
             }
-                .onSuccess { (items, points) ->
-                    _points.value = points
-
-                    val filtered = items.filter { item ->
-                        val st = item.state?.status?.trim()?.uppercase() ?: "ACTIVE"
-                        st != "CLAIMED"
-                    }
-
-                    _state.value = LoyaltyUiState.Success(filtered)
-                }
-                .onFailure {
-                    _state.value = LoyaltyUiState.Error(it.message ?: "Greška")
-                }
         }
     }
 
@@ -58,9 +61,7 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         _state.value = LoyaltyUiState.Loading
         viewModelScope.launch {
             runCatching { repo.markChallengeClaimed(challengeId) }
-                .onSuccess {
-                    load()
-                }
+                .onSuccess { load() }
                 .onFailure {
                     _state.value = LoyaltyUiState.Error(it.message ?: "Greška pri preuzimanju bodova")
                 }
@@ -93,6 +94,28 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         _quizSubmitResult.value = null
     }
 
+    private val rewardFilters = mutableSetOf<RewardsFilter>()
+    private fun hasAnyRewardFilters(): Boolean = rewardFilters.isNotEmpty()
+
+    //fun isRewardFilterEnabled(filter: RewardsFilter): Boolean = rewardFilters.contains(filter)
+
+    /*fun setRewardFilter(filter: RewardsFilter, enabled: Boolean) {
+        if (enabled) rewardFilters.add(filter) else rewardFilters.remove(filter)
+    }*/
+
+    fun getRewardFiltersSnapshot(): Set<RewardsFilter> = rewardFilters.toSet()
+
+    fun setRewardFilters(newFilters: Set<RewardsFilter>) {
+        rewardFilters.clear()
+        rewardFilters.addAll(newFilters)
+    }
+
+    // kad ode s Rewards tab
+    fun clearRewardFiltersSilently() {
+        rewardFilters.clear()
+    }
+
+    // ucita sve
     fun loadRewards() {
         _rewardsState.value = RewardsUiState.Loading
         viewModelScope.launch {
@@ -109,20 +132,52 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         }
     }
 
+    // lokalno filtriranje
+    fun applyRewardFilters() {
+        _rewardsState.value = RewardsUiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                val rewards = repo.getRewards()
+                val points = repo.getPointsBalanceForCurrentUser()
+
+                val canGet = rewardFilters.contains(RewardsFilter.CAN_GET)
+                val categories = rewardFilters - RewardsFilter.CAN_GET
+
+                val filtered = rewards.filter { r ->
+                    val okCanGet = if (canGet) r.costPoints <= points else true
+                    val okCategory = if (categories.isEmpty()) true else categories.contains(r.category)
+                    okCanGet && okCategory
+                }
+
+                filtered to points
+            }.onSuccess { (filtered, points) ->
+                _points.value = points
+                _rewardsState.value = RewardsUiState.Success(filtered)
+            }.onFailure {
+                _rewardsState.value = RewardsUiState.Error(it.message ?: "Greška")
+            }
+        }
+    }
+
     fun redeemReward(rewardId: String) {
         _rewardsState.value = RewardsUiState.Loading
         viewModelScope.launch {
             runCatching {
                 repo.redeemReward(rewardId)
             }.onSuccess {
-                loadRewards()
+                val newPoints = repo.getPointsBalanceForCurrentUser()
+                _points.value = newPoints
+
+                if (hasAnyRewardFilters()) {
+                    applyRewardFilters()
+                } else {
+                    loadRewards()
+                }
             }.onFailure {
-                _rewardsState.value = RewardsUiState.Error(it.message ?: "Redeem nije uspio")
+                _rewardsState.value = RewardsUiState.Error(it.message ?: "Sakupljanje nagrade nije uspio")
             }
         }
     }
-
-
 }
 
 class LoyaltyViewModelFactory(

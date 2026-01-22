@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import hr.foi.air.otpstudent.R
 import androidx.fragment.app.viewModels
+import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 
 class PointsFragment : Fragment(R.layout.fragment_points) {
@@ -17,7 +17,6 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
     private val viewModel: LoyaltyViewModel by viewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,10 +45,21 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
             showRewards()
             setSelectedTab(isChallenges = false)
         }
+
+        // Filter button
+        val btnFilter: View? = view.findViewById(R.id.btnFilter) ?: runCatching {
+            requireActivity().findViewById<View>(R.id.btnFilter)
+        }.getOrNull()
+
+        btnFilter?.setOnClickListener {
+            val currentChild = childFragmentManager.findFragmentById(R.id.pointsFragmentContainer)
+            if (currentChild is RewardsFragment) {
+                currentChild.openRewardsFilter()
+            } else {
+                //nema na izazovima
+            }
+        }
     }
-
-
-
 
     private fun showChallenges() {
         childFragmentManager.beginTransaction()

@@ -5,6 +5,7 @@ import hr.foi.air.otpstudent.domain.model.ChallengeState
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
+import hr.foi.air.otpstudent.domain.model.RewardsFilter
 
 interface LoyaltyRemoteDataSource {
     suspend fun fetchActiveChallenges(): List<Challenge>
@@ -17,8 +18,12 @@ interface LoyaltyRemoteDataSource {
 
     suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult
 
+    //filter stvari
     suspend fun fetchActiveRewards(): List<Reward>
 
-    suspend fun redeemReward(rewardId: String): String
+    suspend fun fetchActiveRewards(filter: RewardsFilter?, pointsBalance: Long? = null): List<Reward>
 
+    suspend fun redeemReward(rewardId: String): String
 }
+
+

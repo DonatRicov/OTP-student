@@ -9,5 +9,8 @@ data class Reward(
     val validDays: Long,
     val channel: String,
     val barcodeFormat: String,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+
+    //filter
+    val category: RewardsFilter = RewardsFilter.OPT_REWARDS
 )

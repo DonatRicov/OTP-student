@@ -1,15 +1,16 @@
 package hr.foi.air.otpstudent.data.source.remote
 
+import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.functions.functions
 import hr.foi.air.otpstudent.domain.model.Challenge
 import hr.foi.air.otpstudent.domain.model.ChallengeState
-import kotlinx.coroutines.tasks.await
-import com.google.firebase.functions.functions
-import com.google.firebase.Firebase
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
+import hr.foi.air.otpstudent.domain.model.RewardsFilter
+import kotlinx.coroutines.tasks.await
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -48,7 +49,6 @@ class FirebaseLoyaltyRemoteDataSource(
         }
     }
 
-
     override suspend fun fetchChallengeStates(uid: String): List<ChallengeState> {
         val snap = db.collection("users")
             .document(uid)
@@ -80,7 +80,6 @@ class FirebaseLoyaltyRemoteDataSource(
         return doc.getLong("pointsBalance") ?: 0L
     }
 
-
     override suspend fun fetchQuizQuestion(challengeId: String): QuizQuestion? {
         val snap = db.collection("challenges")
             .document(challengeId)
@@ -108,7 +107,6 @@ class FirebaseLoyaltyRemoteDataSource(
         )
     }
 
-
     override suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult {
         val data = hashMapOf(
             "challengeId" to challengeId,
@@ -128,11 +126,37 @@ class FirebaseLoyaltyRemoteDataSource(
         return QuizSubmitResult(correct = correct, pointsAwarded = pointsAwarded)
     }
 
+
     override suspend fun fetchActiveRewards(): List<Reward> {
-        val snap = db.collection("rewards")
+        return fetchActiveRewards(filter = null, pointsBalance = null)
+    }
+
+    //dohvati aktivne filtere
+
+    override suspend fun fetchActiveRewards(
+        filter: RewardsFilter?,
+        pointsBalance: Long?
+    ): List<Reward> {
+
+        var query = db.collection("rewards")
             .whereEqualTo("active", true)
-            .get()
-            .await()
+
+        when (filter) {
+            null -> Unit
+
+            RewardsFilter.CAN_GET -> {
+                requireNotNull(pointsBalance) {
+                    "pointsBalance is required for CAN_GET filter"
+                }
+                query = query.whereLessThanOrEqualTo("costPoints", pointsBalance)
+            }
+
+            else -> {
+                query = query.whereEqualTo("category", filter.name)
+            }
+        }
+
+        val snap = query.get().await()
 
         return snap.documents.map { doc ->
             Reward(
@@ -144,7 +168,12 @@ class FirebaseLoyaltyRemoteDataSource(
                 validDays = doc.getLong("validDays") ?: 7L,
                 channel = doc.getString("channel") ?: "BOTH",
                 barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
-                imageUrl = doc.getString("imageUrl")
+                imageUrl = doc.getString("imageUrl"),
+                category = run {
+                    val raw = doc.getString("category") ?: RewardsFilter.OPT_REWARDS.name
+                    //da nebu crash
+                    try { RewardsFilter.valueOf(raw) } catch (_: Exception) { RewardsFilter.OPT_REWARDS }
+                }
             )
         }
     }
@@ -159,5 +188,4 @@ class FirebaseLoyaltyRemoteDataSource(
         val map = res.data as Map<*, *>
         return map["redemptionId"] as String
     }
-
 }

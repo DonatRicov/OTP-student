@@ -3,10 +3,11 @@ package hr.foi.air.otpstudent.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import hr.foi.air.otpstudent.data.source.remote.LoyaltyRemoteDataSource
 import hr.foi.air.otpstudent.domain.model.ChallengeWithState
-import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
+import hr.foi.air.otpstudent.domain.model.RewardsFilter
+import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 
 class FirebaseLoyaltyRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -49,9 +50,15 @@ class FirebaseLoyaltyRepositoryImpl(
     override suspend fun getRewards(): List<Reward> =
         remote.fetchActiveRewards()
 
+    //filtrirane nagrade
+    override suspend fun getRewards(
+        filter: RewardsFilter?,
+        pointsBalance: Long?
+    ): List<Reward> =
+        remote.fetchActiveRewards(filter, pointsBalance)
+
     override suspend fun redeemReward(rewardId: String): String {
         auth.currentUser?.uid ?: throw IllegalStateException("Not logged in")
         return remote.redeemReward(rewardId)
     }
-
 }
