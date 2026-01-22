@@ -10,6 +10,9 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import hr.foi.air.otpstudent.MainActivity
 import hr.foi.air.otpstudent.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import hr.foi.air.otpstudent.di.AppModule
 
 class ProfilePersonalActivity : AppCompatActivity() {
 
@@ -34,9 +37,28 @@ class ProfilePersonalActivity : AppCompatActivity() {
         }
 
         btnNext.setOnClickListener {
-            val intent = Intent(this, ProfileFacultyActivity::class.java)
-            startActivity(intent)
+            val firstName = etFirstName.text?.toString()?.trim().orEmpty()
+            val lastName  = etLastName.text?.toString()?.trim().orEmpty()
+            val gender    = etGender.text?.toString()?.trim().orEmpty()
+
+            val uid = AppModule.authRepository.currentUserId()
+            if (uid != null) {
+                lifecycleScope.launch {
+                    AppModule.authRepository.updateUserFields(
+                        uid,
+                        mapOf(
+                            "firstName" to firstName,
+                            "lastName" to lastName,
+                            "gender" to gender
+                        )
+                    )
+                    startActivity(Intent(this@ProfilePersonalActivity, ProfileFacultyActivity::class.java))
+                }
+            } else {
+                startActivity(Intent(this, ProfileFacultyActivity::class.java))
+            }
         }
+
     }
 
     private fun goToMain() {
