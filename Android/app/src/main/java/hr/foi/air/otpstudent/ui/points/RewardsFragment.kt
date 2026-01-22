@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,8 +29,14 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
         val rv = view.findViewById<RecyclerView>(R.id.rvRewards)
 
         adapter = RewardsAdapter(
-            onRedeem = { rewardId ->
-                vm.redeemReward(rewardId)
+            onOpenDetails = { rewardId ->
+                findNavController().navigate(
+                    R.id.rewardDetailsFragment,
+                    RewardDetailsFragment.createArgs(
+                        rewardId = rewardId,
+                        userPoints = vm.points.value ?: 0L
+                    )
+                )
             }
         )
 
@@ -54,8 +61,6 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
         if (!isAdded) return
         showRewardsFilterDialog()
     }
-
-    //dok ode s Rewards taba resetira filtere
 
     override fun onStop() {
         super.onStop()
@@ -84,8 +89,6 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
         )
 
         val original = vm.getRewardFiltersSnapshot()
-
-        // privremeni izbor
         val temp = original.toMutableSet()
 
         val checked = BooleanArray(labels.size) { idx ->
@@ -98,12 +101,10 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
                 val f = map[which]
                 if (isChecked) temp.add(f) else temp.remove(f)
             }
-            .setNegativeButton("Odustani") { _, _ ->
-                // nista
-            }
+            .setNegativeButton("Odustani") { _, _ -> }
             .setNeutralButton("Očisti") { _, _ ->
                 vm.setRewardFilters(emptySet())
-                vm.loadRewards() // vrati sve
+                vm.loadRewards()
             }
             .setPositiveButton("Primijeni") { _, _ ->
                 vm.setRewardFilters(temp.toSet())

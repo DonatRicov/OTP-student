@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
+import androidx.navigation.fragment.findNavController
+
 
 class PointsFragment : Fragment(R.layout.fragment_points) {
 
@@ -25,6 +27,19 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
         tabRewards = view.findViewById(R.id.tabRewards)
         tvPoints = view.findViewById(R.id.tvPoints)
 
+        val handle = findNavController().currentBackStackEntry?.savedStateHandle
+        handle?.getLiveData<String>("openTab")?.observe(viewLifecycleOwner) { tab ->
+            if (tab == "rewards") {
+                showRewards()
+                setSelectedTab(isChallenges = false)
+            } else if (tab == "challenges") {
+                showChallenges()
+                setSelectedTab(isChallenges = true)
+            }
+            handle.remove<String>("openTab") // da se ne ponavlja
+        }
+
+
         viewModel.points.observe(viewLifecycleOwner) { points ->
             tvPoints.text = getString(R.string.points_total, points)
         }
@@ -32,9 +47,17 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
         viewModel.load()
 
         if (savedInstanceState == null) {
-            showChallenges()
-            setSelectedTab(isChallenges = true)
+            val openTab = arguments?.getString("openTab")
+
+            if (openTab == "rewards") {
+                showRewards()
+                setSelectedTab(isChallenges = false)
+            } else {
+                showChallenges()
+                setSelectedTab(isChallenges = true)
+            }
         }
+
 
         tabChallenges.setOnClickListener {
             showChallenges()

@@ -118,4 +118,32 @@
 
     <string name="points_total">Imaš %1$d bodova</string>
 
+    <!--detalji nagrade-->
+    <string name="reward_details_title">Detalji nagrade</string>
+    <string name="reward_instructions_title">Kako preuzeti nagradu</string>
+
+    <string name="reward_redeem_button">Preuzmi nagradu</string>
+
+    <string name="reward_cost_points_label">Cijena:</string>
+    <string name="reward_cost_points_value">Cijena: %1$d bodova</string>
+
+    <string name="reward_points_ratio">%1$d/%2$d</string>
+    <string name="reward_points_missing_default">Nedostaje ti bodova!</string>
+    <string name="reward_points_missing">Nedostaje ti %1$d bodova!</string>
+
+    <string name="reward_chip_valid_to">Vrijedi do: %1$s</string>
+    <string name="reward_chip_default_type">popust</string>
+    <string name="reward_chip_default_uses">jednokratno</string>
+
+    <string name="reward_details_empty">Nema dodatnih detalja za ovu nagradu.</string>
+    <string name="reward_instructions_empty">Nema uputa za ovu nagradu.</string>
+
+    <string name="reward_default_store">Nagrada</string>
+    <string name="reward_default_reward_type">popust</string>
+    <string name="reward_valid_days_fallback">%1$d dana</string>
+
+    <string name="reward_badge_discount">POPUSTA</string>
+
+
+
 </resources>

@@ -59,4 +59,25 @@
         android:name="hr.foi.air.otpstudent.ChatbotFragment"
         android:label="Chatbot" />
 
+    <!--detalji nagrade-->
+    <fragment
+        android:id="@+id/rewardDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.points.RewardDetailsFragment"
+        android:label="RewardDetails"
+        tools:layout="@layout/fragment_reward_details" />
+
+    <fragment
+        android:id="@+id/nav_points"
+        android:name="hr.foi.air.otpstudent.ui.points.PointsFragment"
+        android:label="Bodovi"
+        tools:layout="@layout/fragment_points">
+
+        <argument
+            android:name="openTab"
+            app:argType="string"
+            android:defaultValue="challenges" />
+    </fragment>
+
+
+
 </navigation>

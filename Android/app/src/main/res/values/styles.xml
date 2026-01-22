@@ -163,5 +163,20 @@
         <item name="backgroundInsetBottom">0dp</item>
     </style>
 
+    <!--detalji nagrade-->
+    <style name="RewardSectionTitle" parent="TekstInterakcija">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RewardChip" parent="MaliTekstInterakcija">
+        <item name="android:background">@drawable/bg_points_badge</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+    </style>
+
+
 </resources>
 

@@ -19,4 +19,8 @@
 
     <color name="otp_green_glow">#220A7B47</color>
 
+    <color name="otp_grey_dark">#4B5563</color>
+    <color name="otp_white">#EFF7EA</color>
+
+
 </resources>
