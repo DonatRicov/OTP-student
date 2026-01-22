@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/otp_green_light">
 
-    <!-- GUMB PRESKOK -->
     <TextView
         android:id="@+id/tvSkipFaculty"
         android:layout_width="wrap_content"
@@ -49,7 +48,6 @@
             android:fontFamily="sans-serif-italic" />
     </LinearLayout>
 
-    <!-- PODNASLOV -->
     <TextView
         android:id="@+id/tvSubtitleFaculty"
         android:layout_width="0dp"
@@ -128,47 +126,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Fakultet"
-                app:placeholderText="Unesi naziv fakulteta..."
                 app:boxBackgroundMode="outline">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFaculty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/OTPTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Smjer"
-                app:placeholderText="Unesi naziv smjera..."
-                app:boxBackgroundMode="outline">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMajor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/OTPTextInputLayout"
+                style="@style/OTPExposedDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="Razina obrazovanja"
-                app:placeholderText="Npr. preddiplomski, diplomski..."
-                app:boxBackgroundMode="outline">
+                app:endIconMode="dropdown_menu">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLevel"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
+                    android:popupBackground="@android:color/white"
+                    android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OTPExposedDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Smjer"
+                app:endIconMode="dropdown_menu">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvMajor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@android:color/white"
+                    android:inputType="none"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/OTPTextInputLayout"

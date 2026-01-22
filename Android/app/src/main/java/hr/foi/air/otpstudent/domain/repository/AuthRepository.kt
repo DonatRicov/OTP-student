@@ -6,4 +6,7 @@ interface AuthRepository {
     suspend fun saveUserDocument(uid: String, email: String)
     fun currentUserId(): String?
     fun logout()
+
+    suspend fun updateUserFields(uid: String, fields: Map<String, Any?>)
+
 }

@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import hr.foi.air.otpstudent.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.SetOptions
 
 class FirebaseAuthRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -32,4 +33,12 @@ class FirebaseAuthRepositoryImpl(
     override fun logout() {
         auth.signOut()
     }
+
+    override suspend fun updateUserFields(uid: String, fields: Map<String, Any?>) {
+        firestore.collection("users")
+            .document(uid)
+            .set(fields, SetOptions.merge())
+            .await()
+    }
+
 }

@@ -6,7 +6,17 @@
         <item name="boxStrokeWidthFocused">2dp</item>
         <item name="hintTextColor">@color/otp_green_dark</item>
         <item name="endIconTint">@color/otp_green</item>
+
     </style>
+
+    <style name="OTPExposedDropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/otp_green</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="hintTextColor">@color/otp_green_dark</item>
+        <item name="endIconTint">@color/otp_green</item>
+    </style>
+
 
     <style name="Naslov">
         <item name="android:textColor">@color/black</item>
