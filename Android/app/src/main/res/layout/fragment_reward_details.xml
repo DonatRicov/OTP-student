@@ -84,7 +84,6 @@
                         android:layout_width="0dp"
                         android:layout_height="140dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/male_stvari"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />

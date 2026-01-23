@@ -2,7 +2,6 @@ package hr.foi.air.otpstudent.ui.points
 
 import android.os.Bundle
 import android.view.View
-//import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.os.bundleOf
@@ -15,6 +14,9 @@ import hr.foi.air.otpstudent.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 
 class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
@@ -43,7 +45,7 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
         // Views
         val btnBack: View = view.findViewById(R.id.btnBack)
-        //val ivReward: ImageView = view.findViewById(R.id.ivRewardImage)
+        val ivReward: ImageView = view.findViewById(R.id.ivRewardImage)
 
         // Badge views
         val badgeContainer: View = view.findViewById(R.id.tvImageBadge)
@@ -98,6 +100,33 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                     (doc.get("details") as? List<*>)?.mapNotNull { it as? String }.orEmpty()
                 val instructionsList =
                     (doc.get("instructions") as? List<*>)?.mapNotNull { it as? String }.orEmpty()
+
+                val img = doc.getString("imageUrl")
+
+                if (!img.isNullOrBlank() && img.startsWith("gs://")) {
+                    val ref = FirebaseStorage.getInstance().getReferenceFromUrl(img)
+
+                    ivReward.setImageResource(R.drawable.placeholder_reward)
+
+                    ref.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            if (!isAdded) return@addOnSuccessListener
+                            Glide.with(this@RewardDetailsFragment)
+                                .load(uri)
+                                .placeholder(R.drawable.placeholder_reward)
+                                .error(R.drawable.placeholder_reward)
+                                .into(ivReward)
+                        }
+                        .addOnFailureListener {
+                            ivReward.setImageResource(R.drawable.placeholder_reward)
+                        }
+                } else {
+                    Glide.with(this@RewardDetailsFragment)
+                        .load(img)
+                        .placeholder(R.drawable.placeholder_reward)
+                        .error(R.drawable.placeholder_reward)
+                        .into(ivReward)
+                }
 
                 // Header texts
                 tvStore.text = title.takeIf { it.isNotBlank() }
