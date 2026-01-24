@@ -36,6 +36,9 @@
     <dimen name="header_logo_height">40dp</dimen>
     <dimen name="header_icon_size">48dp</dimen>
 
+    <dimen name="stroke_1dp">1dp</dimen>
+
+
 
 
 </resources>

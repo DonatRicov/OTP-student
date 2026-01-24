@@ -74,5 +74,12 @@
         android:id="@+id/action_chatbotFragment_to_chatHistoryFragment"
         app:destination="@id/chatHistoryFragment" />
 
+    <fragment
+        android:id="@+id/nav_jobs_add_favorites"
+        android:name="hr.foi.air.otpstudent.ui.jobs.JobsAddFavoritesFragment"
+        android:label="Dodaj favorite"
+        tools:layout="@layout/fragment_jobs_add_favorites" />
+
+
 
 </navigation>

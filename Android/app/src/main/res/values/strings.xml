@@ -136,4 +136,20 @@
     <string name="cd_send">Pošalji</string>
     <string name="points_total">Imaš %1$d bodova</string>
 
+    <!--Poslovi-->
+    <string name="jobs_applicants_count">%1$d studenata</string>
+    <string name="jobs_status_applied">Prijavljeno</string>
+    <string name="jobs_status_soon_expiring">Uskoro ističe</string>
+    <string name="jobs_favourite">Favorit</string>
+    <string name="job_details_screen_title">Detalji posla</string>
+    <string name="job_details_business_area_label">Poslovno područje:</string>
+    <string name="job_details_workplace_label">Mjesto rada:</string>
+    <string name="job_details_contract_period_label">Razdoblje primjene ugovora o radu:</string>
+    <string name="job_details_deadline_label">Rok za prijavu:</string>
+    <string name="job_details_qualifications_label">Potrebne kvalifikacije</string>
+    <string name="job_details_apply">Prijavi posao</string>
+    <string name="job_details_add_favorite">Dodaj u favorite</string>
+    <string name="job_details_remove_favorite">Makni iz favorita</string>
+
+
 </resources>

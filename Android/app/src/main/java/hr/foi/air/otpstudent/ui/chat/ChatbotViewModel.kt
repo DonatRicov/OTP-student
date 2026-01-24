@@ -27,7 +27,13 @@ class ChatbotViewModel(
         _state.value = ChatbotUiState(
             messages = listOf(ChatMessage("Bok! Kako ti mogu pomoći?", fromUser = false))
         )
+
+        val id = initialConversationId?.takeIf { it.isNotBlank() }
+        if (id != null) {
+            openConversation(id)
+        }
     }
+
 
     private fun ensureConversation(firstUserText: String) {
         if (activeConversationId != null) return
@@ -117,6 +123,13 @@ class ChatbotViewModel(
     }
 
 
+    fun openConversation(conversationId: String) {
+        if (conversationId.isBlank()) return
+
+        val conv = store.getById(historyKey, conversationId) ?: return
+        activeConversationId = conv.id
+        _state.value = ChatbotUiState(messages = conv.messages)
+    }
 
 
 
