@@ -18,12 +18,13 @@ interface LoyaltyRemoteDataSource {
 
     suspend fun submitQuizAnswer(challengeId: String, selectedIndex: Int): QuizSubmitResult
 
-    //filter stvari
+    // rewards
     suspend fun fetchActiveRewards(): List<Reward>
-
     suspend fun fetchActiveRewards(filter: RewardsFilter?, pointsBalance: Long? = null): List<Reward>
+
+    // reward tracking (maxPerUser)
+    suspend fun fetchRedeemedRewardIds(uid: String): Set<String>
+    suspend fun markRewardRedeemed(uid: String, rewardId: String, redemptionId: String)
 
     suspend fun redeemReward(rewardId: String): String
 }
-
-

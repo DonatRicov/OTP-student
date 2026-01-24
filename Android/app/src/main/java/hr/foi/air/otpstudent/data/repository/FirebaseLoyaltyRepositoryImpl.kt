@@ -50,15 +50,26 @@ class FirebaseLoyaltyRepositoryImpl(
     override suspend fun getRewards(): List<Reward> =
         remote.fetchActiveRewards()
 
-    //filtrirane nagrade
     override suspend fun getRewards(
         filter: RewardsFilter?,
         pointsBalance: Long?
     ): List<Reward> =
         remote.fetchActiveRewards(filter, pointsBalance)
 
+    override suspend fun getRedeemedRewardIdsForCurrentUser(): Set<String> {
+        val uid = auth.currentUser?.uid ?: return emptySet()
+        return remote.fetchRedeemedRewardIds(uid)
+    }
+
     override suspend fun redeemReward(rewardId: String): String {
-        auth.currentUser?.uid ?: throw IllegalStateException("Not logged in")
-        return remote.redeemReward(rewardId)
+        val uid = auth.currentUser?.uid ?: throw IllegalStateException("Not logged in")
+        val redemptionId = remote.redeemReward(rewardId)
+
+        // u bazu da je korisnik preuzeo reward (za maxPerUser: 1)
+        runCatching {
+            remote.markRewardRedeemed(uid, rewardId, redemptionId)
+        }
+
+        return redemptionId
     }
 }

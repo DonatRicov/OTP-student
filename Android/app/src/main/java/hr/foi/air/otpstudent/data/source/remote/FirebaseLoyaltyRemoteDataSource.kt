@@ -2,6 +2,7 @@ package hr.foi.air.otpstudent.data.source.remote
 
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.functions.functions
 import hr.foi.air.otpstudent.domain.model.Challenge
@@ -126,12 +127,9 @@ class FirebaseLoyaltyRemoteDataSource(
         return QuizSubmitResult(correct = correct, pointsAwarded = pointsAwarded)
     }
 
-
     override suspend fun fetchActiveRewards(): List<Reward> {
         return fetchActiveRewards(filter = null, pointsBalance = null)
     }
-
-    //dohvati aktivne filtere
 
     override suspend fun fetchActiveRewards(
         filter: RewardsFilter?,
@@ -169,13 +167,43 @@ class FirebaseLoyaltyRemoteDataSource(
                 channel = doc.getString("channel") ?: "BOTH",
                 barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
                 imageUrl = doc.getString("imageUrl"),
+                maxPerUser = doc.getLong("maxPerUser") ?: 0L,
                 category = run {
                     val raw = doc.getString("category") ?: RewardsFilter.OPT_REWARDS.name
-                    //da nebu crash
-                    try { RewardsFilter.valueOf(raw) } catch (_: Exception) { RewardsFilter.OPT_REWARDS }
+                    try {
+                        RewardsFilter.valueOf(raw)
+                    } catch (_: Exception) {
+                        RewardsFilter.OPT_REWARDS
+                    }
                 }
             )
         }
+    }
+
+    override suspend fun fetchRedeemedRewardIds(uid: String): Set<String> {
+        val snap = db.collection("users")
+            .document(uid)
+            .collection("redeemedRewards")
+            .get()
+            .await()
+
+        // doc id = rewardId
+        return snap.documents.map { it.id }.toSet()
+    }
+
+    override suspend fun markRewardRedeemed(uid: String, rewardId: String, redemptionId: String) {
+        val data = hashMapOf(
+            "rewardId" to rewardId,
+            "redemptionId" to redemptionId,
+            "redeemedAt" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("users")
+            .document(uid)
+            .collection("redeemedRewards")
+            .document(rewardId)
+            .set(data)
+            .await()
     }
 
     override suspend fun redeemReward(rewardId: String): String {

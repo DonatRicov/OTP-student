@@ -41,9 +41,13 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
     private val _rewardsState = MutableLiveData<RewardsUiState>()
     val rewardsState: LiveData<RewardsUiState> = _rewardsState
 
-    // redeem state za details ekran
+    // redeem state za details
     private val _redeemState = MutableLiveData<RedeemUiState?>()
     val redeemState: LiveData<RedeemUiState?> = _redeemState
+
+    // rewardId koje je korisnik vec preuzel
+    private val _redeemedRewardIds = MutableLiveData<Set<String>>(emptySet())
+    val redeemedRewardIds: LiveData<Set<String>> = _redeemedRewardIds
 
     fun load() {
         _state.value = LoyaltyUiState.Loading
@@ -119,30 +123,38 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
         rewardFilters.clear()
     }
 
-    // ucita sve
+    // ucita sve (skriva  koje su preuzete ako maxPerUser: 1)
     fun loadRewards() {
         _rewardsState.value = RewardsUiState.Loading
         viewModelScope.launch {
             runCatching {
                 val rewards = repo.getRewards()
                 val points = repo.getPointsBalanceForCurrentUser()
-                rewards to points
-            }.onSuccess { (rewards, points) ->
+                val redeemed = repo.getRedeemedRewardIdsForCurrentUser()
+                Triple(rewards, points, redeemed)
+            }.onSuccess { (rewards, points, redeemed) ->
                 _points.value = points
-                _rewardsState.value = RewardsUiState.Success(rewards)
+                _redeemedRewardIds.value = redeemed
+
+                val visibleRewards = rewards.filter { r ->
+                    !(r.maxPerUser == 1L && redeemed.contains(r.id))
+                }
+
+                _rewardsState.value = RewardsUiState.Success(visibleRewards)
             }.onFailure {
                 _rewardsState.value = RewardsUiState.Error(it.message ?: "Greška")
             }
         }
     }
 
-    // lokalno filtriranje
+    // lokalno filtriranje i skriva preuzete
     fun applyRewardFilters() {
         _rewardsState.value = RewardsUiState.Loading
         viewModelScope.launch {
             runCatching {
                 val rewards = repo.getRewards()
                 val points = repo.getPointsBalanceForCurrentUser()
+                val redeemed = repo.getRedeemedRewardIdsForCurrentUser()
 
                 val canGet = rewardFilters.contains(RewardsFilter.CAN_GET)
                 val categories = rewardFilters - RewardsFilter.CAN_GET
@@ -150,12 +162,14 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 val filtered = rewards.filter { r ->
                     val okCanGet = if (canGet) r.costPoints <= points else true
                     val okCategory = if (categories.isEmpty()) true else categories.contains(r.category)
-                    okCanGet && okCategory
+                    val okNotRedeemed = !(r.maxPerUser == 1L && redeemed.contains(r.id))
+                    okCanGet && okCategory && okNotRedeemed
                 }
 
-                filtered to points
-            }.onSuccess { (filtered, points) ->
+                Triple(filtered, points, redeemed)
+            }.onSuccess { (filtered, points, redeemed) ->
                 _points.value = points
+                _redeemedRewardIds.value = redeemed
                 _rewardsState.value = RewardsUiState.Success(filtered)
             }.onFailure {
                 _rewardsState.value = RewardsUiState.Error(it.message ?: "Greška")
@@ -169,6 +183,9 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
             runCatching {
                 repo.redeemReward(rewardId)
             }.onSuccess {
+                // oznaci lokalno
+                _redeemedRewardIds.value = (_redeemedRewardIds.value ?: emptySet()) + rewardId
+
                 val newPoints = repo.getPointsBalanceForCurrentUser()
                 _points.value = newPoints
 
@@ -190,10 +207,13 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
             runCatching {
                 repo.redeemReward(rewardId)
             }.onSuccess { redemptionId ->
+                // lokalno
+                _redeemedRewardIds.value = (_redeemedRewardIds.value ?: emptySet()) + rewardId
+
                 val newPoints = repo.getPointsBalanceForCurrentUser()
                 _points.value = newPoints
 
-                // refresh rewards liste
+                // refresh reward listu
                 if (hasAnyRewardFilters()) applyRewardFilters() else loadRewards()
 
                 _redeemState.value = RedeemUiState.Success(redemptionId)

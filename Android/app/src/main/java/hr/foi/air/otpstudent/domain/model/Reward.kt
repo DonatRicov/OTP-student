@@ -10,7 +10,8 @@ data class Reward(
     val channel: String,
     val barcodeFormat: String,
     val imageUrl: String? = null,
+    val maxPerUser: Long = 0L,
 
-    //filter
+    // filter
     val category: RewardsFilter = RewardsFilter.OPT_REWARDS
 )

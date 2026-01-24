@@ -21,5 +21,8 @@ interface LoyaltyRepository {
         pointsBalance: Long? = null
     ): List<Reward>
 
+    // rewardId koje je trenutni korisnik preuzel
+    suspend fun getRedeemedRewardIdsForCurrentUser(): Set<String>
+
     suspend fun redeemReward(rewardId: String): String
 }

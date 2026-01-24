@@ -7,19 +7,19 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.bumptech.glide.Glide
+import android.widget.ImageView
+import android.widget.Toast
 import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.di.AppModule
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.google.firebase.storage.FirebaseStorage
-import androidx.fragment.app.activityViewModels
-import android.widget.Toast
-import hr.foi.air.otpstudent.di.AppModule
 
 class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
@@ -30,7 +30,7 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
         activity?.findViewById<View>(R.id.bottomNavigationView)?.isVisible = visible
     }
 
-    //za redeem bodova
+    // za redeem bodova
     private val vm: LoyaltyViewModel by activityViewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
@@ -85,7 +85,7 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
         btnBack.setOnClickListener { findNavController().navigateUp() }
 
-        //redeem click listener
+        // redeem click listener
         btnRedeem.setOnClickListener {
             btnRedeem.isEnabled = false
             vm.redeemRewardFromDetails(currentRewardId)
@@ -97,7 +97,11 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                 is RedeemUiState.Loading -> {
                     // loading indikator
                 }
+
                 is RedeemUiState.Success -> {
+                    // osvjezi listu i redeemed stanje
+                    vm.loadRewards()
+
                     vm.clearRedeemState()
                     findNavController().navigate(
                         R.id.rewardRedeemedFragment,
@@ -107,11 +111,13 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                         )
                     )
                 }
+
                 is RedeemUiState.Error -> {
                     vm.clearRedeemState()
                     btnRedeem.isEnabled = true
                     Toast.makeText(requireContext(), st.message, Toast.LENGTH_LONG).show()
                 }
+
                 null -> Unit
             }
         }
@@ -125,6 +131,7 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
                 val title = doc.getString("title").orEmpty()
                 val costPoints = doc.getLong("costPoints") ?: 0L
+                val maxPerUser = doc.getLong("maxPerUser") ?: 0L
 
                 val type = doc.getString("type").orEmpty()
                 val value = doc.getLong("value") ?: (doc.getDouble("value")?.toLong() ?: 0L)
@@ -186,7 +193,8 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                 // Chips
                 tvChipType.text = rewardType.ifBlank { getString(R.string.reward_chip_default_type) }
                 tvChipValid.text = getString(R.string.reward_chip_valid_to, validToText)
-                tvChipUses.text = numberOfUses.ifBlank { getString(R.string.reward_chip_default_uses) }
+                tvChipUses.text =
+                    numberOfUses.ifBlank { getString(R.string.reward_chip_default_uses) }
 
                 // Points panel
                 tvCost.text = getString(R.string.reward_cost_points_value, costPoints)
@@ -196,11 +204,19 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                 progress.progress = userPoints.coerceAtMost(costPoints).toInt()
 
                 val missing = (costPoints - userPoints).coerceAtLeast(0L)
-                val canRedeem = userPoints >= costPoints
+
+                val alreadyRedeemed =
+                    maxPerUser == 1L && (vm.redeemedRewardIds.value ?: emptySet()).contains(rewardId)
+
+                val canRedeem = (userPoints >= costPoints) && !alreadyRedeemed
 
                 tvWarn.visibility = if (canRedeem) View.GONE else View.VISIBLE
                 if (!canRedeem) {
-                    tvWarn.text = getString(R.string.reward_points_missing, missing)
+                    tvWarn.text = if (alreadyRedeemed) {
+                        "Nagradu ste već preuzeli."
+                    } else {
+                        getString(R.string.reward_points_missing, missing)
+                    }
                 }
 
                 // Details i Instructions
