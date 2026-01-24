@@ -80,6 +80,16 @@
         android:label="Dodaj favorite"
         tools:layout="@layout/fragment_jobs_add_favorites" />
 
+    <fragment
+        android:id="@+id/internshipDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipDetailsFragment"
+        android:label="@string/internship_details_title">
+        <argument
+            android:name="internshipId"
+            app:argType="string" />
+    </fragment>
+
+
 
 
 </navigation>

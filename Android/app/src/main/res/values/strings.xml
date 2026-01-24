@@ -41,7 +41,6 @@
     <string name="success_icon_desc">Ikona uspjeha</string>
 
 
-
     <string name="my_cv">Moj Životopis</string>
     <string name="choose_file_for_upload">Odaberi datoteku za prijenos</string>
     <string name="supported_format_pdf">Podržani format: PDF (do 10MB)</string>
@@ -70,30 +69,30 @@
 
     <!--uredivanje podatki profila-->
 
-        <!-- Općenito -->
-        <string name="edit_profile">Uredi profil</string>
-        <string name="edit_your_data">Uredi svoje podatke</string>
-        <string name="save_changes">Spremi promjene</string>
-        <string name="cancel">Odustani</string>
+    <!-- Općenito -->
+    <string name="edit_profile">Uredi profil</string>
+    <string name="edit_your_data">Uredi svoje podatke</string>
+    <string name="save_changes">Spremi promjene</string>
+    <string name="cancel">Odustani</string>
 
-        <!-- Profil -->
-        <string name="profile_name_placeholder">OTPStudent</string>
-        <string name="profile_data">Podaci o profilu</string>
-        <string name="personal_data">Osobni podaci</string>
-        <string name="study_data">Podaci o studiju</string>
+    <!-- Profil -->
+    <string name="profile_name_placeholder">OTPStudent</string>
+    <string name="profile_data">Podaci o profilu</string>
+    <string name="personal_data">Osobni podaci</string>
+    <string name="study_data">Podaci o studiju</string>
 
-        <!-- Polja -->
-        <string name="first_name">Ime</string>
-        <string name="last_name">Prezime</string>
-        <string name="phone">Telefon</string>
-        <string name="location">Lokacija</string>
-        <string name="gender">Spol</string>
-        <string name="date_of_birth">Datum rođenja</string>
+    <!-- Polja -->
+    <string name="first_name">Ime</string>
+    <string name="last_name">Prezime</string>
+    <string name="phone">Telefon</string>
+    <string name="location">Lokacija</string>
+    <string name="gender">Spol</string>
+    <string name="date_of_birth">Datum rođenja</string>
 
-        <!-- Studij -->
-        <string name="faculty">Fakultet</string>
-        <string name="major">Smjer</string>
-        <string name="education_level">Razina obrazovanja</string>
+    <!-- Studij -->
+    <string name="faculty">Fakultet</string>
+    <string name="major">Smjer</string>
+    <string name="education_level">Razina obrazovanja</string>
 
     <!-- Postavke -->
     <string name="account">Račun</string>
@@ -155,6 +154,26 @@
     <string name="internship_filter">Filtriraj</string>
     <string name="internship_my_applications">Moje prijave</string>
     <string name="internship_search_hint">Pretraži prakse...</string>
+    <string name="internship_details_user_role">FOI student</string>
+
+    <string name="internship_study_direction">Smjer studija</string>
+    <string name="internship_mentor">Mentor</string>
+    <string name="internship_start_date">Datum početka prakse</string>
+    <string name="internship_end_date">Datum završetka prakse</string>
+
+    <string name="internship_details_button_apply">Prijavi praksu</string>
+    <string name="internship_details_button_details">Detalji prakse</string>
+
+    <string name="internship_add_favorite">Dodaj u favorite</string>
+    <string name="internship_remove_favorite">Ukloni iz favorita</string>
+
+    <string name="internship_cv_title">Priloženi životopis</string>
+    <string name="cv_uploader_default">Student</string>
+
+    <string name="placeholder_user_name">Student</string>
+    <string name="error_missing_internship_id">Greška: ID prakse nije pronađen.</string>
+
+
 
 
     <string name="internship_status_applied">Prijavljeno</string>
