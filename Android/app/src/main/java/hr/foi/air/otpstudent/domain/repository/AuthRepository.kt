@@ -1,5 +1,7 @@
 package hr.foi.air.otpstudent.domain.repository
 
+import android.net.Uri
+
 interface AuthRepository {
     suspend fun login(email: String, password: String)
     suspend fun register(email: String, password: String)
@@ -9,4 +11,6 @@ interface AuthRepository {
 
     suspend fun updateUserFields(uid: String, fields: Map<String, Any?>)
 
+    suspend fun getUserDocument(uid: String): Map<String, Any?>?
+    suspend fun uploadAvatar(uid: String, imageUri: Uri): String
 }
