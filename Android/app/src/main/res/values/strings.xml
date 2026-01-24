@@ -146,5 +146,12 @@
 
     <string name="study_year">Godina studija</string>
 
+    <!--Skupljena nagrada-->
+    <string name="reward_redeemed_message">Nagrada preuzeta!</string>
+    <string name="reward_active_chip">AKTIVNO</string>
+    <string name="cd_qr">QR kod</string>
+    <string name="qr_code_for_store_purchase">QR kod za kupnju u trgovini</string>
+    <string name="code_for_online_purchase">Kod za online kupnju</string>
+    <string name="copy">Kopiraj</string>
 
 </resources>
