@@ -18,18 +18,45 @@ class JobsFavoritesViewModel(
     val state: StateFlow<JobsFavoritesUiState> = _state
 
     fun load() {
-        val uid = userIdProvider() ?: run {
-            _state.update { it.copy(isLoading = false, allJobs = emptyList(), visibleJobs = emptyList(), error = "Morate biti prijavljeni.") }
+        val uid = userIdProvider()
+        if (uid.isNullOrBlank()) {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    allFavorites = emptyList(),
+                    visibleFavorites = emptyList(),
+                    recommendations = emptyList(),
+                    error = "Morate biti prijavljeni."
+                )
+            }
             return
         }
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                val jobs = repo.getFavoriteJobsForUser(uid)
+                // Uzimamo SVE poslove za usera jer treba i non-fav za preporuke
+                val allJobs = repo.getJobsForUser(uid)
+
+                val favorites = allJobs.filter { it.isFavorite }
+                val nonFavorites = allJobs.filter { !it.isFavorite }
+
+                val visibleFavs = applyFilters(
+                    jobs = favorites,
+                    query = _state.value.query,
+                    filters = _state.value.activeFilters
+                )
+
+                val recs = pickRandomTwo(nonFavorites)
+
                 _state.update { s ->
-                    val newState = s.copy(isLoading = false, allJobs = jobs)
-                    newState.copy(visibleJobs = applyFilters(newState.allJobs, newState.query, newState.activeFilters))
+                    s.copy(
+                        isLoading = false,
+                        allFavorites = favorites,
+                        visibleFavorites = visibleFavs,
+                        recommendations = recs,
+                        error = null
+                    )
                 }
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.message ?: "Greška") }
@@ -40,15 +67,25 @@ class JobsFavoritesViewModel(
     fun onQueryChanged(q: String) {
         _state.update { s ->
             val newState = s.copy(query = q)
-            newState.copy(visibleJobs = applyFilters(newState.allJobs, newState.query, newState.activeFilters))
+            newState.copy(
+                visibleFavorites = applyFilters(newState.allFavorites, newState.query, newState.activeFilters)
+            )
         }
     }
 
     fun onFiltersChanged(filters: Set<FavoritesFilter>) {
         _state.update { s ->
             val newState = s.copy(activeFilters = filters)
-            newState.copy(visibleJobs = applyFilters(newState.allJobs, newState.query, newState.activeFilters))
+            newState.copy(
+                visibleFavorites = applyFilters(newState.allFavorites, newState.query, newState.activeFilters)
+            )
         }
+    }
+
+    private fun pickRandomTwo(list: List<Job>): List<Job> {
+        if (list.isEmpty()) return emptyList()
+        val shuffled = list.shuffled()
+        return if (shuffled.size >= 2) shuffled.take(2) else shuffled
     }
 
     private fun applyFilters(jobs: List<Job>, query: String, filters: Set<FavoritesFilter>): List<Job> {

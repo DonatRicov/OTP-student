@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- WRAPPER ZA SADRŽAJ -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
         android:layout_width="0dp"
@@ -27,18 +28,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- NASLOV EKRANA -->
+        <TextView
+            android:id="@+id/tvInternshipTitle"
+            style="@style/Podnaslov"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/internship_list_title"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- TRAŽILICA -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutSearch"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:hint="Pretraži prakse..."
+            android:layout_marginTop="12dp"
+            android:hint="@string/internship_search_hint"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeColor="@color/otp_green"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInternshipTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -50,6 +65,7 @@
                 android:paddingStart="12dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- FILTER ROW -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/filterRow"
             android:layout_width="0dp"
@@ -69,7 +85,7 @@
                 android:gravity="center_vertical"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="5dp"
-                android:text="Filtriraj"
+                android:text="@string/internship_filter"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/otp_green_dark"
                 app:cornerRadius="5dp"
@@ -78,20 +94,22 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
+            <!-- MOJE PRIJAVE (ikonu ti samo zamijeni svojom) -->
             <TextView
-                android:id="@+id/btnFavourites"
+                android:id="@+id/btnMyApplications"
                 style="@style/TekstInterakcija"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:drawableLeft="@drawable/ic_favorite_filled"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
-                android:text="Favoriti"
+                android:text="@string/internship_my_applications"
                 app:drawableTint="@color/otp_green_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:drawableLeft="@drawable/ic_history" />
+            <!-- ^^^ TODO: stavi svoju ikonu umjesto ic_history -->
 
             <TextView
                 android:id="@+id/tvActiveFilters"
@@ -105,11 +123,13 @@
                 android:textColor="@color/otp_grey"
                 android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/btnFilter"
-                app:layout_constraintEnd_toStartOf="@id/btnFavourites"
+                app:layout_constraintEnd_toStartOf="@id/btnMyApplications"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- LISTA -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvInternships"
             android:layout_width="0dp"
@@ -120,12 +140,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <!-- EMPTY -->
         <TextView
             android:id="@+id/tvEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Trenutno nema dostupnih praksi."
+            android:text="@string/internship_empty_list"
             android:textColor="@color/otp_grey"
             android:textSize="14sp"
             android:visibility="gone"

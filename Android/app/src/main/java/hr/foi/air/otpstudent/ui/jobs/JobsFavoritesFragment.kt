@@ -21,15 +21,22 @@ import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import android.widget.ImageButton
 
 class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
 
-    private lateinit var adapter: JobAdapter
-    private lateinit var rvJobs: RecyclerView
+    // UI
+    private lateinit var rvFavorites: RecyclerView
+    private lateinit var rvRecommendations: RecyclerView
     private lateinit var etSearch: TextInputEditText
     private lateinit var btnFilter: MaterialButton
     private lateinit var tvActiveFilters: TextView
-    private lateinit var tvEmpty: TextView
+    private lateinit var tvEmptyFavorites: TextView
+    private lateinit var btnAddFavorites: MaterialButton
+
+    // Adapters
+    private lateinit var favoritesAdapter: JobAdapter
+    private lateinit var recommendationsAdapter: JobAdapter
 
     private val viewModel: JobsFavoritesViewModel by lazy {
         ViewModelProvider(this, FavoritesVmFactory())[JobsFavoritesViewModel::class.java]
@@ -40,32 +47,49 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
+
         view.findViewById<TextView>(R.id.btnFavourites).setOnClickListener {
             findNavController().popBackStack()
         }
 
-        tvEmpty = view.findViewById(R.id.tvEmpty)
-        rvJobs = view.findViewById(R.id.rvJobs)
+
+        rvFavorites = view.findViewById(R.id.rvFavorites)
+        rvRecommendations = view.findViewById(R.id.rvRecommendations)
+        tvEmptyFavorites = view.findViewById(R.id.tvEmptyFavorites)
+        btnAddFavorites = view.findViewById(R.id.btnAddFavorites)
+
         etSearch = view.findViewById(R.id.etSearch)
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
 
-        adapter = JobAdapter { job ->
-            val intent = Intent(requireContext(), JobDetailsActivity::class.java)
-            intent.putExtra("JOB_ID", job.id)
-            startActivity(intent)
-        }
+        favoritesAdapter = JobAdapter { job -> openDetails(job.id) }
+        recommendationsAdapter = JobAdapter { job -> openDetails(job.id) }
 
-        rvJobs.layoutManager = LinearLayoutManager(requireContext())
-        rvJobs.adapter = adapter
+        rvFavorites.layoutManager = LinearLayoutManager(requireContext())
+        rvFavorites.adapter = favoritesAdapter
+
+        rvRecommendations.layoutManager = LinearLayoutManager(requireContext())
+        rvRecommendations.adapter = recommendationsAdapter
+
 
         etSearch.addTextChangedListener { text ->
             viewModel.onQueryChanged(text?.toString().orEmpty())
         }
 
+
         btnFilter.setOnClickListener {
             showFilterDialog()
         }
+
+
+        btnAddFavorites.setOnClickListener {
+            findNavController().navigate(R.id.nav_jobs_add_favorites)
+        }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { state ->
@@ -81,21 +105,28 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
         viewModel.load()
     }
 
+    private fun openDetails(jobId: String) {
+        val intent = Intent(requireContext(), JobDetailsActivity::class.java)
+        intent.putExtra("JOB_ID", jobId)
+        startActivity(intent)
+    }
+
     private fun render(state: JobsFavoritesUiState) {
-        adapter.submitList(state.visibleJobs)
+        // Favorites + preporuke
+        favoritesAdapter.submitList(state.visibleFavorites)
+        recommendationsAdapter.submitList(state.recommendations)
 
         if (state.error != null) {
             Toast.makeText(requireContext(), state.error, Toast.LENGTH_LONG).show()
         }
 
-        if (!state.isLoading && state.visibleJobs.isEmpty()) {
-            tvEmpty.visibility = View.VISIBLE
-            tvEmpty.text = if (state.allJobs.isEmpty()) "Nemate spremljenih favorita." else "Nema rezultata pretrage."
-            rvJobs.visibility = View.GONE
-        } else {
-            tvEmpty.visibility = View.GONE
-            rvJobs.visibility = View.VISIBLE
-        }
+        // Empty stanje samo za FAVORITE dio
+        val showEmptyFav = !state.isLoading && state.visibleFavorites.isEmpty()
+        tvEmptyFavorites.visibility = if (showEmptyFav) View.VISIBLE else View.GONE
+        rvFavorites.visibility = if (showEmptyFav) View.GONE else View.VISIBLE
+
+        // Preporuke: ako nema ničega, sakrij listu (opcionalno)
+        rvRecommendations.visibility = if (state.recommendations.isEmpty()) View.GONE else View.VISIBLE
 
         updateActiveFiltersLabel(state.activeFilters)
     }

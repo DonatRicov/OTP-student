@@ -151,5 +151,16 @@
     <string name="job_details_add_favorite">Dodaj u favorite</string>
     <string name="job_details_remove_favorite">Makni iz favorita</string>
 
+    <string name="internship_list_title">Praksa u IT sektoru</string>
+    <string name="internship_filter">Filtriraj</string>
+    <string name="internship_my_applications">Moje prijave</string>
+    <string name="internship_search_hint">Pretraži prakse...</string>
+
+
+    <string name="internship_status_applied">Prijavljeno</string>
+    <string name="internship_status_soon_expiring">Uskoro ističe</string>
+
+    <string name="internship_empty_list">Trenutno nema dostupnih praksi.</string>
+    <string name="internship_applicants_count">%1$d studenata</string>
 
 </resources>

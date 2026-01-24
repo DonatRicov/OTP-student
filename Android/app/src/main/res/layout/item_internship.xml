@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardJob"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="6dp"
@@ -11,11 +13,9 @@
     app:strokeWidth="1dp"
     app:strokeColor="@color/otp_grey">
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="12dp">
 
         <ImageView
@@ -23,60 +23,75 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_otp_logo_circle"/>
+            android:src="@drawable/ic_otp_logo_circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <!-- FAVORITE zvjezdica gore desno (prikazuje se samo kad je favorit) -->
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/jobs_favourite"
+            android:src="@drawable/ic_favorite_filled"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvJobTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Analitičar za softversku imovinu"
+            app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
+            app:layout_constraintTop_toTopOf="@id/imgCompanyLogo"
+            app:layout_constraintEnd_toStartOf="@id/ivFavorite" />
+
+        <TextView
+            android:id="@+id/tvJobLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/otp_grey"
+            android:textSize="13sp"
+            tools:text="Zadar / Split / Zagreb"
+            app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
+            app:layout_constraintTop_toBottomOf="@id/tvJobTitle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/metaRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
+            app:layout_constraintTop_toBottomOf="@id/tvJobLocation"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/iconPeople"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_people"
+                app:tint="@color/otp_grey" />
 
             <TextView
-                android:id="@+id/tvJobTitle"
+                android:id="@+id/tvApplicants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Engineer"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/tvJobLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Zagreb / Split"
-                android:textSize="13sp"
-                android:textColor="@color/otp_grey" />
-
-            <LinearLayout
-                android:id="@+id/metaRow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/iconPeople"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_people"
-                    app:tint="@color/otp_grey"
-                    android:contentDescription="@string/app_name" />
-
-                <TextView
-                    android:id="@+id/tvApplicants"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="5 studenata"
-                    android:textSize="12sp"
-                    android:textColor="@color/otp_green_dark" />
-
-            </LinearLayout>
-
+                android:layout_marginStart="6dp"
+                android:textColor="@color/otp_green_dark"
+                android:textSize="12sp"
+                tools:text="5 studenata" />
         </LinearLayout>
 
 
@@ -84,19 +99,23 @@
             android:id="@+id/btnApplied"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="Prijavljeno"
+            android:text="@string/internship_status_applied"
             android:textAllCaps="false"
+            android:textSize="12sp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
             android:visibility="gone"
-            app:cornerRadius="16dp"
-            app:icon="@drawable/ic_check"
-            app:iconPadding="6dp"
-            app:iconTint="@android:color/white"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/otp_green_dark"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"/>
+            app:cornerRadius="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
