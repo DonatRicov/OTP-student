@@ -4,8 +4,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.net.Uri
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -15,25 +17,22 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.storage.FirebaseStorage
 import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.di.AppModule
 import java.io.File
 import java.util.Calendar
+import kotlinx.coroutines.flow.collectLatest
 
 class ProfileSetupActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
-    private lateinit var currentUid: String
+    private lateinit var viewModel: ProfileViewModel
 
     private lateinit var imgAvatar: ShapeableImageView
     private lateinit var imgEditPhoto: ImageView
@@ -50,9 +49,11 @@ class ProfileSetupActivity : AppCompatActivity() {
     private lateinit var etBirthday: TextInputEditText
 
     private lateinit var acGender: AutoCompleteTextView
-    private lateinit var acFaculty: AutoCompleteTextView
-    private lateinit var acMajor: AutoCompleteTextView
-    private lateinit var acEducationLevel: AutoCompleteTextView
+
+    private lateinit var etFaculty: TextInputEditText
+    private lateinit var actvLevel: AutoCompleteTextView
+    private lateinit var actvMajor: AutoCompleteTextView
+    private lateinit var etStudyYear: TextInputEditText
 
     private lateinit var btnSave: MaterialButton
     private lateinit var btnCancel: MaterialButton
@@ -69,26 +70,61 @@ class ProfileSetupActivity : AppCompatActivity() {
             }
         }
 
+    private val facultyFixed = "Fakultet organizacije i informatike"
+
+    private val levels = listOf(
+        "sveučilišni prijediplomski",
+        "sveučilišni displomski",
+        "stručni prijediplomski",
+        "sveučilišni specijalistički",
+        "doktorski",
+        "cjeloživotno učenje"
+    )
+
+    private val majorsByLevel: Map<String, List<String>> = mapOf(
+        "sveučilišni prijediplomski" to listOf(
+            "Informacijski i poslovni sustavi 1.2 (IPS)",
+            "Ekonomika poduzetništva 1.2 (EP)"
+        ),
+        "sveučilišni displomski" to listOf(
+            "Baze podataka i baze znanja 1.4 (BPBZ)",
+            "Informacijsko i programsko inžinjerstvo 1.4 (IPI)",
+            "Informatika u obrazovanju 1.4 (IUO)",
+            "Organizacija poslovnih sustava 1.4. (OPS)",
+            "Ekonomika poduzetništva 1.1 (EP-DS)"
+        ),
+        "stručni prijediplomski" to listOf(
+            "Informacijske tehnologije i digitalizacija poslovanja 1.3 (ITDP)"
+        ),
+        "sveučilišni specijalistički" to listOf(
+            "Menadžment poslovnih sustava 1.0 (PDSSMPS)",
+            "Upravljanje sigurnošću i revizija informacijskih sustava 2.0 (PDSSSRIS)",
+            "E-učenje u obrazovanju i poslovanju 1.0 (PDEU)"
+        ),
+        "doktorski" to listOf(
+            "Doktorski studij Informacijskih znanosti 1.1 (PDDSIZ)",
+            "Upravljanje digitalnim inovacijama 1.0 (UDI-DOK)"
+        ),
+        "cjeloživotno učenje" to listOf(
+            "Pedagoško-psihološko-didaktičko-metodičko obrazovanje 1.0 (PPDMO)"
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_setup)
+
+        viewModel = ViewModelProvider(
+            this,
+            ProfileViewModelFactory(AppModule.authRepository)
+        )[ProfileViewModel::class.java]
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 showDiscardChangesDialog()
             }
         }
-
         onBackPressedDispatcher.addCallback(this, callback)
-
-
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-        storage = FirebaseStorage.getInstance()
-
-        val user = auth.currentUser ?: return
-        val uid = user.uid
-        currentUid = uid
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
             showDiscardChangesDialog()
@@ -97,158 +133,173 @@ class ProfileSetupActivity : AppCompatActivity() {
         imgAvatar = findViewById(R.id.imgAvatar)
         imgEditPhoto = findViewById(R.id.imgEditPhoto)
 
-        val avatarClickListener = View.OnClickListener {
-            showChooseImageDialog()
-        }
+        val avatarClickListener = View.OnClickListener { showChooseImageDialog() }
         imgAvatar.setOnClickListener(avatarClickListener)
         imgEditPhoto.setOnClickListener(avatarClickListener)
 
         tvFullNameHeader = findViewById(R.id.tvFullName)
 
-        etFirstName       = findViewById(R.id.tvNameValue)
-        etLastName        = findViewById(R.id.etLastName)
-        etEmail           = findViewById(R.id.tvEmailValue)
-        etPassword        = findViewById(R.id.tvPasswordValue)
-        etPhone           = findViewById(R.id.tvPhoneValue)
-        etLocation        = findViewById(R.id.tvLocationValue)
-        etBirthday        = findViewById(R.id.tvBirthdayValue)
+        etFirstName = findViewById(R.id.tvNameValue)
+        etLastName = findViewById(R.id.etLastName)
+        etEmail = findViewById(R.id.tvEmailValue)
+        etPassword = findViewById(R.id.tvPasswordValue)
+        etPhone = findViewById(R.id.tvPhoneValue)
+        etLocation = findViewById(R.id.tvLocationValue)
+        etBirthday = findViewById(R.id.tvBirthdayValue)
+        acGender = findViewById(R.id.tvGenderValue)
 
-        acGender          = findViewById(R.id.tvGenderValue)
-        acFaculty         = findViewById(R.id.tvFacultyValue)
-        acMajor           = findViewById(R.id.tvMajorValue)
-        acEducationLevel  = findViewById(R.id.tvEducationLevelValue)
+        btnSave = findViewById(R.id.btnSave)
+        btnCancel = findViewById(R.id.btnCancel)
 
-        btnSave           = findViewById(R.id.btnSave)
-        btnCancel         = findViewById(R.id.btnCancel)
+        etPassword.apply {
+            setText("************")
+            isEnabled = false
+            isFocusable = false
+            isFocusableInTouchMode = false
+            keyListener = null
+        }
 
-        db.collection("users").document(uid).get()
-            .addOnSuccessListener { doc ->
-                if (doc != null && doc.exists()) {
+        etPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
-                    val fullName = doc.getString("fullName") ?: ""
-                    if (fullName.isNotEmpty()) {
-                        val parts = fullName.trim().split(" ")
-                        val first = parts.firstOrNull() ?: ""
-                        val last  = parts.drop(1).joinToString(" ")
+        val genders = listOf("Muško", "Žensko", "Ostalo")
+        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, genders)
+        acGender.setAdapter(genderAdapter)
+        acGender.keyListener = null
 
-                        etFirstName.setText(first)
-                        etLastName.setText(last)
-                        tvFullNameHeader.text = fullName
-                    }
+        etFaculty = findViewById(R.id.etFaculty)
+        actvLevel = findViewById(R.id.actvEducationLevel)
+        actvMajor = findViewById(R.id.actvMajor)
+        etStudyYear = findViewById(R.id.etStudyYear)
 
-                    doc.getString("firstName")?.let { if (it.isNotEmpty()) etFirstName.setText(it) }
-                    doc.getString("lastName")?.let  { if (it.isNotEmpty()) etLastName.setText(it) }
+        etFaculty.setText(facultyFixed)
+        etFaculty.isEnabled = false
 
-                    etEmail.setText(
-                        doc.getString("email") ?: user.email ?: ""
-                    )
-                    etPhone.setText(
-                        doc.getString("phone") ?: ""
-                    )
-                    etLocation.setText(
-                        doc.getString("location") ?: ""
-                    )
-                    etBirthday.setText(
-                        doc.getString("birthday") ?: ""
-                    )
+        val levelAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, levels)
+        actvLevel.setAdapter(levelAdapter)
 
-                    acFaculty.setText(
-                        doc.getString("faculty")
-                            ?: "Fakultet organizacije i informatike",
-                        false
-                    )
-                    acMajor.setText(
-                        doc.getString("major")
-                            ?: "Informacijsko i programsko inženjerstvo",
-                        false
-                    )
-                    acEducationLevel.setText(
-                        doc.getString("educationLevel") ?: "",
-                        false
-                    )
-                    acGender.setText(
-                        doc.getString("gender") ?: "—",
-                        false
-                    )
+        actvMajor.isEnabled = false
+        actvLevel.setOnItemClickListener { _, _, position, _ ->
+            val selectedLevel = levels[position]
 
-                    doc.getString("avatarUrl")
-                        ?.takeIf { it.isNotEmpty() }
-                        ?.let { url ->
-                            Glide.with(this)
-                                .load(url)
-                                .placeholder(R.drawable.ic_profile_placeholder)
-                                .into(imgAvatar)
-                        }
+            actvMajor.setText("", false)
 
-                    etPassword.setText("************")
-                } else {
-                    etEmail.setText(user.email ?: "")
-                    tvFullNameHeader.text = "Uredi profil"
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Greška pri dohvaćanju podataka: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+            val majors = majorsByLevel[selectedLevel].orEmpty()
+            val majorAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, majors)
+            actvMajor.setAdapter(majorAdapter)
+
+            actvMajor.isEnabled = majors.isNotEmpty()
+        }
 
         etBirthday.setOnClickListener {
-            showDatePicker { formatted ->
-                etBirthday.setText(formatted)
+            showDatePicker { formatted -> etBirthday.setText(formatted) }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.collectLatest { state ->
+                when (state) {
+                    ProfileState.Idle -> Unit
+
+                    ProfileState.Loading -> {
+                        btnSave.isEnabled = false
+                    }
+
+                    is ProfileState.Loaded -> {
+                        btnSave.isEnabled = true
+                        bindProfileToUi(state.ui)
+                    }
+
+                    is ProfileState.Saved -> {
+                        Toast.makeText(this@ProfileSetupActivity, state.message, Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+
+                    is ProfileState.Error -> {
+                        btnSave.isEnabled = true
+                        Toast.makeText(this@ProfileSetupActivity, state.message, Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
 
+        viewModel.load()
 
         btnSave.setOnClickListener {
-            val firstName      = etFirstName.text?.toString()?.trim() ?: ""
-            val lastName       = etLastName.text?.toString()?.trim() ?: ""
-            val fullName       = listOf(firstName, lastName)
-                .filter { it.isNotEmpty() }
-                .joinToString(" ")
+            val firstName = etFirstName.text?.toString()?.trim().orEmpty()
+            val lastName = etLastName.text?.toString()?.trim().orEmpty()
+            val fullName = listOf(firstName, lastName).filter { it.isNotBlank() }.joinToString(" ")
 
-            val email          = etEmail.text?.toString()?.trim() ?: ""
-            val phone          = etPhone.text?.toString()?.trim() ?: ""
-            val location       = etLocation.text?.toString()?.trim() ?: ""
-            val birthday       = etBirthday.text?.toString()?.trim() ?: ""
-            val gender         = acGender.text?.toString()?.trim() ?: ""
-            val faculty        = acFaculty.text?.toString()?.trim() ?: ""
-            val major          = acMajor.text?.toString()?.trim() ?: ""
-            val educationLevel = acEducationLevel.text?.toString()?.trim() ?: ""
+            val email = etEmail.text?.toString()?.trim().orEmpty()
+            val phone = etPhone.text?.toString()?.trim().orEmpty()
+            val location = etLocation.text?.toString()?.trim().orEmpty()
+            val birthday = etBirthday.text?.toString()?.trim().orEmpty()
+            val gender = acGender.text?.toString()?.trim().orEmpty()
 
-            val data = mapOf(
-                "fullName"       to fullName,
-                "firstName"      to firstName,
-                "lastName"       to lastName,
-                "email"          to email,
-                "phone"          to phone,
-                "location"       to location,
-                "birthday"       to birthday,
-                "gender"         to gender,
-                "faculty"        to faculty,
-                "major"          to major,
-                "educationLevel" to educationLevel
-            )
+            val faculty = etFaculty.text?.toString()?.trim().orEmpty().ifEmpty { facultyFixed }
+            val educationLevel = actvLevel.text?.toString()?.trim().orEmpty()
+            val major = actvMajor.text?.toString()?.trim().orEmpty()
+            val studyYear = etStudyYear.text?.toString()?.trim()?.toIntOrNull()
 
-            db.collection("users").document(uid)
-                .set(data, SetOptions.merge())
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Podaci spremljeni", Toast.LENGTH_SHORT).show()
-                    if (fullName.isNotEmpty()) {
-                        tvFullNameHeader.text = fullName
-                    }
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(
-                        this,
-                        "Greška pri spremanju: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+            val fields = mutableMapOf<String, Any?>(
+                "fullName" to fullName,
+                "firstName" to firstName,
+                "lastName" to lastName,
+                "email" to email,
+                "phone" to phone,
+                "location" to location,
+                "birthday" to birthday,
+                "gender" to gender,
+                "faculty" to faculty,
+                "educationLevel" to educationLevel,
+                "major" to major,
+                "studyYear" to studyYear
+            ).filterValues { it != null }
+
+            viewModel.save(fields)
         }
 
         btnCancel.setOnClickListener {
             showDiscardChangesDialog()
         }
+    }
 
+    private fun bindProfileToUi(ui: ProfileUi) {
+        val fullName = ui.fullName.ifBlank {
+            listOf(ui.firstName, ui.lastName).filter { it.isNotBlank() }.joinToString(" ")
+        }
+
+        tvFullNameHeader.text = fullName.ifBlank { "Uredi profil" }
+
+        etFirstName.setText(ui.firstName)
+        etLastName.setText(ui.lastName)
+
+        etEmail.setText(ui.email)
+        etPhone.setText(ui.phone)
+        etLocation.setText(ui.location)
+        etBirthday.setText(ui.birthday)
+
+        acGender.setText(ui.gender.ifBlank { "—" }, false)
+
+        etFaculty.setText(if (ui.faculty.isBlank()) facultyFixed else ui.faculty)
+
+        if (ui.educationLevel.isNotBlank()) {
+            actvLevel.setText(ui.educationLevel, false)
+            val majors = majorsByLevel[ui.educationLevel].orEmpty()
+            actvMajor.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, majors))
+            actvMajor.isEnabled = majors.isNotEmpty()
+        }
+
+        if (ui.major.isNotBlank()) {
+            actvMajor.setText(ui.major, false)
+        }
+
+        etStudyYear.setText(ui.studyYear)
+
+        if (ui.avatarUrl.isNotBlank()) {
+            Glide.with(this)
+                .load(ui.avatarUrl)
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .into(imgAvatar)
+        }
     }
 
     private fun showChooseImageDialog() {
@@ -277,36 +328,13 @@ class ProfileSetupActivity : AppCompatActivity() {
         takePictureLauncher.launch(cameraImageUri!!)
     }
 
-
     private fun setAvatarImage(uri: Uri) {
         Glide.with(this)
             .load(uri)
             .placeholder(R.drawable.ic_profile_placeholder)
             .into(imgAvatar)
 
-        uploadAvatarToStorage(currentUid, uri)
-    }
-
-    private fun uploadAvatarToStorage(uid: String, imageUri: Uri) {
-
-
-        val ref = storage.reference.child("avatars/$uid/profile.jpg")
-
-        ref.putFile(imageUri)
-            .continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    throw task.exception ?: Exception("Upload nije uspio")
-                }
-                ref.downloadUrl
-            }
-            .addOnSuccessListener { downloadUri ->
-                val url = downloadUri.toString()
-                db.collection("users").document(uid)
-                    .set(mapOf("avatarUrl" to url), SetOptions.merge())
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Greška pri uploadu slike: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+        viewModel.uploadAvatar(uri)
     }
 
     private fun showDatePicker(onDatePicked: (String) -> Unit) {
@@ -322,17 +350,12 @@ class ProfileSetupActivity : AppCompatActivity() {
         }, year, month, day).show()
     }
 
-
     private fun showDiscardChangesDialog() {
         val dialogView = LayoutInflater.from(this)
             .inflate(R.layout.dialog_discard_changes, null)
 
-        val btnDiscard = dialogView.findViewById<MaterialButton>(
-            R.id.btnDiscardChanges
-        )
-        val btnContinue = dialogView.findViewById<MaterialButton>(
-            R.id.btnContinueEditing
-        )
+        val btnDiscard = dialogView.findViewById<MaterialButton>(R.id.btnDiscardChanges)
+        val btnContinue = dialogView.findViewById<MaterialButton>(R.id.btnContinueEditing)
 
         val alertDialog = MaterialAlertDialogBuilder(this, R.style.RoundedDialog)
             .setView(dialogView)
