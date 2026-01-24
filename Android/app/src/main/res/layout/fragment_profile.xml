@@ -89,7 +89,7 @@
                         android:id="@+id/tvProfileName"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Lana Maček"
+                        android:text=""
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:textColor="#111827"
@@ -194,7 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="Moji bodovi"
+                        android:text="Moje nagrade"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
                 </LinearLayout>
@@ -216,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="Postavke profila"
+                        android:text="Postavke"
                         android:textSize="16sp"
                         android:textColor="@color/otp_green" />
                 </LinearLayout>
