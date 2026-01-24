@@ -6,19 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".JobDetailsActivity">
+    tools:context=".ui.jobs.JobDetailsActivity">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:clipToPadding="false"
-        android:paddingBottom="90dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true"
+        android:paddingBottom="110dp"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
@@ -29,70 +29,70 @@
                 android:id="@+id/header"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
                 android:paddingStart="14dp"
+                android:paddingTop="20dp"
                 android:paddingEnd="14dp"
                 android:paddingBottom="30dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/btnBack"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_back"
                     android:contentDescription="@string/back_button"
-                    app:tint="@color/otp_green_dark"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:tint="@color/otp_green_dark" />
 
                 <ImageView
                     android:id="@+id/btnFavorite"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_favorite_outline"
-                    android:contentDescription="@null"
                     android:clickable="true"
+                    android:contentDescription="@string/jobs_favourite"
                     android:focusable="true"
-                    app:tint="@color/otp_green_dark"
-                    app:layout_constraintTop_toTopOf="@id/btnBack"
+                    android:src="@drawable/ic_favorite_outline"
                     app:layout_constraintBottom_toBottomOf="@id/btnBack"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/btnBack"
+                    app:tint="@color/otp_green_dark" />
 
                 <TextView
                     android:id="@+id/tvHeaderTitle"
                     style="@style/Podnaslov"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Detalji posla"
                     android:gravity="center"
+                    android:text="@string/job_details_screen_title"
                     android:textAlignment="center"
-                    app:layout_constraintTop_toTopOf="@id/btnBack"
                     app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                    app:layout_constraintEnd_toStartOf="@id/btnFavorite"
                     app:layout_constraintStart_toEndOf="@id/btnBack"
-                    app:layout_constraintEnd_toStartOf="@id/btnFavorite" />
+                    app:layout_constraintTop_toTopOf="@id/btnBack" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardLogo"
                     android:layout_width="84dp"
                     android:layout_height="84dp"
                     android:layout_marginTop="18dp"
-                    app:cardElevation="0dp"
                     app:cardBackgroundColor="@android:color/white"
-                    app:strokeColor="#33FFFFFF"
-                    app:strokeWidth="1dp"
-                    app:layout_constraintTop_toBottomOf="@id/btnBack"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/btnBack"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp">
 
                     <ImageView
                         android:id="@+id/ivCompanyLogo"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/app_name"
                         android:padding="14dp"
-                        android:src="@drawable/ic_otp_logo_circle"
-                        android:contentDescription="@string/app_name" />
+                        android:src="@drawable/ic_otp_logo_circle" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
@@ -103,9 +103,9 @@
                     android:layout_marginTop="12dp"
                     android:gravity="center"
                     android:textAlignment="center"
-                    app:layout_constraintTop_toBottomOf="@id/cardLogo"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardLogo"
                     tools:text="Viši / Specijalist za poslovnu analizu (domena digitalnog)" />
 
                 <TextView
@@ -117,10 +117,10 @@
                     android:layout_marginBottom="12dp"
                     android:gravity="center"
                     android:textAlignment="center"
-                    app:layout_constraintTop_toBottomOf="@id/tv_job_title_details"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_job_title_details"
                     tools:text="OTP Banka" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -129,34 +129,34 @@
                 android:id="@+id/cardsContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="14dp"
-                app:layout_constraintTop_toBottomOf="@id/header"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/header">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardHourly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@android:color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="#B4B4B4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cardLocation"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_weight="1">
+                    app:layout_constraintEnd_toStartOf="@id/cardLocation"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="#B4B4B4"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:padding="12dp"
-                        android:gravity="center_horizontal">
+                        android:padding="12dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -169,8 +169,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Satnica"
                             android:gravity="center"
+                            android:text="Satnica"
                             android:textAlignment="center"
                             android:textColor="@color/otp_grey" />
 
@@ -192,23 +192,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@android:color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="#B4B4B4"
-                    app:layout_constraintStart_toEndOf="@id/cardHourly"
-                    app:layout_constraintEnd_toStartOf="@id/cardExpires"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_weight="1">
+                    app:layout_constraintEnd_toStartOf="@id/cardExpires"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/cardHourly"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="#B4B4B4"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:padding="12dp"
-                        android:gravity="center_horizontal">
+                        android:padding="12dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -221,8 +221,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Lokacija"
                             android:gravity="center"
+                            android:text="Lokacija"
                             android:textAlignment="center"
                             android:textColor="@color/otp_grey" />
 
@@ -242,23 +242,23 @@
                     android:id="@+id/cardExpires"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@android:color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="#B4B4B4"
-                    app:layout_constraintStart_toEndOf="@id/cardLocation"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_weight="1">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/cardLocation"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="#B4B4B4"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:padding="12dp"
-                        android:gravity="center_horizontal">
+                        android:padding="12dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -271,8 +271,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Traje do"
                             android:gravity="center"
+                            android:text="Traje do"
                             android:textAlignment="center"
                             android:textColor="@color/otp_grey" />
 
@@ -294,18 +294,18 @@
                 android:id="@+id/cardBody"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="14dp"
+                android:backgroundTint="@android:color/white"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="#B4B4B4"
-                android:backgroundTint="@android:color/white"
-                app:layout_constraintTop_toBottomOf="@id/cardsContainer"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardsContainer"
+                app:strokeColor="#B4B4B4"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -326,16 +326,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:textColor="@color/otp_grey"
-                        android:text="Opis posla ide ovdje..." />
+                        android:text="Opis posla ide ovdje..."
+                        android:textColor="@color/otp_grey" />
 
                     <TextView
                         style="@style/Podnaslov"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Područja"
                         android:gravity="center"
+                        android:text="Područja"
                         android:textAlignment="center" />
 
                     <TextView
@@ -353,27 +353,47 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- BOTTOM BAR: 2 gumba -->
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="14dp"
         android:layout_marginBottom="20dp"
         android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_apply"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="52dp"
-            android:text="Prijavi se"
+            android:layout_weight="1"
+            android:text="@string/job_details_apply"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:backgroundTint="@color/otp_green"
             app:cornerRadius="90dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_favorite_toggle"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="@string/job_details_add_favorite"
+            android:textAllCaps="false"
+            android:textColor="@color/otp_green_dark"
+            android:textSize="16sp"
+            app:backgroundTint="@android:color/transparent"
+            app:cornerRadius="90dp"
+            app:strokeColor="@color/otp_green_dark"
+            app:strokeWidth="1dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

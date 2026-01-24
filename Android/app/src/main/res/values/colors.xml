@@ -21,4 +21,6 @@
     <color name="chat_border">#D7D7D7</color>
     <color name="chat_text_muted">#7A7A7A</color>
 
+    <color name="jobs_card_applied_bg">#EFF7EA</color>
+    <color name="jobs_status_soon_bg">#F56A0B</color>
 </resources>
