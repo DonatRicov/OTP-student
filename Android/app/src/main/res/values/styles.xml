@@ -17,6 +17,12 @@
         <item name="endIconTint">@color/otp_green</item>
     </style>
 
+    <style name="OtpDropdownText" parent="">
+        <item name="android:fontFamily">@font/sf_pro_display_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
     <style name="Naslov">
         <item name="android:textColor">@color/black</item>
@@ -69,7 +75,7 @@
 
     <style name="CircleImageView">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">5%</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="RoundedDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">

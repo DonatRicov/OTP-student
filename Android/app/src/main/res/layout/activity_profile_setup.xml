@@ -147,15 +147,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="@string/password"
-                    app:passwordToggleEnabled="true">
+                    android:hint="@string/password">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tvPasswordValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:cursorVisible="false"
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutPhone"
@@ -169,7 +172,9 @@
                         android:id="@+id/tvPhoneValue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone" />
+                        android:inputType="phone"
+                        android:autofillHints="phone"
+                        android:imeOptions="actionNext" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -282,6 +287,8 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+
+
         <!-- PODACI O STUDIJU -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardStudy"
@@ -303,41 +310,26 @@
                     android:layout_marginBottom="10dp"
                     android:text="@string/study_data" />
 
+                <!-- Fakultet (fiksno, disabled) -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutFaculty"
                     style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/faculty"
-                    app:endIconMode="dropdown_menu">
+                    android:hint="@string/faculty">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/tvFacultyValue"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etFaculty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="15dp"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:cursorVisible="false"
+                        android:popupBackground="@android:color/white"
                         android:inputType="none" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Razina obrazovanja -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutMajor"
-                    style="@style/PlaceholderLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:hint="@string/major"
-                    app:endIconMode="dropdown_menu">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/tvMajorValue"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="15dp"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutEducationLevel"
                     style="@style/PlaceholderLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -345,12 +337,46 @@
                     android:hint="@string/education_level"
                     app:endIconMode="dropdown_menu">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/tvEducationLevelValue"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actvEducationLevel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="15dp"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:popupBackground="@android:color/white"
+                        android:paddingHorizontal="15dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Smjer (disabled dok nema razine) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/PlaceholderLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="@string/major"
+                    app:endIconMode="dropdown_menu">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actvMajor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:paddingHorizontal="15dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Godina studija -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/PlaceholderLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="@string/study_year">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etStudyYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
