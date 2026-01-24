@@ -67,17 +67,9 @@
         tools:layout="@layout/fragment_reward_details" />
 
     <fragment
-        android:id="@+id/nav_points"
-        android:name="hr.foi.air.otpstudent.ui.points.PointsFragment"
-        android:label="Bodovi"
-        tools:layout="@layout/fragment_points">
-
-        <argument
-            android:name="openTab"
-            app:argType="string"
-            android:defaultValue="challenges" />
-    </fragment>
-
-
+        android:id="@+id/rewardRedeemedFragment"
+        android:name="hr.foi.air.otpstudent.ui.points.RewardRedeemedFragment"
+        android:label="RewardRedeemed"
+        tools:layout="@layout/fragment_reward_redeemed" />
 
 </navigation>

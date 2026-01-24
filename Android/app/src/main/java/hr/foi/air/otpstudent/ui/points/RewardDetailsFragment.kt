@@ -17,6 +17,9 @@ import java.util.Locale
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
+import androidx.fragment.app.activityViewModels
+import android.widget.Toast
+import hr.foi.air.otpstudent.di.AppModule
 
 class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
@@ -26,6 +29,14 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
     private fun setBottomNavVisible(visible: Boolean) {
         activity?.findViewById<View>(R.id.bottomNavigationView)?.isVisible = visible
     }
+
+    //za redeem bodova
+    private val vm: LoyaltyViewModel by activityViewModels {
+        LoyaltyViewModelFactory(AppModule.loyaltyRepository)
+    }
+
+    private lateinit var btnRedeem: View
+    private var currentRewardId: String = ""
 
     override fun onResume() {
         super.onResume()
@@ -42,6 +53,8 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
         val rewardId = requireArguments().getString(ARG_REWARD_ID).orEmpty()
         val userPoints = requireArguments().getLong(ARG_USER_POINTS, 0L)
+
+        currentRewardId = rewardId
 
         // Views
         val btnBack: View = view.findViewById(R.id.btnBack)
@@ -66,13 +79,42 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
         val tvDetailsBody: TextView = view.findViewById(R.id.tvDetailsBody)
         val tvInstructionsBody: TextView = view.findViewById(R.id.tvInstructionsBody)
 
-        val btnRedeem: View = view.findViewById(R.id.btnRedeem)
+        btnRedeem = view.findViewById(R.id.btnRedeem)
         val tvRedeemText: TextView = view.findViewById(R.id.tvRedeemText)
         val tvRedeemCost: TextView = view.findViewById(R.id.tvRedeemCostBadge)
 
         btnBack.setOnClickListener { findNavController().navigateUp() }
-        btnRedeem.setOnClickListener { /* TODO: redeem later */ }
 
+        //redeem click listener
+        btnRedeem.setOnClickListener {
+            btnRedeem.isEnabled = false
+            vm.redeemRewardFromDetails(currentRewardId)
+        }
+
+        // gledaj redeem state
+        vm.redeemState.observe(viewLifecycleOwner) { st ->
+            when (st) {
+                is RedeemUiState.Loading -> {
+                    // loading indikator
+                }
+                is RedeemUiState.Success -> {
+                    vm.clearRedeemState()
+                    findNavController().navigate(
+                        R.id.rewardRedeemedFragment,
+                        RewardRedeemedFragment.createArgs(
+                            rewardId = currentRewardId,
+                            redemptionId = st.redemptionId
+                        )
+                    )
+                }
+                is RedeemUiState.Error -> {
+                    vm.clearRedeemState()
+                    btnRedeem.isEnabled = true
+                    Toast.makeText(requireContext(), st.message, Toast.LENGTH_LONG).show()
+                }
+                null -> Unit
+            }
+        }
 
         if (rewardId.isBlank()) return
 

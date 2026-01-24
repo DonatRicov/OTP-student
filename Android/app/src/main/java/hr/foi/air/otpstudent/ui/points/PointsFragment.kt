@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import androidx.navigation.fragment.findNavController
@@ -16,7 +16,10 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
     private lateinit var tabRewards: TextView
     private lateinit var tvPoints: TextView
 
-    private val viewModel: LoyaltyViewModel by viewModels {
+    //private val viewModel: LoyaltyViewModel by viewModels {
+    //    LoyaltyViewModelFactory(AppModule.loyaltyRepository)
+    //}
+    private val viewModel: LoyaltyViewModel by activityViewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
 

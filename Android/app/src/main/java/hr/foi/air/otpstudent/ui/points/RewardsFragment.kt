@@ -3,7 +3,7 @@ package hr.foi.air.otpstudent.ui.points
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,10 +14,8 @@ import hr.foi.air.otpstudent.domain.model.RewardsFilter
 
 class RewardsFragment : Fragment(R.layout.fragment_rewards) {
 
-    // Shared VM s PointsFragment
-    private val vm: LoyaltyViewModel by viewModels(
-        ownerProducer = { requireParentFragment() }
-    ) {
+    // Shared VM sa svima koji koriste bodove
+    private val vm: LoyaltyViewModel by activityViewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
 

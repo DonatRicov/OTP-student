@@ -18,6 +18,12 @@ sealed class LoyaltyUiState {
     data class Error(val message: String) : LoyaltyUiState()
 }
 
+sealed class RedeemUiState {
+    object Loading : RedeemUiState()
+    data class Success(val redemptionId: String) : RedeemUiState()
+    data class Error(val message: String) : RedeemUiState()
+}
+
 class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
 
     private val _state = MutableLiveData<LoyaltyUiState>()
@@ -34,6 +40,10 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
 
     private val _rewardsState = MutableLiveData<RewardsUiState>()
     val rewardsState: LiveData<RewardsUiState> = _rewardsState
+
+    // redeem state za details ekran
+    private val _redeemState = MutableLiveData<RedeemUiState?>()
+    val redeemState: LiveData<RedeemUiState?> = _redeemState
 
     fun load() {
         _state.value = LoyaltyUiState.Loading
@@ -96,12 +106,6 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
 
     private val rewardFilters = mutableSetOf<RewardsFilter>()
     private fun hasAnyRewardFilters(): Boolean = rewardFilters.isNotEmpty()
-
-    //fun isRewardFilterEnabled(filter: RewardsFilter): Boolean = rewardFilters.contains(filter)
-
-    /*fun setRewardFilter(filter: RewardsFilter, enabled: Boolean) {
-        if (enabled) rewardFilters.add(filter) else rewardFilters.remove(filter)
-    }*/
 
     fun getRewardFiltersSnapshot(): Set<RewardsFilter> = rewardFilters.toSet()
 
@@ -177,6 +181,31 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 _rewardsState.value = RewardsUiState.Error(it.message ?: "Sakupljanje nagrade nije uspio")
             }
         }
+    }
+
+    // redeem iz RewardDetails i vraca redemptionId po redeemState
+    fun redeemRewardFromDetails(rewardId: String) {
+        _redeemState.value = RedeemUiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                repo.redeemReward(rewardId)
+            }.onSuccess { redemptionId ->
+                val newPoints = repo.getPointsBalanceForCurrentUser()
+                _points.value = newPoints
+
+                // refresh rewards liste
+                if (hasAnyRewardFilters()) applyRewardFilters() else loadRewards()
+
+                _redeemState.value = RedeemUiState.Success(redemptionId)
+            }.onFailure {
+                _redeemState.value =
+                    RedeemUiState.Error(it.message ?: "Sakupljanje nagrade nije uspjelo")
+            }
+        }
+    }
+
+    fun clearRedeemState() {
+        _redeemState.value = null
     }
 }
 

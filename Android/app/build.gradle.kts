@@ -60,6 +60,8 @@ dependencies {
     implementation("com.google.firebase:firebase-common")
     implementation("com.google.firebase:firebase-functions")
 
+    //qr kod
+    implementation("com.google.zxing:core:3.5.3")
 
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
