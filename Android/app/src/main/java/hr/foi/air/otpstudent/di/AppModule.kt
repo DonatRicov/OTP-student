@@ -13,6 +13,7 @@ import hr.foi.air.otpstudent.data.source.remote.InternshipsRemoteDataSource
 import hr.foi.air.otpstudent.data.repository.FirebaseLoyaltyRepositoryImpl
 import hr.foi.air.otpstudent.data.source.remote.FirebaseLoyaltyRemoteDataSource
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
+import com.google.firebase.storage.FirebaseStorage
 
 
 object AppModule {
@@ -20,9 +21,11 @@ object AppModule {
 
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
 
+    private val storage by lazy { FirebaseStorage.getInstance() }
+
     // repositories
     val authRepository: AuthRepository by lazy {
-        FirebaseAuthRepositoryImpl(firebaseAuth, firestore)
+        FirebaseAuthRepositoryImpl(firebaseAuth, firestore,storage)
     }
     private val firestore by lazy { FirebaseFirestore.getInstance() }
 
@@ -42,6 +45,5 @@ object AppModule {
     val loyaltyRepository: LoyaltyRepository by lazy {
         FirebaseLoyaltyRepositoryImpl(firebaseAuth, loyaltyRemote)
     }
-
 
 }
