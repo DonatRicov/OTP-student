@@ -6,10 +6,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import hr.foi.air.otpstudent.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
+import android.net.Uri
 
 class FirebaseAuthRepositoryImpl(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage
 ) : AuthRepository {
 
     override suspend fun login(email: String, password: String) {
@@ -41,4 +44,20 @@ class FirebaseAuthRepositoryImpl(
             .await()
     }
 
+    override suspend fun getUserDocument(uid: String): Map<String, Any?>? {
+        val doc = firestore.collection("users").document(uid).get().await()
+        return if (doc.exists()) doc.data else null
+    }
+
+    override suspend fun uploadAvatar(uid: String, imageUri: Uri): String {
+        val ref = storage.reference.child("avatars/$uid/profile.jpg")
+        ref.putFile(imageUri).await()
+        val url = ref.downloadUrl.await().toString()
+
+        firestore.collection("users").document(uid)
+            .set(mapOf("avatarUrl" to url), SetOptions.merge())
+            .await()
+
+        return url
+    }
 }
