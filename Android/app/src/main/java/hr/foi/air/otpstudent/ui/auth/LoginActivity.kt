@@ -26,6 +26,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import hr.foi.air.auth.pin.PinStore
 import hr.foi.air.auth.pin.PinUnlockActivity
 import hr.foi.air.auth.pin.PinUnlockContract
 import hr.foi.air.core.auth.AuthRegistry
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         ViewModelProvider(this, LoginVmFactory())[LoginViewModel::class.java]
     }
 
-    // PIN flow ne gledaj samo RESULT_OK nego i EXTRA_RESULT iz PinUnlockContract
+    // PIN flow cita ishod iz PinUnlockContract.EXTRA_RESULT
     private val pinUnlockLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             if (res.resultCode != RESULT_OK) return@registerForActivityResult
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     goToSuccess()
                 }
             }
-            //RESULT_NOT_YOU ne radi nista
+            // RESULT_NOT_YOU ostaje na loginu
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,7 +135,15 @@ class LoginActivity : AppCompatActivity() {
             viewModel.login(
                 email = email,
                 pass = pass,
-                onSaveCreds = { e, p -> SecureCreds.save(this, e, p) }
+                onSaveCreds = { e, p ->
+                    SecureCreds.save(this, e, p)
+                    // kad se user uspjesno prijavi zapamti ga za PIN ekran
+                    val uid = FirebaseAuth.getInstance().currentUser?.uid
+                    if (!uid.isNullOrBlank()) {
+                        PinStore.setLastUid(this, uid)
+                        PinStore.setLastUserLabel(this, e) // email kao label
+                    }
+                }
             )
         }
     }
@@ -171,11 +180,16 @@ class LoginActivity : AppCompatActivity() {
                 setOnClickListener {
                     val request = AuthRequest(email = etEmail.text.toString().trim())
 
-                    // PIN metoda ide na PinUnlockActivity
+                    //PIN metoda ide na PinUnlockActivity i salje zadnjeg korisnika
                     if (spec.title.contains("PIN", ignoreCase = true)) {
-                        pinUnlockLauncher.launch(
-                            Intent(this@LoginActivity, PinUnlockActivity::class.java)
-                        )
+                        val i = Intent(this@LoginActivity, PinUnlockActivity::class.java).apply {
+                            putExtra(PinUnlockActivity.EXTRA_UID, PinStore.getLastUid(this@LoginActivity))
+                            putExtra(
+                                PinUnlockActivity.EXTRA_USER_LABEL,
+                                PinStore.getLastUserLabel(this@LoginActivity)
+                            )
+                        }
+                        pinUnlockLauncher.launch(i)
                         return@setOnClickListener
                     }
 

@@ -8,8 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class PinUnlockActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_UID = "extra_uid"
+        const val EXTRA_USER_LABEL = "extra_user_label"
+    }
 
     private val pin = StringBuilder()
 
@@ -29,9 +35,56 @@ class PinUnlockActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun resolveUid(): String? {
+        //iz intenta
+        intent.getStringExtra(EXTRA_UID)?.let { if (it.isNotBlank()) return it }
+
+        //firebase user
+        FirebaseAuth.getInstance().currentUser?.uid?.let { if (it.isNotBlank()) return it }
+
+        //fallback
+        return PinStore.getLastUid(this)
+    }
+
+    private fun emailPrefix(email: String): String {
+        val at = email.indexOf('@')
+        return if (at > 0) email.substring(0, at) else email
+    }
+
+
+    private fun formatUserLabel(raw: String?): String? {
+        val s = raw?.trim()
+        if (s.isNullOrBlank()) return null
+        return if (s.contains("@")) emailPrefix(s) else s
+    }
+
+    private fun resolveUserLabelFormatted(): String {
+        // app moze poslati ime ili email
+        val fromIntent = formatUserLabel(intent.getStringExtra(EXTRA_USER_LABEL))
+        if (!fromIntent.isNullOrBlank()) return fromIntent
+
+        //iz firebase usera ime
+        val u = FirebaseAuth.getInstance().currentUser
+        val fromName = formatUserLabel(u?.displayName)
+        if (!fromName.isNullOrBlank()) return fromName
+
+        val fromEmail = formatUserLabel(u?.email)
+        if (!fromEmail.isNullOrBlank()) return fromEmail
+
+        // fallback iz stora moze biti ime ili email
+        val fromStore = formatUserLabel(PinStore.getLastUserLabel(this))
+        if (!fromStore.isNullOrBlank()) return fromStore
+
+        return "korisnika"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin_unlock)
+
+        val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        val label = resolveUserLabelFormatted()
+        tvTitle.text = "Unesite PIN za $label"
 
         val tvOtherLogin = findViewById<TextView>(R.id.tvOtherLogin)
         val tvForgotPin = findViewById<TextView>(R.id.tvForgotPin)
@@ -68,8 +121,18 @@ class PinUnlockActivity : AppCompatActivity() {
         fun verifyAndFinishIfComplete() {
             if (pin.length != 6) return
 
-            val ok = PinVerifier.verify(this@PinUnlockActivity, pin.toString())
+            val uid = resolveUid() ?: run {
+                Toast.makeText(this@PinUnlockActivity, "PIN prijava nije dostupna.", Toast.LENGTH_LONG).show()
+                resetPin()
+                return
+            }
+
+            val ok = PinVerifier.verify(this@PinUnlockActivity, uid, pin.toString())
+
             if (ok) {
+                //spremi zadnjeg korisnika kao formatirani label
+                PinStore.setLastUid(this@PinUnlockActivity, uid)
+                PinStore.setLastUserLabel(this@PinUnlockActivity, resolveUserLabelFormatted())
                 finishOk()
             } else {
                 Toast.makeText(this@PinUnlockActivity, "Neispravan PIN", Toast.LENGTH_LONG).show()
@@ -81,7 +144,6 @@ class PinUnlockActivity : AppCompatActivity() {
             if (pin.length >= 6) return
             pin.append(d)
             renderPin()
-            // Provjera ide samo na klik OK.
         }
 
         fun deleteDigit() {
@@ -119,18 +181,13 @@ class PinUnlockActivity : AppCompatActivity() {
         setupRandomKeypad()
 
         btnDel.setOnClickListener { deleteDigit() }
-
-        btnOk.setOnClickListener {
-            // Provjera ide samo ovdje
-            verifyAndFinishIfComplete()
-        }
+        btnOk.setOnClickListener { verifyAndFinishIfComplete() }
 
         tvOtherLogin.setOnClickListener { finishNotYou() }
         tvForgotPin.setOnClickListener { finishNotYou() }
 
         renderPin()
 
-        //BACK ne smije biti uspjeh nego CANCEL
         onBackPressedDispatcher.addCallback(this) {
             setResult(RESULT_CANCELED)
             finish()
@@ -139,7 +196,6 @@ class PinUnlockActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // sigurnosno: ocisti PIN kad se activity napusti
         pin.clear()
     }
 }
