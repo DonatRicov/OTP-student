@@ -1,5 +1,6 @@
 package hr.foi.air.otpstudent.ui.internship
 
+import hr.foi.air.otpstudent.domain.model.CvDocument
 import hr.foi.air.otpstudent.domain.model.Internship
 
 data class InternshipDetailsUiState(
@@ -7,5 +8,6 @@ data class InternshipDetailsUiState(
     val internship: Internship? = null,
     val isFavorite: Boolean = false,
     val isApplied: Boolean = false,
+    val cvDocument: CvDocument? = null,
     val error: String? = null
 )

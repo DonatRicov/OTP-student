@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -46,7 +47,6 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
         tvEmpty = view.findViewById(R.id.tvEmpty)
 
-
         btnMyApplications = view.findViewById(R.id.btnMyApplications)
         btnMyApplications.setOnClickListener {
             val enabled = viewModel.isFilterEnabled(InternshipFilter.APPLIED)
@@ -58,8 +58,12 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
             findNavController().navigate(R.id.chatbotFragment)
         }
 
+        // ✅ OVDJE JE KLIK IZ LISTE PRAKSI (promjena: Activity -> Fragment navigation)
         adapter = InternshipAdapter { internship ->
-            startActivity(InternshipDetailsActivity.newIntent(requireContext(), internship.id))
+            findNavController().navigate(
+                R.id.internshipDetailsFragment,
+                bundleOf(InternshipDetailsFragment.ARG_INTERNSHIP_ID to internship.id)
+            )
         }
 
         rv.layoutManager = LinearLayoutManager(requireContext())

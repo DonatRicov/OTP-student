@@ -2,6 +2,7 @@ package hr.foi.air.otpstudent.ui.internship
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import hr.foi.air.otpstudent.domain.repository.CvRepository
 import hr.foi.air.otpstudent.domain.repository.InternshipRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class InternshipDetailsViewModel(
-    private val repo: InternshipRepository,
+    private val internshipRepo: InternshipRepository,
+    private val cvRepoProvider: (String) -> CvRepository,
     private val userIdProvider: () -> String?
 ) : ViewModel() {
 
@@ -23,22 +25,29 @@ class InternshipDetailsViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                val internship = repo.getInternshipById(id)
+                val internship = internshipRepo.getInternshipById(id)
                 if (internship == null) {
-                    _state.update { it.copy(isLoading = false, error = "Internship nije pronađen.") }
+                    _state.update { it.copy(isLoading = false, error = "Praksa nije pronađena.") }
                     return@launch
                 }
 
                 val uid = userIdProvider()
-                val fav = if (!uid.isNullOrBlank()) repo.isFavorite(uid, id) else false
-                val applied = if (!uid.isNullOrBlank()) repo.isApplied(uid, id) else false
+                val fav = if (!uid.isNullOrBlank()) internshipRepo.isFavorite(uid, id) else false
+                val applied = if (!uid.isNullOrBlank()) internshipRepo.isApplied(uid, id) else false
+
+
+                val latestCv = if (!uid.isNullOrBlank()) {
+                    val cvRepo = cvRepoProvider(uid)
+                    cvRepo.getAllCvs().maxByOrNull { it.timestamp }
+                } else null
 
                 _state.update {
                     it.copy(
                         isLoading = false,
                         internship = internship,
                         isFavorite = fav,
-                        isApplied = applied
+                        isApplied = applied,
+                        cvDocument = latestCv
                     )
                 }
             } catch (e: Exception) {
@@ -57,7 +66,7 @@ class InternshipDetailsViewModel(
         viewModelScope.launch {
             try {
                 val newValue = !_state.value.isFavorite
-                repo.setFavorite(uid, id, newValue)
+                internshipRepo.setFavorite(uid, id, newValue)
                 _state.update { it.copy(isFavorite = newValue) }
             } catch (e: Exception) {
                 _state.update { it.copy(error = e.message ?: "Greška pri spremanju favorita.") }
@@ -65,22 +74,34 @@ class InternshipDetailsViewModel(
         }
     }
 
-    fun apply() {
-        val id = internshipId ?: return
-        val uid = userIdProvider() ?: run {
-            _state.update { it.copy(error = "Morate biti prijavljeni.") }
+
+    fun onApplyOrDetailsClicked(openUrl: (String) -> Unit) {
+        val internship = _state.value.internship ?: return
+        val url = internship.applyUrl.orEmpty()
+
+        if (url.isBlank()) {
+            _state.update { it.copy(error = "Link nije dostupan.") }
             return
         }
 
-        if (_state.value.isApplied) return
+        val uid = userIdProvider()
+        if (uid.isNullOrBlank()) {
 
-        viewModelScope.launch {
-            try {
-                repo.markApplied(uid, id)
-                _state.update { it.copy(isApplied = true) }
-            } catch (e: Exception) {
-                _state.update { it.copy(error = e.message ?: "Greška pri prijavi.") }
+            openUrl(url)
+            return
+        }
+
+        if (!_state.value.isApplied) {
+            viewModelScope.launch {
+                try {
+                    internshipRepo.markApplied(uid, internship.id)
+                    _state.update { it.copy(isApplied = true) }
+                } catch (e: Exception) {
+                    _state.update { it.copy(error = e.message ?: "Greška pri prijavi.") }
+                }
             }
+        } else {
+            openUrl(url)
         }
     }
 

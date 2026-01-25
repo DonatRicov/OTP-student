@@ -3,6 +3,7 @@ package hr.foi.air.otpstudent
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
@@ -19,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import hr.foi.air.otpstudent.di.AppModule
 import hr.foi.air.otpstudent.domain.model.Internship
 import hr.foi.air.otpstudent.domain.model.Job
-import hr.foi.air.otpstudent.ui.internship.InternshipDetailsActivity
 import hr.foi.air.otpstudent.ui.jobs.JobDetailsActivity
 import kotlinx.coroutines.launch
 import android.widget.ImageButton
@@ -182,10 +182,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     bindInternship(internshipInclude, randomInternship)
 
                     internshipInclude.setOnClickListener {
-                        startActivity(
-                            InternshipDetailsActivity.newIntent(requireContext(), randomInternship.id)
+                        findNavController().navigate(
+                            R.id.internshipDetailsFragment,
+                            bundleOf("internshipId" to randomInternship.id)
                         )
                     }
+
                 }
             } catch (e: Exception) {
                 Log.e("HomeFragment", "Internship load error", e)

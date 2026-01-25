@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
@@ -34,10 +36,13 @@ class InternshipFulfilledFragment : Fragment(R.layout.fragment_internship_fullfi
         tvEmpty = view.findViewById(R.id.tvEmpty)
         etSearch = view.findViewById(R.id.etSearch)
 
+        // ✅ promjena: Activity -> Fragment navigation
         adapter = InternshipAdapter { internship ->
-            startActivity(InternshipDetailsActivity.newIntent(requireContext(), internship.id))
+            findNavController().navigate(
+                R.id.internshipDetailsFragment,
+                bundleOf(InternshipDetailsFragment.ARG_INTERNSHIP_ID to internship.id)
+            )
         }
-
 
         rvInternships.layoutManager = LinearLayoutManager(requireContext())
         rvInternships.adapter = adapter
