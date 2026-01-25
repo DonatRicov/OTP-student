@@ -6,10 +6,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 
-//bug* - dok se unese pin od 6 znameni se automatski ulogira bez da se klikne potvrda (OK), fali ekran za uspješnu prijavu
 class PinUnlockActivity : AppCompatActivity() {
+
+    private val pin = StringBuilder()
 
     private fun finishOk() {
         setResult(
@@ -46,8 +48,6 @@ class PinUnlockActivity : AppCompatActivity() {
             findViewById<View>(R.id.pin6),
         )
 
-        val pin = StringBuilder()
-
         fun renderPin() {
             pinBoxes.forEachIndexed { index, v ->
                 v.setBackgroundResource(
@@ -81,7 +81,7 @@ class PinUnlockActivity : AppCompatActivity() {
             if (pin.length >= 6) return
             pin.append(d)
             renderPin()
-            verifyAndFinishIfComplete()
+            // Provjera ide samo na klik OK.
         }
 
         fun deleteDigit() {
@@ -121,6 +121,7 @@ class PinUnlockActivity : AppCompatActivity() {
         btnDel.setOnClickListener { deleteDigit() }
 
         btnOk.setOnClickListener {
+            // Provjera ide samo ovdje
             verifyAndFinishIfComplete()
         }
 
@@ -128,5 +129,17 @@ class PinUnlockActivity : AppCompatActivity() {
         tvForgotPin.setOnClickListener { finishNotYou() }
 
         renderPin()
+
+        //BACK ne smije biti uspjeh nego CANCEL
+        onBackPressedDispatcher.addCallback(this) {
+            setResult(RESULT_CANCELED)
+            finish()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // sigurnosno: ocisti PIN kad se activity napusti
+        pin.clear()
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
@@ -12,29 +13,31 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
-import hr.foi.air.core.auth.AuthRegistry
-import hr.foi.air.core.auth.AuthRequest
-import hr.foi.air.core.auth.AuthResult
-import hr.foi.air.otpstudent.R
-import hr.foi.air.core.auth.SecureCreds
-import hr.foi.air.otpstudent.di.AppModule
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import hr.foi.air.auth.pin.PinUnlockActivity
+import hr.foi.air.auth.pin.PinUnlockContract
+import hr.foi.air.core.auth.AuthRegistry
+import hr.foi.air.core.auth.AuthRequest
+import hr.foi.air.core.auth.AuthResult
+import hr.foi.air.core.auth.SecureCreds
+import hr.foi.air.otpstudent.R
+import hr.foi.air.otpstudent.di.AppModule
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
-import android.util.Log
 
 class LoginActivity : AppCompatActivity() {
 
@@ -43,6 +46,21 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this, LoginVmFactory())[LoginViewModel::class.java]
     }
+
+    // PIN flow ne gledaj samo RESULT_OK nego i EXTRA_RESULT iz PinUnlockContract
+    private val pinUnlockLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+            if (res.resultCode != RESULT_OK) return@registerForActivityResult
+
+            val outcome = res.data?.getStringExtra(PinUnlockContract.EXTRA_RESULT)
+            if (outcome == PinUnlockContract.RESULT_OK) {
+                lifecycleScope.launch {
+                    logDailyLoginEvent()
+                    goToSuccess()
+                }
+            }
+            //RESULT_NOT_YOU ne radi nista
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
             v.updatePadding(top = bars.top)
             insets
         }
-
 
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPass = findViewById<EditText>(R.id.etPass)
@@ -90,13 +107,7 @@ class LoginActivity : AppCompatActivity() {
                     LoginEffect.GoToSuccess -> {
                         lifecycleScope.launch {
                             logDailyLoginEvent()
-
-                            startActivity(
-                                Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
-                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                }
-                            )
-                            finish()
+                            goToSuccess()
                         }
                     }
 
@@ -128,6 +139,82 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupAuthPlugins(container: LinearLayout, etEmail: EditText) {
+        container.removeAllViews()
+
+        val enabledPlugins = AuthRegistry.available().filter { it.isEnabled(this) }
+
+        enabledPlugins.forEach { plugin ->
+            val spec = plugin.uiSpec()
+
+            val btn = MaterialButton(
+                this,
+                null,
+                com.google.android.material.R.attr.materialButtonOutlinedStyle
+            ).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    resources.getDimensionPixelSize(R.dimen.auth_btn_height)
+                ).also { lp ->
+                    lp.topMargin = resources.getDimensionPixelSize(R.dimen.auth_btn_margin_top)
+                }
+
+                text = spec.title
+                isAllCaps = false
+
+                spec.iconRes?.let {
+                    setIconResource(it)
+                    iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
+                    iconPadding = resources.getDimensionPixelSize(R.dimen.auth_btn_icon_padding)
+                }
+
+                setOnClickListener {
+                    val request = AuthRequest(email = etEmail.text.toString().trim())
+
+                    // PIN metoda ide na PinUnlockActivity
+                    if (spec.title.contains("PIN", ignoreCase = true)) {
+                        pinUnlockLauncher.launch(
+                            Intent(this@LoginActivity, PinUnlockActivity::class.java)
+                        )
+                        return@setOnClickListener
+                    }
+
+                    // ostali pluginovi
+                    plugin.authenticate(this@LoginActivity, request) { result ->
+                        when (result) {
+                            is AuthResult.Success -> {
+                                lifecycleScope.launch {
+                                    logDailyLoginEvent()
+                                    goToSuccess()
+                                }
+                            }
+
+                            is AuthResult.Error ->
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    result.message,
+                                    Toast.LENGTH_LONG
+                                ).show()
+
+                            AuthResult.Cancelled -> Unit
+                        }
+                    }
+                }
+            }
+
+            container.addView(btn)
+        }
+    }
+
+    private fun goToSuccess() {
+        startActivity(
+            Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+        )
+        finish()
+    }
+
     private suspend fun logDailyLoginEvent() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val db = FirebaseFirestore.getInstance()
@@ -148,59 +235,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun setupAuthPlugins(container: LinearLayout, etEmail: EditText) {
-        container.removeAllViews()
-
-        val enabledPlugins = AuthRegistry.available().filter { it.isEnabled(this) }
-
-        enabledPlugins.forEach { plugin ->
-            val spec = plugin.uiSpec()
-
-            val btn = MaterialButton(
-                this,
-                null,
-                com.google.android.material.R.attr.materialButtonOutlinedStyle
-            ).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    resources.getDimensionPixelSize(R.dimen.auth_btn_height)
-                ).also { it.topMargin = resources.getDimensionPixelSize(R.dimen.auth_btn_margin_top) }
-
-                text = spec.title
-                isAllCaps = false
-
-                spec.iconRes?.let {
-                    setIconResource(it)
-                    iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
-                    iconPadding = resources.getDimensionPixelSize(R.dimen.auth_btn_icon_padding)
-                }
-
-                setOnClickListener {
-                    val request = AuthRequest(email = etEmail.text.toString().trim())
-
-                    plugin.authenticate(this@LoginActivity, request) { result ->
-                        when (result) {
-                            is AuthResult.Success -> {
-                                startActivity(
-                                    Intent(this@LoginActivity, LoginSuccessActivity::class.java).apply {
-                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                    }
-                                )
-                                finish()
-                            }
-                            is AuthResult.Error ->
-                                Toast.makeText(this@LoginActivity, result.message, Toast.LENGTH_LONG).show()
-                            AuthResult.Cancelled -> Unit
-                        }
-                    }
-                }
-            }
-
-            container.addView(btn)
-        }
-    }
-
     private fun setPasswordVisible(et: EditText, til: TextInputLayout) {
         et.transformationMethod = HideReturnsTransformationMethod.getInstance()
         et.setSelection(et.text?.length ?: 0)
@@ -215,7 +249,7 @@ class LoginActivity : AppCompatActivity() {
         til.endIconContentDescription = getString(R.string.show_password)
     }
 
-    private inner class LoginVmFactory : ViewModelProvider.Factory {
+    private class LoginVmFactory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")

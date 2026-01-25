@@ -65,20 +65,22 @@
             android:layout_marginTop="8dp">
 
             <TextView
+                style="@style/PodnaslovInterakcija"
+                android:paddingHorizontal="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Već imaš račun? "
-                android:textSize="14sp" />
+                android:text="Već imaš račun? " />
 
             <TextView
                 android:id="@+id/tvStartLogin"
+                style="@style/Podnaslov"
+                android:paddingHorizontal="5dp"
+                android:textColor="@color/otp_orange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prijavi se"
-                android:textStyle="bold"
-                android:textColor="@color/otp_orange"
-                android:textSize="14sp" />
+                android:text="Prijavi se" />
         </LinearLayout>
+
 
     </LinearLayout>
 
