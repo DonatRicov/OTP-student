@@ -49,16 +49,15 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
 
         btnMyApplications = view.findViewById(R.id.btnMyApplications)
         btnMyApplications.setOnClickListener {
-            val enabled = viewModel.isFilterEnabled(InternshipFilter.APPLIED)
-            viewModel.setFilter(InternshipFilter.APPLIED, !enabled)
-            viewModel.applyFilters()
+            findNavController().navigate(R.id.internshipMyApplicationsFragment)
         }
+
 
         view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
             findNavController().navigate(R.id.chatbotFragment)
         }
 
-        // ✅ OVDJE JE KLIK IZ LISTE PRAKSI (promjena: Activity -> Fragment navigation)
+
         adapter = InternshipAdapter { internship ->
             findNavController().navigate(
                 R.id.internshipDetailsFragment,

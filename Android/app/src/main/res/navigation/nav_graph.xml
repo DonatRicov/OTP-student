@@ -89,6 +89,18 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/internshipMyApplicationsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipMyApplicationsFragment"
+        android:label="@string/internship_my_applications" />
+
+    <fragment
+        android:id="@+id/mentorshipDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.MentorshipDetailsFragment"
+        android:label="@string/mentorship_request_title" />
+
+
+
 
 
 

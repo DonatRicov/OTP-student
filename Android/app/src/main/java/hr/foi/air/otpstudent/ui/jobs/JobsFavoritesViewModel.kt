@@ -35,7 +35,7 @@ class JobsFavoritesViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                // Uzimamo SVE poslove za usera jer treba i non-fav za preporuke
+
                 val allJobs = repo.getJobsForUser(uid)
 
                 val favorites = allJobs.filter { it.isFavorite }

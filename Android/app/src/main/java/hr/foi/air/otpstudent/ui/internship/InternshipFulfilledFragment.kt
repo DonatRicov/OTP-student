@@ -36,7 +36,7 @@ class InternshipFulfilledFragment : Fragment(R.layout.fragment_internship_fullfi
         tvEmpty = view.findViewById(R.id.tvEmpty)
         etSearch = view.findViewById(R.id.etSearch)
 
-        // ✅ promjena: Activity -> Fragment navigation
+
         adapter = InternshipAdapter { internship ->
             findNavController().navigate(
                 R.id.internshipDetailsFragment,

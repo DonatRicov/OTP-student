@@ -174,12 +174,29 @@
     <string name="error_missing_internship_id">Greška: ID prakse nije pronađen.</string>
 
 
-
-
     <string name="internship_status_applied">Prijavljeno</string>
     <string name="internship_status_soon_expiring">Uskoro ističe</string>
 
     <string name="internship_empty_list">Trenutno nema dostupnih praksi.</string>
     <string name="internship_applicants_count">%1$d studenata</string>
+
+    <string name="internship_completed_title">Obavljena praksa</string>
+    <string name="not_implemented_yet">Nije implementirano.</string>
+    <string name="mentorship_card_title">Mentorstvo za završni rad</string>
+    <string name="otp_internship_card_title">Praksa u OTP banci</string>
+    <string name="learn_more">Saznaj više</string>
+    <string name="empty_list">Nema rezultata.</string>
+
+    <string name="mentorship_request_title">Zamolba za mentorstvo</string>
+    <string name="mentorship_send_request">Pošalji zahtjev</string>
+    <string name="mentorship_study_hint">Unesite smjer studija</string>
+    <string name="mentorship_mentor_hint">Odaberite mentora</string>
+
+    <string name="mentorship_fill_required">Molimo ispunite obavezna polja.</string>
+    <string name="mentorship_request_sent">Zahtjev je predan.</string>
+    <string name="error_link_not_available">Link nije dostupan.</string>
+    <string name="error_cannot_open_link">Ne mogu otvoriti link.</string>
+
+
 
 </resources>

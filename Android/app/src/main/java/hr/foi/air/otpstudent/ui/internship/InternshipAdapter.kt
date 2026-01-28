@@ -58,7 +58,7 @@ class InternshipAdapter(
 
             imgLogo.setImageResource(R.drawable.ic_otp_logo_circle)
 
-            // zvjezdica se vidi samo kad je favorit
+
             ivFavorite.visibility = if (internship.isFavorite) View.VISIBLE else View.GONE
 
             val now = Date()

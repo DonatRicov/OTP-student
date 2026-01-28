@@ -104,7 +104,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             rvJobs.visibility = View.VISIBLE
         }
 
-        // label filtera
+
         updateActiveFiltersLabel(state.activeFilters)
     }
 

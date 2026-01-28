@@ -40,7 +40,7 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
             return
         }
 
-        // HEADER (view_header_chatbot.xml): btnBack + btnHome
+
         val header = view.findViewById<View>(R.id.includeHeader)
 
         header.findViewById<View>(R.id.btnBack).setOnClickListener {
@@ -48,17 +48,17 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         }
 
         header.findViewById<View>(R.id.btnHome).setOnClickListener {
-            // ako ti je home destinacija drugačija, promijeni ovaj id
+
             findNavController().navigate(R.id.nav_home)
         }
 
-        // User card
+
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val tvUserRole = view.findViewById<TextView>(R.id.tvUserRole)
         tvUserRole.text = getString(R.string.internship_details_user_role)
         loadUserNameInto(tvUserName)
 
-        // Main views
+
         val ivFavorite = view.findViewById<ImageView>(R.id.ivFavorite)
         val tvTitle = view.findViewById<TextView>(R.id.tvInternshipTitle)
 
@@ -71,7 +71,7 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         val btnApplyOrDetails = view.findViewById<MaterialButton>(R.id.btnApplyOrDetails)
         val btnToggleFavorite = view.findViewById<MaterialButton>(R.id.btnToggleFavorite)
 
-        // CV views
+
         val cvCard = view.findViewById<View>(R.id.cvCard)
         val tvCvFileName = view.findViewById<TextView>(R.id.tvCvFileName)
         val tvCvUploaderName = view.findViewById<TextView>(R.id.tvCvUploaderName)
@@ -80,9 +80,14 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         ivFavorite.setOnClickListener { viewModel.toggleFavorite() }
         btnToggleFavorite.setOnClickListener { viewModel.toggleFavorite() }
 
+
         btnApplyOrDetails.setOnClickListener {
-            viewModel.onApplyOrDetailsClicked { url ->
-                openUrl(url)
+            if (viewModel.state.value.isApplied) {
+                openUrl(PRAKSA_DETAILS_URL)
+            } else {
+                viewModel.onApplyOrDetailsClicked { url ->
+                    openUrl(url)
+                }
             }
         }
 
@@ -98,7 +103,6 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
                 if (internship != null) {
                     tvTitle.text = internship.title.ifBlank { getString(R.string.placeholder_dash) }
 
-                    // MAPIRANJE po tvom modelu (dok ne dodaš posebna polja za smjer/mentora/mail)
                     tvStudyDirection.text = internship.description.ifBlank { getString(R.string.placeholder_dash) }
                     tvMentor.text = internship.company.ifBlank { getString(R.string.placeholder_dash) }
                     tvMentorEmail.text = internship.location.ifBlank { getString(R.string.placeholder_dash) }
@@ -107,19 +111,16 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
                     tvEndDate.text = formatDate(internship.expiresAt) ?: getString(R.string.placeholder_dash)
                 }
 
-                // 2-step button: Prijavi praksu -> Detalji prakse
                 btnApplyOrDetails.text =
                     if (s.isApplied) getString(R.string.internship_details_button_details)
                     else getString(R.string.internship_details_button_apply)
 
-                // Favorite icon + button text
                 updateFavoriteIcon(ivFavorite, s.isFavorite)
 
                 btnToggleFavorite.text =
                     if (s.isFavorite) getString(R.string.internship_remove_favorite)
                     else getString(R.string.internship_add_favorite)
 
-                // CV card
                 val cv = s.cvDocument
                 if (cv == null) {
                     cvCard.visibility = View.GONE
@@ -173,8 +174,23 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         return sdf.format(ts.toDate())
     }
 
-    private fun openUrl(url: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    private fun openUrl(rawUrl: String) {
+        val url = rawUrl.trim()
+        if (url.isBlank()) {
+            Toast.makeText(requireContext(), getString(R.string.error_link_not_available), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val finalUrl =
+            if (url.startsWith("http://") || url.startsWith("https://")) url
+            else "https://$url"
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl))
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), getString(R.string.error_cannot_open_link), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun updateFavoriteIcon(iv: ImageView, isFavorite: Boolean) {
@@ -205,5 +221,8 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
 
     companion object {
         const val ARG_INTERNSHIP_ID = "internshipId"
+
+
+        private const val PRAKSA_DETAILS_URL = "https://strucnapraksa.foi.hr/hr/"
     }
 }

@@ -112,7 +112,7 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
     }
 
     private fun render(state: JobsFavoritesUiState) {
-        // Favorites + preporuke
+
         favoritesAdapter.submitList(state.visibleFavorites)
         recommendationsAdapter.submitList(state.recommendations)
 
@@ -120,12 +120,12 @@ class JobsFavoritesFragment : Fragment(R.layout.fragment_jobs_favorites) {
             Toast.makeText(requireContext(), state.error, Toast.LENGTH_LONG).show()
         }
 
-        // Empty stanje samo za FAVORITE dio
+
         val showEmptyFav = !state.isLoading && state.visibleFavorites.isEmpty()
         tvEmptyFavorites.visibility = if (showEmptyFav) View.VISIBLE else View.GONE
         rvFavorites.visibility = if (showEmptyFav) View.GONE else View.VISIBLE
 
-        // Preporuke: ako nema ničega, sakrij listu (opcionalno)
+
         rvRecommendations.visibility = if (state.recommendations.isEmpty()) View.GONE else View.VISIBLE
 
         updateActiveFiltersLabel(state.activeFilters)

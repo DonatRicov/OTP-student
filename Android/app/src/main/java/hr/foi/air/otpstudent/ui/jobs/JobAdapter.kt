@@ -73,13 +73,13 @@ class JobAdapter(
                     btnApplied.backgroundTintList =
                         ColorStateList.valueOf(itemView.context.getColor(R.color.jobs_status_soon_bg))
 
-                    // TODO: boja pozadine kartice za "uskoro ističe"
+
                     card.setCardBackgroundColor(itemView.context.getColor(R.color.jobs_status_soon_bg))
                 }
 
                 else -> {
                     btnApplied.visibility = View.GONE
-                    // default bg (može ostati bijelo)
+
                     card.setCardBackgroundColor(itemView.context.getColor(R.color.white))
                 }
             }
