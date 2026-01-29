@@ -52,9 +52,15 @@ class RewardRedeemedFragment : Fragment(R.layout.fragment_reward_redeemed) {
         val tvOnlineCode: TextView = view.findViewById(R.id.tvOnlineCode)
 
         btnBack.setOnClickListener {
-            // Vrati korisnika na Bodove da nebi mogo vise put skupit nagradu
-            findNavController().popBackStack(R.id.nav_points, false)
+            val nav = findNavController()
+
+            nav.getBackStackEntry(R.id.nav_points)
+                .savedStateHandle["openTab"] = "rewards"
+
+            nav.popBackStack(R.id.nav_points, false)
         }
+
+
 
 
         val qrPayload = generateOtpToken()
