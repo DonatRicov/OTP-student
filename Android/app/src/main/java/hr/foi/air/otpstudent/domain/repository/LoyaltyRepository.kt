@@ -5,6 +5,7 @@ import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
 import hr.foi.air.otpstudent.domain.model.RewardsFilter
+import hr.foi.air.otpstudent.domain.model.RedeemedReward
 
 interface LoyaltyRepository {
     suspend fun getActiveChallengesForCurrentUser(): List<ChallengeWithState>
@@ -25,4 +26,7 @@ interface LoyaltyRepository {
     suspend fun getRedeemedRewardIdsForCurrentUser(): Set<String>
 
     suspend fun redeemReward(rewardId: String): String
+
+    suspend fun getRedeemedRewardsForCurrentUser(): List<RedeemedReward>
+
 }
