@@ -110,4 +110,16 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
         tabChallenges.isClickable = !isChallenges
         tabRewards.isClickable = isChallenges
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        val currentChild = childFragmentManager.findFragmentById(R.id.pointsFragmentContainer)
+        if (currentChild is RewardsFragment) {
+            setSelectedTab(isChallenges = false)
+        } else if (currentChild is ChallengesFragment) {
+            setSelectedTab(isChallenges = true)
+        }
+    }
+
 }
