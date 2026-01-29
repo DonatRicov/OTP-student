@@ -8,14 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hr.foi.air.otpstudent.R
-import androidx.fragment.app.viewModels
 import hr.foi.air.otpstudent.di.AppModule
+import androidx.fragment.app.activityViewModels
 
 class ChallengesFragment : Fragment(R.layout.fragment_challenges) {
 
-    private val vm: LoyaltyViewModel by viewModels(
-        ownerProducer = { requireParentFragment() }
-    ) {
+    private val vm: LoyaltyViewModel by activityViewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
 
