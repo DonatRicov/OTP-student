@@ -6,6 +6,7 @@ import hr.foi.air.otpstudent.domain.model.QuizQuestion
 import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
 import hr.foi.air.otpstudent.domain.model.RewardsFilter
+import hr.foi.air.otpstudent.domain.model.RedeemedRewardEntry
 
 interface LoyaltyRemoteDataSource {
     suspend fun fetchActiveChallenges(): List<Challenge>
@@ -22,9 +23,13 @@ interface LoyaltyRemoteDataSource {
     suspend fun fetchActiveRewards(): List<Reward>
     suspend fun fetchActiveRewards(filter: RewardsFilter?, pointsBalance: Long? = null): List<Reward>
 
-    // reward tracking (maxPerUser)
+    // reward tracking (maxPerUser iz baze)
     suspend fun fetchRedeemedRewardIds(uid: String): Set<String>
     suspend fun markRewardRedeemed(uid: String, rewardId: String, redemptionId: String)
 
     suspend fun redeemReward(rewardId: String): String
+
+    suspend fun fetchRedeemedRewards(uid: String): List<RedeemedRewardEntry>
+    suspend fun fetchRewardById(rewardId: String): Reward?
+
 }
