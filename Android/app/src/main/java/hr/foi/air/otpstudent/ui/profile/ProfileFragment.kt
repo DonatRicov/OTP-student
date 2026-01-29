@@ -91,7 +91,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
             startActivity(i)
-            ctx.finish() //
+            ctx.finish()
         }
 
 
@@ -100,13 +100,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             startActivity(intent)
         }
 
+
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
             // TO DO: Odradener prakse
         }
 
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
-            // TO DO: Moji poslovi
+            findNavController().navigate(R.id.redeemedRewardsFragment)
         }
+
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
             val intent = Intent(requireContext(), hr.foi.air.otpstudent.ui.settings.SettingsActivity::class.java)
