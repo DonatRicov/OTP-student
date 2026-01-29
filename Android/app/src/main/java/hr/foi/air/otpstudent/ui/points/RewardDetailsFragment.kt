@@ -20,6 +20,7 @@ import hr.foi.air.otpstudent.di.AppModule
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.navigation.navOptions
 
 class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
@@ -108,7 +109,10 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                         RewardRedeemedFragment.createArgs(
                             rewardId = currentRewardId,
                             redemptionId = st.redemptionId
-                        )
+                        ),
+                        navOptions {
+                            popUpTo(R.id.rewardDetailsFragment) { inclusive = true }
+                        }
                     )
                 }
 
