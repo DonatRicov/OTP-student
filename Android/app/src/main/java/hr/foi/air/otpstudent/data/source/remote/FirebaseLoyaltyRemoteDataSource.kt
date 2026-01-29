@@ -12,6 +12,9 @@ import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.Reward
 import hr.foi.air.otpstudent.domain.model.RewardsFilter
 import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
+import hr.foi.air.otpstudent.domain.model.RedeemedRewardEntry
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -167,7 +170,8 @@ class FirebaseLoyaltyRemoteDataSource(
                 channel = doc.getString("channel") ?: "BOTH",
                 barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
                 imageUrl = doc.getString("imageUrl"),
-                maxPerUser = doc.getLong("maxPerUser") ?: 0L,
+                maxPerUser = (doc.get("maxPerUser") as? Number)?.toLong() ?: 0L,
+
                 category = run {
                     val raw = doc.getString("category") ?: RewardsFilter.OPT_REWARDS.name
                     try {
@@ -216,4 +220,46 @@ class FirebaseLoyaltyRemoteDataSource(
         val map = res.data as Map<*, *>
         return map["redemptionId"] as String
     }
+
+    override suspend fun fetchRedeemedRewards(uid: String): List<RedeemedRewardEntry> {
+        val snap = db.collection("users")
+            .document(uid)
+            .collection("redeemedRewards")
+            .orderBy("redeemedAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .get()
+            .await()
+
+        return snap.documents.mapNotNull { doc ->
+            val redemptionId = doc.getString("redemptionId") ?: return@mapNotNull null
+            RedeemedRewardEntry(
+                rewardId = doc.id,
+                redemptionId = redemptionId,
+                redeemedAt = doc.getTimestamp("redeemedAt")
+            )
+        }
+    }
+
+    override suspend fun fetchRewardById(rewardId: String): Reward? {
+        val doc = db.collection("rewards").document(rewardId).get().await()
+        if (!doc.exists()) return null
+
+        return Reward(
+            id = doc.id,
+            title = doc.getString("title") ?: "",
+            description = doc.getString("description") ?: "",
+            costPoints = doc.getLong("costPoints") ?: 0L,
+            active = doc.getBoolean("active") ?: true,
+            validDays = doc.getLong("validDays") ?: 7L,
+            channel = doc.getString("channel") ?: "BOTH",
+            barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
+            imageUrl = doc.getString("imageUrl"),
+            maxPerUser = (doc.get("maxPerUser") as? Number)?.toLong() ?: 0L,
+
+            category = run {
+                val raw = doc.getString("category") ?: RewardsFilter.OPT_REWARDS.name
+                try { RewardsFilter.valueOf(raw) } catch (_: Exception) { RewardsFilter.OPT_REWARDS }
+            }
+        )
+    }
+
 }
