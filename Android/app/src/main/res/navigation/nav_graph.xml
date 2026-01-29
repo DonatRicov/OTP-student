@@ -72,4 +72,23 @@
         android:label="RewardRedeemed"
         tools:layout="@layout/fragment_reward_redeemed" />
 
+    <fragment
+        android:id="@+id/redeemedRewardsFragment"
+        android:name="hr.foi.air.otpstudent.ui.points.RedeemedRewardsFragment"
+        android:label="Moje nagrade" />
+
+    <fragment
+        android:id="@+id/redeemedRewardDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.points.RedeemedRewardDetailsFragment"
+        android:label="Preuzeta nagrada">
+
+        <argument
+            android:name="rewardId"
+            app:argType="string" />
+
+        <argument
+            android:name="redemptionId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
