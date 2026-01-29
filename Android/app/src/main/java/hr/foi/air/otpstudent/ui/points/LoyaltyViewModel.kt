@@ -11,6 +11,8 @@ import hr.foi.air.otpstudent.domain.model.QuizSubmitResult
 import hr.foi.air.otpstudent.domain.model.RewardsFilter
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
+import hr.foi.air.otpstudent.domain.model.RedeemedReward
 
 sealed class LoyaltyUiState {
     object Loading : LoyaltyUiState()
@@ -137,7 +139,7 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 _redeemedRewardIds.value = redeemed
 
                 val visibleRewards = rewards.filter { r ->
-                    !(r.maxPerUser == 1L && redeemed.contains(r.id))
+                    !redeemed.contains(r.id) // sakrij sve koje je korisnik preuzeo
                 }
 
                 _rewardsState.value = RewardsUiState.Success(visibleRewards)
@@ -146,6 +148,9 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
             }
         }
     }
+
+
+
 
     // lokalno filtriranje i skriva preuzete
     fun applyRewardFilters() {
@@ -162,9 +167,11 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
                 val filtered = rewards.filter { r ->
                     val okCanGet = if (canGet) r.costPoints <= points else true
                     val okCategory = if (categories.isEmpty()) true else categories.contains(r.category)
-                    val okNotRedeemed = !(r.maxPerUser == 1L && redeemed.contains(r.id))
+                    val okNotRedeemed = !redeemed.contains(r.id)
+
                     okCanGet && okCategory && okNotRedeemed
                 }
+
 
                 Triple(filtered, points, redeemed)
             }.onSuccess { (filtered, points, redeemed) ->
@@ -227,6 +234,23 @@ class LoyaltyViewModel(private val repo: LoyaltyRepository) : ViewModel() {
     fun clearRedeemState() {
         _redeemState.value = null
     }
+
+    private val _redeemedRewardsState = MutableLiveData<RedeemedRewardsUiState>()
+    val redeemedRewardsState: LiveData<RedeemedRewardsUiState> = _redeemedRewardsState
+
+    fun loadRedeemedRewards() {
+        _redeemedRewardsState.value = RedeemedRewardsUiState.Loading
+        viewModelScope.launch {
+            runCatching { repo.getRedeemedRewardsForCurrentUser() }
+                .onSuccess { list ->
+                    _redeemedRewardsState.value = RedeemedRewardsUiState.Success(list)
+                }
+                .onFailure {
+                    _redeemedRewardsState.value = RedeemedRewardsUiState.Error(it.message ?: "Greška")
+                }
+        }
+    }
+
 }
 
 class LoyaltyViewModelFactory(
@@ -240,3 +264,5 @@ class LoyaltyViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+
+
