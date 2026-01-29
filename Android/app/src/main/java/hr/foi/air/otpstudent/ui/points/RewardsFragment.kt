@@ -110,4 +110,9 @@ class RewardsFragment : Fragment(R.layout.fragment_rewards) {
             }
             .show()
     }
+    override fun onResume() {
+        super.onResume()
+        vm.loadRewards()
+    }
+
 }
