@@ -41,7 +41,6 @@
     <string name="success_icon_desc">Ikona uspjeha</string>
 
 
-
     <string name="my_cv">Moj Životopis</string>
     <string name="choose_file_for_upload">Odaberi datoteku za prijenos</string>
     <string name="supported_format_pdf">Podržani format: PDF (do 10MB)</string>
@@ -70,30 +69,30 @@
 
     <!--uredivanje podatki profila-->
 
-        <!-- Općenito -->
-        <string name="edit_profile">Uredi profil</string>
-        <string name="edit_your_data">Uredi svoje podatke</string>
-        <string name="save_changes">Spremi promjene</string>
-        <string name="cancel">Odustani</string>
+    <!-- Općenito -->
+    <string name="edit_profile">Uredi profil</string>
+    <string name="edit_your_data">Uredi svoje podatke</string>
+    <string name="save_changes">Spremi promjene</string>
+    <string name="cancel">Odustani</string>
 
-        <!-- Profil -->
-        <string name="profile_name_placeholder">OTPStudent</string>
-        <string name="profile_data">Podaci o profilu</string>
-        <string name="personal_data">Osobni podaci</string>
-        <string name="study_data">Podaci o studiju</string>
+    <!-- Profil -->
+    <string name="profile_name_placeholder">OTPStudent</string>
+    <string name="profile_data">Podaci o profilu</string>
+    <string name="personal_data">Osobni podaci</string>
+    <string name="study_data">Podaci o studiju</string>
 
-        <!-- Polja -->
-        <string name="first_name">Ime</string>
-        <string name="last_name">Prezime</string>
-        <string name="phone">Telefon</string>
-        <string name="location">Lokacija</string>
-        <string name="gender">Spol</string>
-        <string name="date_of_birth">Datum rođenja</string>
+    <!-- Polja -->
+    <string name="first_name">Ime</string>
+    <string name="last_name">Prezime</string>
+    <string name="phone">Telefon</string>
+    <string name="location">Lokacija</string>
+    <string name="gender">Spol</string>
+    <string name="date_of_birth">Datum rođenja</string>
 
-        <!-- Studij -->
-        <string name="faculty">Fakultet</string>
-        <string name="major">Smjer</string>
-        <string name="education_level">Razina obrazovanja</string>
+    <!-- Studij -->
+    <string name="faculty">Fakultet</string>
+    <string name="major">Smjer</string>
+    <string name="education_level">Razina obrazovanja</string>
 
     <!-- Postavke -->
     <string name="account">Račun</string>
@@ -113,9 +112,27 @@
     <string name="enable_fast_login_action">Uključi brzu prijavu</string>
     <string name="remind_me_later">Podsjeti me kasnije</string>
 
+    <!-- ChatBot -->
+    <string name="chat_title">Pitaj Ota!</string>
+    <string name="chat_history">Povijest razgovora</string>
+    <string name="chat_hint">Pitaju Ota...</string>
+    <string name="chat_add_symbol">+</string>
+    <string name="chat_send_symbol">S</string>
+
+    <!-- ChatBot povijest-->
+    <string name="chat_history_title_page">Povijest razgovora</string>
+    <string name="chat_history_empty_title">Novi razgovor</string>
+
+
     <!--Filter-->
     <string name="filter">Filtriraj</string>
 
+    <string name="chat_preview_user">Kako da se zaposlim u OTP kao student?</string>
+    <string name="chat_preview_bot">Tekst Chatbota</string>
+
+    <string name="cd_home">Početna</string>
+    <string name="cd_add">Dodaj</string>
+    <string name="cd_send">Pošalji</string>
     <string name="points_total">Imaš %1$d bodova</string>
 
     <!--detalji nagrade-->
@@ -153,5 +170,69 @@
     <string name="qr_code_for_store_purchase">QR kod za kupnju u trgovini</string>
     <string name="code_for_online_purchase">Kod za online kupnju</string>
     <string name="copy">Kopiraj</string>
+
+    <!--Poslovi-->
+    <string name="jobs_applicants_count">%1$d studenata</string>
+    <string name="jobs_status_applied">Prijavljeno</string>
+    <string name="jobs_status_soon_expiring">Uskoro ističe</string>
+    <string name="jobs_favourite">Favorit</string>
+    <string name="job_details_screen_title">Detalji posla</string>
+    <string name="job_details_business_area_label">Poslovno područje:</string>
+    <string name="job_details_workplace_label">Mjesto rada:</string>
+    <string name="job_details_contract_period_label">Razdoblje primjene ugovora o radu:</string>
+    <string name="job_details_deadline_label">Rok za prijavu:</string>
+    <string name="job_details_qualifications_label">Potrebne kvalifikacije</string>
+    <string name="job_details_apply">Prijavi posao</string>
+    <string name="job_details_add_favorite">Dodaj u favorite</string>
+    <string name="job_details_remove_favorite">Makni iz favorita</string>
+
+    <string name="internship_list_title">Praksa u IT sektoru</string>
+    <string name="internship_filter">Filtriraj</string>
+    <string name="internship_my_applications">Moje prijave</string>
+    <string name="internship_search_hint">Pretraži prakse...</string>
+    <string name="internship_details_user_role">FOI student</string>
+
+    <string name="internship_study_direction">Smjer studija</string>
+    <string name="internship_mentor">Mentor</string>
+    <string name="internship_start_date">Datum početka prakse</string>
+    <string name="internship_end_date">Datum završetka prakse</string>
+
+    <string name="internship_details_button_apply">Prijavi praksu</string>
+    <string name="internship_details_button_details">Detalji prakse</string>
+
+    <string name="internship_add_favorite">Dodaj u favorite</string>
+    <string name="internship_remove_favorite">Ukloni iz favorita</string>
+
+    <string name="internship_cv_title">Priloženi životopis</string>
+    <string name="cv_uploader_default">Student</string>
+
+    <string name="placeholder_user_name">Student</string>
+    <string name="error_missing_internship_id">Greška: ID prakse nije pronađen.</string>
+
+
+    <string name="internship_status_applied">Prijavljeno</string>
+    <string name="internship_status_soon_expiring">Uskoro ističe</string>
+
+    <string name="internship_empty_list">Trenutno nema dostupnih praksi.</string>
+    <string name="internship_applicants_count">%1$d studenata</string>
+
+    <string name="internship_completed_title">Obavljena praksa</string>
+    <string name="not_implemented_yet">Nije implementirano.</string>
+    <string name="mentorship_card_title">Mentorstvo za završni rad</string>
+    <string name="otp_internship_card_title">Praksa u OTP banci</string>
+    <string name="learn_more">Saznaj više</string>
+    <string name="empty_list">Nema rezultata.</string>
+
+    <string name="mentorship_request_title">Zamolba za mentorstvo</string>
+    <string name="mentorship_send_request">Pošalji zahtjev</string>
+    <string name="mentorship_study_hint">Unesite smjer studija</string>
+    <string name="mentorship_mentor_hint">Odaberite mentora</string>
+
+    <string name="mentorship_fill_required">Molimo ispunite obavezna polja.</string>
+    <string name="mentorship_request_sent">Zahtjev je predan.</string>
+    <string name="error_link_not_available">Link nije dostupan.</string>
+    <string name="error_cannot_open_link">Ne mogu otvoriti link.</string>
+
+
 
 </resources>

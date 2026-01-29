@@ -2,6 +2,7 @@ package hr.foi.air.otpstudent.ui.internship
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import hr.foi.air.otpstudent.domain.repository.CvRepository
 import hr.foi.air.otpstudent.domain.repository.InternshipRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class InternshipDetailsViewModel(
     private val repo: InternshipRepository,
+    private val cvRepoProvider: (String) -> CvRepository,
     private val userIdProvider: () -> String?
 ) : ViewModel() {
 
@@ -24,21 +26,22 @@ class InternshipDetailsViewModel(
             _state.update { it.copy(isLoading = true, error = null) }
 
             val uid = userIdProvider()
-
-            if (uid != null) {
+            if (!uid.isNullOrBlank()) {
                 try {
                     repo.markViewed(uid, id)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                } catch (_: Exception) { }
             }
 
             try {
                 val internship = repo.getInternshipById(id)
                 if (internship == null) {
-                    _state.update { it.copy(isLoading = false, error = "Internship nije pronađen.") }
+                    _state.update { it.copy(isLoading = false, error = "Praksa nije pronađena.") }
                     return@launch
                 }
+
+                val latestCv = if (!uid.isNullOrBlank()) {
+                    cvRepoProvider(uid).getAllCvs().maxByOrNull { it.timestamp }
+                } else null
 
                 val fav = if (!uid.isNullOrBlank()) repo.isFavorite(uid, id) else false
                 val applied = if (!uid.isNullOrBlank()) repo.isApplied(uid, id) else false
@@ -48,7 +51,8 @@ class InternshipDetailsViewModel(
                         isLoading = false,
                         internship = internship,
                         isFavorite = fav,
-                        isApplied = applied
+                        isApplied = applied,
+                        cvDocument = latestCv
                     )
                 }
             } catch (e: Exception) {
@@ -56,7 +60,6 @@ class InternshipDetailsViewModel(
             }
         }
     }
-
 
     fun toggleFavorite() {
         val id = internshipId ?: return
@@ -76,22 +79,32 @@ class InternshipDetailsViewModel(
         }
     }
 
-    fun apply() {
-        val id = internshipId ?: return
-        val uid = userIdProvider() ?: run {
-            _state.update { it.copy(error = "Morate biti prijavljeni.") }
+    fun onApplyOrDetailsClicked(openUrl: (String) -> Unit) {
+        val internship = _state.value.internship ?: return
+        val url = internship.applyUrl.orEmpty()
+
+        if (url.isBlank()) {
+            _state.update { it.copy(error = "Link nije dostupan.") }
             return
         }
 
-        if (_state.value.isApplied) return
+        val uid = userIdProvider()
+        if (uid.isNullOrBlank()) {
+            openUrl(url)
+            return
+        }
 
-        viewModelScope.launch {
-            try {
-                repo.markApplied(uid, id)
-                _state.update { it.copy(isApplied = true) }
-            } catch (e: Exception) {
-                _state.update { it.copy(error = e.message ?: "Greška pri prijavi.") }
+        if (!_state.value.isApplied) {
+            viewModelScope.launch {
+                try {
+                    repo.markApplied(uid, internship.id)
+                    _state.update { it.copy(isApplied = true) }
+                } catch (e: Exception) {
+                    _state.update { it.copy(error = e.message ?: "Greška pri prijavi.") }
+                }
             }
+        } else {
+            openUrl(url)
         }
     }
 

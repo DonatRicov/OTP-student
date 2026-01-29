@@ -4,10 +4,13 @@ import hr.foi.air.otpstudent.domain.model.Job
 
 data class JobsFavoritesUiState(
     val isLoading: Boolean = false,
-    val allJobs: List<Job> = emptyList(),
-    val visibleJobs: List<Job> = emptyList(),
+
+    val allFavorites: List<Job> = emptyList(),
+    val visibleFavorites: List<Job> = emptyList(),
+    val recommendations: List<Job> = emptyList(),
     val query: String = "",
     val activeFilters: Set<FavoritesFilter> = emptySet(),
+
     val error: String? = null
 )
 

@@ -67,24 +67,24 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
         rvJobs.layoutManager = LinearLayoutManager(requireContext())
         rvJobs.adapter = adapter
 
-        // Search
+
         etSearch.addTextChangedListener { text ->
             viewModel.onQueryChanged(text?.toString().orEmpty())
         }
 
-        // Filter dialog
+
         btnFilter.setOnClickListener {
             showFilterDialog()
         }
 
-        // Observe state
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { state ->
                 render(state)
             }
         }
 
-        // Load data
+
         viewModel.load()
     }
 
@@ -104,7 +104,7 @@ class JobsFragment : Fragment(R.layout.fragment_jobs) {
             rvJobs.visibility = View.VISIBLE
         }
 
-        // label filtera
+
         updateActiveFiltersLabel(state.activeFilters)
     }
 

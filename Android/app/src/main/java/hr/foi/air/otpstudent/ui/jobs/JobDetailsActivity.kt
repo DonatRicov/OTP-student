@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
@@ -21,15 +21,15 @@ import java.util.Locale
 
 class JobDetailsActivity : AppCompatActivity() {
 
-    private lateinit var btnFavorite: ImageView
-    private lateinit var btnApply: AppCompatButton
+    private lateinit var btnFavoriteTop: ImageView
+    private lateinit var btnFavoriteToggle: MaterialButton
+    private lateinit var btnApply: MaterialButton
 
     private val viewModel: JobDetailsViewModel by lazy {
-        ViewModelProvider(
-            this,
-            JobDetailsVmFactory()
-        )[JobDetailsViewModel::class.java]
+        ViewModelProvider(this, JobDetailsVmFactory())[JobDetailsViewModel::class.java]
     }
+
+    private val df = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,23 +44,25 @@ class JobDetailsActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.btnBack).setOnClickListener { finish() }
 
-        btnFavorite = findViewById(R.id.btnFavorite)
+        btnFavoriteTop = findViewById(R.id.btnFavorite)
+        btnFavoriteToggle = findViewById(R.id.btn_favorite_toggle)
         btnApply = findViewById(R.id.btn_apply)
 
-        btnFavorite.setOnClickListener { viewModel.toggleFavorite() }
+        btnFavoriteTop.setOnClickListener { viewModel.toggleFavorite() }
+        btnFavoriteToggle.setOnClickListener { viewModel.toggleFavorite() }
         btnApply.setOnClickListener { viewModel.onApplyClicked() }
 
         lifecycleScope.launch {
-            viewModel.state.collectLatest { state ->
-                render(state)
-            }
+            viewModel.state.collectLatest { state -> render(state) }
         }
 
         lifecycleScope.launch {
             viewModel.effects.collectLatest { eff ->
                 when (eff) {
-                    is JobDetailsEffect.OpenUrl -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(eff.url)))
-                    is JobDetailsEffect.ShowMessage -> Toast.makeText(this@JobDetailsActivity, eff.message, Toast.LENGTH_LONG).show()
+                    is JobDetailsEffect.OpenUrl ->
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(eff.url)))
+                    is JobDetailsEffect.ShowMessage ->
+                        Toast.makeText(this@JobDetailsActivity, eff.message, Toast.LENGTH_LONG).show()
                     JobDetailsEffect.Close -> finish()
                 }
             }
@@ -72,25 +74,29 @@ class JobDetailsActivity : AppCompatActivity() {
     private fun render(state: JobDetailsUiState) {
         val job = state.job
 
-        if (state.error != null) {
-            Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
+        state.error?.let {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
 
         btnApply.isEnabled = job?.applyUrl?.isNotBlank() == true
-
         if (job == null) return
 
-        btnFavorite.setImageResource(
+
+        btnFavoriteTop.setImageResource(
             if (job.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outline
         )
 
+
         findViewById<TextView>(R.id.tv_job_title_details).text = job.title
+        findViewById<TextView>(R.id.tvCompany).text = job.company.ifBlank { "OTP Banka" }
         findViewById<TextView>(R.id.tv_description_details).text = job.description
+
 
         val tvReq: TextView = findViewById(R.id.tv_job_requirements)
         tvReq.text =
             if (job.requirements.isNotEmpty()) job.requirements.joinToString("\n") { "• $it" }
-            else "Nema specificiranih područja."
+            else "SSS, bacc, mag"
+
 
         val rateText = if (job.hourlyRateMax > 0) {
             String.format(Locale.getDefault(), "%.1f–%.1f €/h", job.hourlyRate, job.hourlyRateMax)
@@ -102,9 +108,27 @@ class JobDetailsActivity : AppCompatActivity() {
 
         val expires = job.expiresAt?.toDate()
         findViewById<TextView>(R.id.tvExpires).text =
-            if (expires != null) SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(expires) else "—"
+            if (expires != null) df.format(expires) else "—"
 
-        findViewById<TextView>(R.id.tvCompany).text = if (job.company.isNotBlank()) job.company else "OTP Banka"
+        renderFavoriteButton(job.isFavorite)
+    }
+
+    private fun renderFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            btnFavoriteToggle.setText(R.string.job_details_remove_favorite)
+            btnFavoriteToggle.backgroundTintList =
+                android.content.res.ColorStateList.valueOf(getColor(R.color.otp_green_dark))
+            btnFavoriteToggle.setTextColor(getColor(android.R.color.white))
+            btnFavoriteToggle.strokeWidth = 0
+        } else {
+            btnFavoriteToggle.setText(R.string.job_details_add_favorite)
+            btnFavoriteToggle.backgroundTintList =
+                android.content.res.ColorStateList.valueOf(getColor(android.R.color.transparent))
+            btnFavoriteToggle.setTextColor(getColor(R.color.otp_green_dark))
+            btnFavoriteToggle.strokeWidth = 1
+            btnFavoriteToggle.strokeColor =
+                android.content.res.ColorStateList.valueOf(getColor(R.color.otp_green_dark))
+        }
     }
 
     private inner class JobDetailsVmFactory : ViewModelProvider.Factory {

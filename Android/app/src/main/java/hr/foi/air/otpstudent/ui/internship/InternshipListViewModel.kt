@@ -110,4 +110,5 @@ class InternshipListViewModel(
         if (InternshipFilter.BEST_PAID in filters) parts.add("najbolje plaćene")
         return "Odabrani: " + parts.joinToString(", ")
     }
+
 }

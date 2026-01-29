@@ -2,13 +2,16 @@ package hr.foi.air.otpstudent.ui.internship
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -19,8 +22,6 @@ import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import android.widget.ImageButton
-import androidx.navigation.fragment.findNavController
 
 class InternshipFragment : Fragment(R.layout.fragment_internship) {
 
@@ -31,7 +32,7 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     private lateinit var tvActiveFilters: TextView
     private lateinit var tvEmpty: TextView
 
-    private lateinit var btnFavourites: TextView
+    private lateinit var btnMyApplications: TextView
 
     private val viewModel: InternshipListViewModel by lazy {
         ViewModelProvider(this, VmFactory())[InternshipListViewModel::class.java]
@@ -45,23 +46,24 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
         btnFilter = view.findViewById(R.id.btnFilter)
         tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
         tvEmpty = view.findViewById(R.id.tvEmpty)
-        btnFavourites = view.findViewById(R.id.btnFavourites)
 
-
-        btnFavourites.setOnClickListener {
-            val enabled = viewModel.isFilterEnabled(InternshipFilter.FAVORITE)
-            viewModel.setFilter(InternshipFilter.FAVORITE, !enabled)
-            viewModel.applyFilters()
+        btnMyApplications = view.findViewById(R.id.btnMyApplications)
+        btnMyApplications.setOnClickListener {
+            findNavController().navigate(R.id.internshipMyApplicationsFragment)
         }
+
 
         view.findViewById<ImageButton>(R.id.btnChatbot).setOnClickListener {
             findNavController().navigate(R.id.chatbotFragment)
         }
 
-        adapter = InternshipAdapter { internship ->
-            startActivity(InternshipDetailsActivity.newIntent(requireContext(), internship.id))
-        }
 
+        adapter = InternshipAdapter { internship ->
+            findNavController().navigate(
+                R.id.internshipDetailsFragment,
+                bundleOf(InternshipDetailsFragment.ARG_INTERNSHIP_ID to internship.id)
+            )
+        }
 
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
@@ -72,11 +74,11 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
 
         btnFilter.setOnClickListener { showFilterDialog() }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { s ->
                 adapter.submitList(s.visible)
 
-                if (s.visible.isEmpty()) {
+                if (!s.isLoading && s.visible.isEmpty()) {
                     tvEmpty.visibility = View.VISIBLE
                     rv.visibility = View.GONE
                 } else {

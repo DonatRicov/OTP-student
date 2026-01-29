@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { SessionsClient } from "@google-cloud/dialogflow";
 import { onDocumentUpdated } from "firebase-functions/v2/firestore";
 
 admin.initializeApp();
@@ -500,3 +501,40 @@ export const useVoucher = onCall(async (request) => {
 
   return { ok: true };
 });
+
+export const dialogflowDetectIntent = onCall(
+  { region: "us-central1", timeoutSeconds: 60 },
+  async (request) => {
+    const message = (request.data?.message ?? "").toString().trim();
+    if (!message) {
+      throw new HttpsError("invalid-argument", "message is required.");
+    }
+
+    const projectId = process.env.GCLOUD_PROJECT;
+    if (!projectId) {
+      throw new HttpsError("internal", "Missing GCLOUD_PROJECT env.");
+    }
+
+    // DOZVOLI i anon korisnike
+    const uid = request.auth?.uid ?? "anon";
+    const clientSession = (request.data?.sessionId ?? "default").toString();
+    const sessionId = `${uid}_${clientSession}`;
+
+    const client = new SessionsClient();
+    const sessionPath = client.projectAgentSessionPath(projectId, sessionId);
+
+    const [response] = await client.detectIntent({
+      session: sessionPath,
+      queryInput: {
+        text: { text: message, languageCode: "hr" },
+      },
+    });
+
+    const result: any = response.queryResult || {};
+    const fulfillment = (result.fulfillmentText || "").trim();
+    const kb = (result.knowledgeAnswers?.answers?.[0]?.answer || "").trim();
+
+    return { reply: fulfillment || kb || "Ne znam odgovor na to." };
+  }
+);
+

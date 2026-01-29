@@ -91,4 +91,49 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/chatHistoryFragment"
+        android:name="hr.foi.air.otpstudent.ui.chat.history.ChatHistoryFragment"
+        android:label="ChatHistoryFragment"
+        tools:layout="@layout/fragment_chat_history" />
+
+    <argument
+        android:name="conversationId"
+        app:argType="string"
+        android:defaultValue="" />
+
+    <action
+        android:id="@+id/action_chatbotFragment_to_chatHistoryFragment"
+        app:destination="@id/chatHistoryFragment" />
+
+    <fragment
+        android:id="@+id/nav_jobs_add_favorites"
+        android:name="hr.foi.air.otpstudent.ui.jobs.JobsAddFavoritesFragment"
+        android:label="Dodaj favorite"
+        tools:layout="@layout/fragment_jobs_add_favorites" />
+
+    <fragment
+        android:id="@+id/internshipDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipDetailsFragment"
+        android:label="@string/internship_details_title">
+        <argument
+            android:name="internshipId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/internshipMyApplicationsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipMyApplicationsFragment"
+        android:label="@string/internship_my_applications" />
+
+    <fragment
+        android:id="@+id/mentorshipDetailsFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.MentorshipDetailsFragment"
+        android:label="@string/mentorship_request_title" />
+
+
+
+
+
+
 </navigation>

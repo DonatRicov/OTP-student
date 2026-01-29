@@ -1,59 +1,88 @@
 package hr.foi.air.otpstudent
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import hr.foi.air.otpstudent.ui.chat.ChatAdapter
+import hr.foi.air.otpstudent.ui.chat.ChatbotViewModel
+import hr.foi.air.otpstudent.ui.chat.ChatbotViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.UUID
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ChatbotFragment : Fragment(R.layout.fragment_chatbot) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ChatbotFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ChatbotFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private val conversationIdArg by lazy {
+        arguments?.getString("conversationId").orEmpty()
+    }
+
+    private val vm: ChatbotViewModel by viewModels {
+        ChatbotViewModelFactory(requireActivity().application, conversationIdArg)
+    }
+
+    private val sessionId by lazy {
+        if (conversationIdArg.isNotBlank()) conversationIdArg else java.util.UUID.randomUUID().toString()
+    }
+
+
+    private val adapter = ChatAdapter()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        val header = view.findViewById<View>(R.id.headerChatbot)
+        header.findViewById<ImageButton>(R.id.btnHome).setOnClickListener {
+            findNavController().popBackStack(R.id.nav_home, false)
         }
-    }
+        header.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            findNavController().navigateUp()
+        }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chatbot, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ChatbotFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ChatbotFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        val rv = view.findViewById<RecyclerView>(R.id.rvChat)
+        rv.adapter = adapter
+
+
+        val inputRoot = view.findViewById<View>(R.id.chatInput)
+        val etMessage = inputRoot.findViewById<EditText>(R.id.etMessage)
+        val btnSend = inputRoot.findViewById<ImageButton>(R.id.btnSend)
+        val btnAdd = inputRoot.findViewById<ImageButton>(R.id.btnAdd)
+
+        btnSend.setOnClickListener {
+            vm.sendMessage(etMessage.text?.toString().orEmpty(), sessionId)
+            etMessage.setText("")
+        }
+
+
+        btnAdd.setOnClickListener {
+            vm.startNewConversation()
+            etMessage.setText("")
+        }
+
+
+        view.findViewById<View>(R.id.tvHistory).setOnClickListener {
+            findNavController().navigate(R.id.action_chatbotFragment_to_chatHistoryFragment)
+        }
+
+
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.state.collectLatest { state ->
+                adapter.submitList(state.messages)
+                btnSend.isEnabled = !state.isSending
+                if (state.messages.isNotEmpty()) {
+                    rv.scrollToPosition(state.messages.size - 1)
                 }
             }
+        }
     }
 }
