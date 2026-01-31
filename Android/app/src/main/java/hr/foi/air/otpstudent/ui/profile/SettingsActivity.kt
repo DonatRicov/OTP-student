@@ -11,6 +11,18 @@ import hr.foi.air.core.auth.AuthRegistry
 import hr.foi.air.core.auth.AuthResult
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.ui.profile.ProfileSetupActivity
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import android.widget.CompoundButton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import androidx.activity.result.ActivityResultLauncher
+
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,6 +31,43 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun bioPlugin() =
         AuthRegistry.available().firstOrNull { it.uiSpec().id == "bio" }
+
+    private val vm by lazy { hr.foi.air.otpstudent.di.AppModule.provideSettingsViewModel() }
+    private lateinit var switchPush: SwitchMaterial
+
+    private val requestNotificationsPermission: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                vm.onPushToggled(true)
+            } else {
+                switchPush.setOnCheckedChangeListener(null)
+                switchPush.isChecked = false
+                switchPush.setOnCheckedChangeListener(pushListener)
+
+                Toast.makeText(this, "Dozvola za obavijesti nije odobrena.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    private val pushListener = CompoundButton.OnCheckedChangeListener { _, checked ->
+        if (checked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val granted = ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+
+                if (!granted) {
+                    requestNotificationsPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    return@OnCheckedChangeListener
+                }
+            }
+            vm.onPushToggled(true)
+        } else {
+            vm.onPushToggled(false)
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +79,26 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileSetupActivity::class.java))
         }
 
-        findViewById<SwitchMaterial>(R.id.switchPush).setOnCheckedChangeListener { _, _ ->
-            // TODO: spremi u SharedPreferences / Firestore
+        switchPush = findViewById(R.id.switchPush)
+        switchPush.setOnCheckedChangeListener(pushListener)
+
+        vm.load()
+
+        lifecycleScope.launch {
+            vm.pushEnabled.collectLatest { enabled ->
+                if (switchPush.isChecked != enabled) {
+                    switchPush.setOnCheckedChangeListener(null)
+                    switchPush.isChecked = enabled
+                    switchPush.setOnCheckedChangeListener(pushListener)
+                }
+            }
         }
+
+
+
+
+
+
 
         // Privacy policy
         findViewById<android.view.View>(R.id.rowPrivacyPolicy).setOnClickListener {
