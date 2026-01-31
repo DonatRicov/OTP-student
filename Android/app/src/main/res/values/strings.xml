@@ -188,7 +188,7 @@
 
     <string name="internship_list_title">Praksa u IT sektoru</string>
     <string name="internship_filter">Filtriraj</string>
-    <string name="internship_my_applications">Moje prijave</string>
+    <string name="internship_my_applications"><u>Moje prijave</u></string>
     <string name="internship_search_hint">Pretraži prakse...</string>
     <string name="internship_details_user_role">FOI student</string>
 
@@ -234,6 +234,9 @@
     <string name="error_cannot_open_link">Ne mogu otvoriti link.</string>
 
     <string name="terms_privacy">Uvjeti o privatnosti</string>
+
+    <!--image description-->
+    <string name="search_icon">Ikona pretraživanja</string>
 
 
 </resources>
