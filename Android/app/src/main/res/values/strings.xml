@@ -233,6 +233,7 @@
     <string name="error_link_not_available">Link nije dostupan.</string>
     <string name="error_cannot_open_link">Ne mogu otvoriti link.</string>
 
+    <string name="terms_privacy">Uvjeti o privatnosti</string>
 
 
 </resources>
