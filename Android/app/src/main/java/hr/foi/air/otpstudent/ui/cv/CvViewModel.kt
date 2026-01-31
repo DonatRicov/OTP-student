@@ -11,9 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import hr.foi.air.otpstudent.domain.repository.AuthRepository
+
 
 class CvViewModel(
     private val repo: CvRepository,
+    private val authRepo: AuthRepository,
     private val userIdProvider: () -> String?
 ) : ViewModel() {
 
@@ -27,13 +30,28 @@ class CvViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
+                val uid = userIdProvider() ?: throw IllegalStateException("User not logged in")
+
+                val profile = authRepo.getUserProfile(uid)
                 val list = repo.getAllCvs().sortedByDescending { it.timestamp }
-                _state.update { it.copy(isLoading = false, cvs = list) }
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        cvs = list,
+                        fullName = profile.fullName,
+                        email = profile.email,
+                        major = profile.major,
+                        location = profile.location,
+                        avatarUrl = profile.avatarUrl
+                    )
+                }
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.message ?: "Greška") }
             }
         }
     }
+
 
     fun uploadCv(uri: Uri) {
         val uid = userIdProvider() ?: run {
