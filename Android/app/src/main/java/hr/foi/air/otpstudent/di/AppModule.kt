@@ -14,7 +14,12 @@ import hr.foi.air.otpstudent.data.repository.FirebaseLoyaltyRepositoryImpl
 import hr.foi.air.otpstudent.data.source.remote.FirebaseLoyaltyRemoteDataSource
 import hr.foi.air.otpstudent.domain.repository.LoyaltyRepository
 import com.google.firebase.storage.FirebaseStorage
-
+import android.content.Context
+import hr.foi.air.otpstudent.data.repository.PushRepositoryImpl
+import hr.foi.air.otpstudent.domain.repository.PushRepository
+import hr.foi.air.otpstudent.domain.usecase.GetPushEnabledUseCase
+import hr.foi.air.otpstudent.domain.usecase.SetPushEnabledUseCase
+import hr.foi.air.otpstudent.ui.profile.SettingsViewModel
 
 object AppModule {
 
@@ -45,5 +50,21 @@ object AppModule {
     val loyaltyRepository: LoyaltyRepository by lazy {
         FirebaseLoyaltyRepositoryImpl(firebaseAuth, loyaltyRemote)
     }
+
+    lateinit var appContext: Context
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    val pushRepository: PushRepository by lazy {
+        PushRepositoryImpl(appContext)
+    }
+
+    val getPushEnabledUseCase by lazy { GetPushEnabledUseCase(pushRepository) }
+    val setPushEnabledUseCase by lazy { SetPushEnabledUseCase(pushRepository) }
+
+    fun provideSettingsViewModel(): SettingsViewModel =
+        SettingsViewModel(getPushEnabledUseCase, setPushEnabledUseCase)
 
 }
