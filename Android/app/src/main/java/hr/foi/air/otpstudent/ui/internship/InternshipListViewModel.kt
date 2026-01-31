@@ -103,12 +103,25 @@ class InternshipListViewModel(
 
     private fun filtersLabel(filters: Set<InternshipFilter>): String {
         if (filters.isEmpty()) return ""
+
+        val allFilters = setOf(
+            InternshipFilter.ACTIVE,
+            InternshipFilter.APPLIED,
+            InternshipFilter.FAVORITE,
+            InternshipFilter.BEST_PAID
+        )
+
+        if (filters.containsAll(allFilters)) {
+            return "Svi filteri primijenjeni"
+        }
+
         val parts = mutableListOf<String>()
         if (InternshipFilter.ACTIVE in filters) parts.add("aktivne")
         if (InternshipFilter.APPLIED in filters) parts.add("moje prijave")
         if (InternshipFilter.FAVORITE in filters) parts.add("favoriti")
         if (InternshipFilter.BEST_PAID in filters) parts.add("najbolje plaćene")
-        return "Odabrani: " + parts.joinToString(", ")
+        return parts.joinToString(", ")
     }
+
 
 }

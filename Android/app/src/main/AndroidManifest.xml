@@ -39,7 +39,10 @@
             android:exported="false"
             android:label="Prijava uspješna" />
 
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
+
 
         <activity
             android:name="hr.foi.air.otpstudent.ui.auth.RegisterActivity"

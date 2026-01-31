@@ -32,6 +32,7 @@ class QuickLoginOfferActivity : AppCompatActivity() {
 
                 text = "Omogući: ${spec.title}"
                 isAllCaps = false
+                setTextColor(getColor(R.color.white))
 
                 setOnClickListener {
                     plugin.configure(this@QuickLoginOfferActivity) { result ->

@@ -23,13 +23,14 @@ import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class InternshipFragment : Fragment(R.layout.fragment_internship) {
+class InternshipFragment : Fragment(R.layout.fragment_internship_list) {
 
     private lateinit var adapter: InternshipAdapter
     private lateinit var rv: RecyclerView
     private lateinit var etSearch: TextInputEditText
     private lateinit var btnFilter: MaterialButton
-    private lateinit var tvActiveFilters: TextView
+
+    private lateinit var tvSelectedFilters: TextView
     private lateinit var tvEmpty: TextView
 
     private lateinit var btnMyApplications: TextView
@@ -44,7 +45,7 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
         rv = view.findViewById(R.id.rvInternships)
         etSearch = view.findViewById(R.id.etSearch)
         btnFilter = view.findViewById(R.id.btnFilter)
-        tvActiveFilters = view.findViewById(R.id.tvActiveFilters)
+        tvSelectedFilters = view.findViewById(R.id.tvSelectedFilters)
         tvEmpty = view.findViewById(R.id.tvEmpty)
 
         btnMyApplications = view.findViewById(R.id.btnMyApplications)
@@ -90,8 +91,8 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
                     Toast.makeText(requireContext(), s.error, Toast.LENGTH_LONG).show()
                 }
 
-                tvActiveFilters.visibility = if (s.activeFiltersText.isBlank()) View.GONE else View.VISIBLE
-                tvActiveFilters.text = s.activeFiltersText
+                tvSelectedFilters.visibility = if (s.activeFiltersText.isBlank()) View.GONE else View.VISIBLE
+                tvSelectedFilters.text = s.activeFiltersText
             }
         }
 

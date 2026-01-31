@@ -2,7 +2,6 @@ package hr.foi.air.otpstudent.ui.internship
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
-class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship_my_applications) {
+class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) {
 
     private lateinit var rv: RecyclerView
     private lateinit var tvEmpty: TextView
