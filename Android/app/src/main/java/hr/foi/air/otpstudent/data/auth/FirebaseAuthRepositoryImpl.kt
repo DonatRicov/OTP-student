@@ -8,6 +8,7 @@ import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import android.net.Uri
+import hr.foi.air.otpstudent.domain.model.UserProfile
 
 class FirebaseAuthRepositoryImpl(
     private val auth: FirebaseAuth,
@@ -59,5 +60,19 @@ class FirebaseAuthRepositoryImpl(
             .await()
 
         return url
+    }
+
+    override suspend fun getUserProfile(uid: String): UserProfile {
+        val authEmail = auth.currentUser?.email.orEmpty()
+
+        val doc = firestore.collection("users").document(uid).get().await()
+
+        return UserProfile(
+            fullName = doc.getString("fullName").orEmpty(),
+            email = doc.getString("email") ?: authEmail,
+            major = doc.getString("major").orEmpty(),
+            location = doc.getString("location").orEmpty(),
+            avatarUrl = doc.getString("avatarUrl").orEmpty()
+        )
     }
 }
