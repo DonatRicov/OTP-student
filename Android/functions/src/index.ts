@@ -538,3 +538,43 @@ export const dialogflowDetectIntent = onCall(
   }
 );
 
+export const onJobCreated = onDocumentCreated("jobs/{jobId}", async (event) => {
+  const jobId = event.params.jobId as string;
+  const job = event.data?.data() || {};
+  const title = (job.title as string | undefined) ?? "Novi posao";
+
+  await admin.messaging().send({
+    topic: "jobs",
+    notification: {
+      title: "Novi posao",
+      body: title,
+    },
+    data: {
+      type: "job",
+      id: jobId,
+    },
+  });
+});
+
+export const onInternshipCreated = onDocumentCreated(
+  "internships/{internshipId}",
+  async (event) => {
+    const internshipId = event.params.internshipId as string;
+    const it = event.data?.data() || {};
+    const title = (it.title as string | undefined) ?? "Nova praksa";
+
+    await admin.messaging().send({
+      topic: "internships",
+      notification: {
+        title: "Nova praksa",
+        body: title,
+      },
+      data: {
+        type: "internship",
+        id: internshipId,
+      },
+    });
+  }
+);
+
+
