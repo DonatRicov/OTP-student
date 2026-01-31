@@ -1,4 +1,4 @@
-package hr.foi.air.otpstudent.ui.settings
+package hr.foi.air.otpstudent.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
