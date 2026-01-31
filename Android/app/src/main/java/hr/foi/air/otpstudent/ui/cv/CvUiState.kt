@@ -6,5 +6,11 @@ data class CvUiState(
     val isLoading: Boolean = false,
     val isUploading: Boolean = false,
     val cvs: List<CvDocument> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+
+    val fullName: String = "",
+    val email: String = "",
+    val major: String = "",
+    val location: String = "",
+    val avatarUrl: String = ""
 )
