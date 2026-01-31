@@ -19,6 +19,8 @@ import hr.foi.air.otpstudent.di.AppModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import hr.foi.air.otpstudent.domain.model.CvDocument
+import android.widget.TextView
+
 class MyCvActivity : AppCompatActivity() {
 
     private lateinit var adapter: CvAdapter
@@ -84,13 +86,38 @@ class MyCvActivity : AppCompatActivity() {
     }
 
     private fun render(state: CvUiState) {
-        if (state.error != null) {
-            Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
+        state.error?.let {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
-        adapter.updateData(state.cvs)
 
+        findViewById<TextView>(R.id.tvUserName).text =
+            state.fullName.ifBlank { "Korisnik" }
+
+        findViewById<TextView>(R.id.tvUserEmail).text =
+            state.email.ifBlank { "—" }
+
+        // ovo je value desno; label lijevo ćemo promijeniti u "Smjer"
+        findViewById<TextView>(R.id.tvUserPosition).text =
+            state.major.ifBlank { "—" }
+
+        findViewById<TextView>(R.id.tvUserLocation).text =
+            state.location.ifBlank { "—" }
+
+        val avatar = findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.ivUserAvatar)
+        if (state.avatarUrl.isNotBlank()) {
+            com.bumptech.glide.Glide.with(this)
+                .load(state.avatarUrl)
+                .circleCrop()
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .into(avatar)
+        } else {
+            avatar.setImageResource(R.drawable.ic_profile_placeholder)
+        }
+
+        adapter.updateData(state.cvs)
         findViewById<Button>(R.id.btnUploadPdf).isEnabled = !state.isUploading
     }
+
 
     private fun openPdf(cv: CvDocument) {
         val uri = Uri.parse(cv.fileUrl)
@@ -114,10 +141,11 @@ class MyCvActivity : AppCompatActivity() {
                     ?: throw IllegalStateException("User not logged in")
 
                 val repo = AppModule.provideCvRepository(uid)
+                val authRepo = AppModule.authRepository
                 val userIdProvider = { FirebaseAuth.getInstance().currentUser?.uid }
 
                 @Suppress("UNCHECKED_CAST")
-                return CvViewModel(repo, userIdProvider) as T
+                return CvViewModel(repo, authRepo, userIdProvider) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
