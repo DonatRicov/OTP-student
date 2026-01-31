@@ -111,7 +111,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
         view.findViewById<LinearLayout>(R.id.rowProfileSettings).setOnClickListener {
-            val intent = Intent(requireContext(), hr.foi.air.otpstudent.ui.settings.SettingsActivity::class.java)
+            val intent = Intent(requireContext(), hr.foi.air.otpstudent.ui.profile.SettingsActivity::class.java)
             startActivity(intent)
         }
 
