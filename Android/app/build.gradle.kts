@@ -7,9 +7,8 @@ plugins {
 
 android {
     namespace = "hr.foi.air.otpstudent"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
+
 
     defaultConfig {
         applicationId = "hr.foi.air.otpstudent"
@@ -83,6 +82,10 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.10.1") //za json format spremanj e poruke chatbota
 
+    implementation("com.google.firebase:firebase-messaging")
+
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
 
 
