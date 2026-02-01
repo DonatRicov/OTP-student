@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.navigation.NavDeepLinkBuilder
+import hr.foi.air.otpstudent.MainActivity
 
 class JobDetailsActivity : AppCompatActivity() {
 
@@ -51,7 +53,24 @@ class JobDetailsActivity : AppCompatActivity() {
         // btnBack i btnChatbot su u secondary headeru
         headerView.findViewById<View>(R.id.btnBack)?.setOnClickListener { finish() }
 
-        headerView.findViewById<View>(R.id.btnChatbot)?.visibility = View.VISIBLE
+        headerView.findViewById<View>(R.id.btnChatbot)?.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                val args = Bundle().apply {
+                    putString("conversationId", "")
+                }
+
+                NavDeepLinkBuilder(this@JobDetailsActivity)
+                    .setComponentName(MainActivity::class.java)      // <-- BITNO
+                    .setGraph(R.navigation.nav_graph)
+                    .setDestination(R.id.chatbotFragment)
+                    .setArguments(args)
+                    .createTaskStackBuilder()
+                    .startActivities()
+
+            }
+        }
+
 
         btnFavoriteToggle = findViewById(R.id.btn_favorite_toggle)
         btnApply = findViewById(R.id.btn_apply)
