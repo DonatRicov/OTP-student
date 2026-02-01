@@ -6,20 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include
-        android:id="@+id/includeHeader"
-        layout="@layout/view_header_chatbot"
+    <!-- HEADER CONTAINER (dinamički: view_header_secondary) -->
+    <FrameLayout
+        android:id="@+id/headerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/includeHeader"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -51,23 +52,22 @@
 
                     <TextView
                         android:id="@+id/tvUserName"
+                        style="@style/Tekst"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/placeholder_user_name"
-                        android:textColor="@color/black"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:text="@string/placeholder_user_name"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/ivAvatar"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvUserRole"
+                        style="@style/MaliTekst"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/internship_details_user_role"
                         android:textColor="@color/otp_grey"
-                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/tvUserName"
                         app:layout_constraintEnd_toEndOf="@id/tvUserName"
                         app:layout_constraintTop_toBottomOf="@id/tvUserName" />
@@ -87,15 +87,14 @@
             <!-- TITLE -->
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/PodnaslovInterakcija"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/mentorship_request_title"
-                android:textColor="@color/otp_green_dark"
                 android:textStyle="bold"
-                android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/cardUser"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -103,6 +102,7 @@
             <!-- STUDY -->
             <TextView
                 android:id="@+id/tvStudyLabel"
+                style="@style/Tekst"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -111,13 +111,13 @@
                 android:text="@string/internship_study_direction"
                 android:textColor="@color/otp_grey"
                 android:textStyle="bold"
-                android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilStudy"
+                style="@style/OTPTextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -131,12 +131,16 @@
                     android:id="@+id/etStudy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/mentorship_study_hint" />
+                    android:hint="@string/mentorship_study_hint"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/otp_grey_dark"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- MENTOR dropdown -->
             <TextView
                 android:id="@+id/tvMentorLabel"
+                style="@style/Tekst"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -145,13 +149,13 @@
                 android:text="@string/internship_mentor"
                 android:textColor="@color/otp_grey"
                 android:textStyle="bold"
-                android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/tilStudy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilMentor"
+                style="@style/OTPExposedDropdown"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -166,12 +170,16 @@
                     android:id="@+id/acMentor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/mentorship_mentor_hint" />
+                    android:hint="@string/mentorship_mentor_hint"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/otp_grey_dark"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Dates -->
             <TextView
                 android:id="@+id/tvStartLabel"
+                style="@style/Tekst"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -180,27 +188,66 @@
                 android:text="@string/internship_start_date"
                 android:textColor="@color/otp_grey"
                 android:textStyle="bold"
-                android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/tilMentor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/tvStartValue"
+            <!-- START DATE FIELD: icon + text (no overlap) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/startDateField"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/placeholder_dash"
-                android:textColor="@color/black"
-                android:textSize="14sp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/otp_grey"
                 app:layout_constraintTop_toBottomOf="@id/tvStartLabel"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="12dp">
+
+                    <ImageView
+                        android:id="@+id/ivStartDateIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_date"
+                        app:tint="@color/otp_grey_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvStartValue"
+                        style="@style/Tekst"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:paddingStart="2dp"
+                        android:text="@string/internship_start_date"
+                        android:textColor="@color/otp_grey_dark"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        app:layout_constraintStart_toEndOf="@id/ivStartDateIcon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tvEndLabel"
+                style="@style/Tekst"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -209,30 +256,109 @@
                 android:text="@string/internship_end_date"
                 android:textColor="@color/otp_grey"
                 android:textStyle="bold"
-                android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/tvStartValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/startDateField" />
+
+            <!-- END DATE FIELD: icon + text (no overlap) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/endDateField"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/otp_grey"
+                app:layout_constraintTop_toBottomOf="@id/tvEndLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="12dp">
+
+                    <ImageView
+                        android:id="@+id/ivEndDateIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_date"
+                        app:tint="@color/otp_grey_dark"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvEndValue"
+                        style="@style/Tekst"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:paddingStart="2dp"
+                        android:text="@string/internship_end_date"
+                        android:textColor="@color/otp_grey_dark"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        app:layout_constraintStart_toEndOf="@id/ivEndDateIcon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- OPIS TEME -->
+            <TextView
+                android:id="@+id/tvTopicDescriptionLabel"
+                style="@style/Tekst"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/mentorship_topic_description"
+                android:textColor="@color/otp_grey"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/endDateField"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/tvEndValue"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTopicDescription"
+                style="@style/OTPTextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/placeholder_dash"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/tvEndLabel"
+                app:layout_constraintTop_toBottomOf="@id/tvTopicDescriptionLabel"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTopicDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mentorship_topic_description_hint"
+                    android:inputType="textMultiLine"
+                    android:minLines="4"
+                    android:gravity="top|start"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/otp_grey_dark" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendRequest"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="16dp"
@@ -241,7 +367,7 @@
                 android:textColor="@color/white"
                 android:backgroundTint="@color/otp_green_dark"
                 app:cornerRadius="20dp"
-                app:layout_constraintTop_toBottomOf="@id/tvEndValue"
+                app:layout_constraintTop_toBottomOf="@id/tilTopicDescription"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

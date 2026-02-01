@@ -230,6 +230,8 @@
 
     <string name="mentorship_fill_required">Molimo ispunite obavezna polja.</string>
     <string name="mentorship_request_sent">Zahtjev je predan.</string>
+
+    <string name="profile_finish_setup_toast">Molimo dovršite s postavljanjem profila</string>
     <string name="error_link_not_available">Link nije dostupan.</string>
     <string name="error_cannot_open_link">Ne mogu otvoriti link.</string>
 
@@ -237,6 +239,10 @@
 
     <!--image description-->
     <string name="search_icon">Ikona pretraživanja</string>
+
+
+    <string name="mentorship_topic_description_hint">Opis teme...</string>
+    <string name="mentorship_topic_description">Opis teme</string>
 
 
 </resources>

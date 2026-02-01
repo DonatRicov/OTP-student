@@ -18,7 +18,7 @@ class InternshipListViewModel(
     val state: StateFlow<InternshipListUiState> = _state
 
     fun load() {
-        val uid = userIdProvider() // može biti null (guest)
+        val uid = userIdProvider()
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {

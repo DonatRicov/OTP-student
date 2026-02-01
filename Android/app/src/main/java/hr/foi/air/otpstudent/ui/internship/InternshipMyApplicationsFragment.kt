@@ -33,13 +33,13 @@ class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Dinamički header (view_header.xml)
+        // Dinamicki header (view_header.xml)
         val headerContainer = view.findViewById<FrameLayout>(R.id.headerContainer)
         headerContainer.removeAllViews()
         val headerView = layoutInflater.inflate(R.layout.view_header, headerContainer, false)
         headerContainer.addView(headerView)
 
-        // Back/Home u headeru (ako postoje)
+        // Back/Home u headeru
         headerView.findViewById<View>(R.id.btnBack)?.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -50,7 +50,7 @@ class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) 
             findNavController().navigate(R.id.chatbotFragment)
         }
 
-        // Clickovi na kartice (ako želiš da postoje i tu)
+        // Clickovi na kartice
         view.findViewById<View>(R.id.cardMentorship).setOnClickListener {
             findNavController().navigate(R.id.mentorshipDetailsFragment)
         }
