@@ -9,12 +9,18 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.biometric.BiometricManager
 
 class PinUnlockActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_UID = "extra_uid"
         const val EXTRA_USER_LABEL = "extra_user_label"
+
+        const val EXTRA_TRY_BIO_FIRST = "extra_try_bio_first"
+
     }
 
     private val pin = StringBuilder()
@@ -36,13 +42,10 @@ class PinUnlockActivity : AppCompatActivity() {
     }
 
     private fun resolveUid(): String? {
-        //iz intenta
         intent.getStringExtra(EXTRA_UID)?.let { if (it.isNotBlank()) return it }
 
-        //firebase user
         FirebaseAuth.getInstance().currentUser?.uid?.let { if (it.isNotBlank()) return it }
 
-        //fallback
         return PinStore.getLastUid(this)
     }
 
@@ -59,11 +62,9 @@ class PinUnlockActivity : AppCompatActivity() {
     }
 
     private fun resolveUserLabelFormatted(): String {
-        // app moze poslati ime ili email
         val fromIntent = formatUserLabel(intent.getStringExtra(EXTRA_USER_LABEL))
         if (!fromIntent.isNullOrBlank()) return fromIntent
 
-        //iz firebase usera ime
         val u = FirebaseAuth.getInstance().currentUser
         val fromName = formatUserLabel(u?.displayName)
         if (!fromName.isNullOrBlank()) return fromName
@@ -71,12 +72,51 @@ class PinUnlockActivity : AppCompatActivity() {
         val fromEmail = formatUserLabel(u?.email)
         if (!fromEmail.isNullOrBlank()) return fromEmail
 
-        // fallback iz stora moze biti ime ili email
         val fromStore = formatUserLabel(PinStore.getLastUserLabel(this))
         if (!fromStore.isNullOrBlank()) return fromStore
 
         return "korisnika"
     }
+
+    private fun tryBiometricOverlayIfEnabled() {
+        val tryBio = intent.getBooleanExtra(EXTRA_TRY_BIO_FIRST, false)
+        if (!tryBio) return
+
+        val canAuth = BiometricManager.from(this).canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                    BiometricManager.Authenticators.BIOMETRIC_WEAK
+        )
+        if (canAuth != BiometricManager.BIOMETRIC_SUCCESS) return
+
+
+        val executor = ContextCompat.getMainExecutor(this)
+
+        val prompt = BiometricPrompt(
+            this,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    finishOk()
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+
+                }
+
+                override fun onAuthenticationFailed() {
+                }
+            }
+        )
+
+        val info = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Otključaj biometrijom")
+            .setSubtitle("Ili unesi PIN")
+            .setNegativeButtonText("Unesi PIN")
+            .build()
+
+        prompt.authenticate(info)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +170,6 @@ class PinUnlockActivity : AppCompatActivity() {
             val ok = PinVerifier.verify(this@PinUnlockActivity, uid, pin.toString())
 
             if (ok) {
-                //spremi zadnjeg korisnika kao formatirani label
                 PinStore.setLastUid(this@PinUnlockActivity, uid)
                 PinStore.setLastUserLabel(this@PinUnlockActivity, resolveUserLabelFormatted())
                 finishOk()
@@ -191,6 +230,10 @@ class PinUnlockActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) {
             setResult(RESULT_CANCELED)
             finish()
+        }
+
+        if (savedInstanceState == null) {
+            tryBiometricOverlayIfEnabled()
         }
     }
 
