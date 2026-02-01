@@ -23,16 +23,6 @@ class RedeemedRewardsFragment : Fragment(R.layout.fragment_redeemed_rewards) {
         activity?.findViewById<View>(R.id.bottomNavigationView)?.isVisible = visible
     }
 
-    override fun onStart() {
-        super.onStart()
-        setBottomNavVisible(false)
-    }
-
-    override fun onStop() {
-        setBottomNavVisible(true)
-        super.onStop()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
