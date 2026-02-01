@@ -50,7 +50,6 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
         val etStudy = view.findViewById<TextInputEditText>(R.id.etStudy)
         val acMentor = view.findViewById<MaterialAutoCompleteTextView>(R.id.acMentor)
 
-        // Smjer studija se dinamički povlači iz profila. Ako nije postavljen, korisnik ga ne može unositi.
         fetchAndApplyMajor(etStudy)
 
         val tvStartValue = view.findViewById<TextView>(R.id.tvStartValue)
@@ -62,7 +61,6 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
         acMentor.setSimpleItems(arrayOf("Mentor 1", "Mentor 2", "Mentor 3"))
 
         view.findViewById<MaterialButton>(R.id.btnSendRequest).setOnClickListener {
-            // Smjer dolazi iz profila; ne uzimamo ga iz inputa.
             if (userMajor.isNullOrBlank()) {
                 Toast.makeText(
                     requireContext(),
@@ -97,7 +95,7 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
     private fun fetchAndApplyMajor(etStudy: TextInputEditText) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Zaključaj editiranje (ali ostavi mogućnost klika za toast u "nema profila" scenariju)
+
         fun lockEditing() {
             etStudy.apply {
                 inputType = InputType.TYPE_NULL
@@ -139,13 +137,13 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
                 userMajor = doc.getString("major")?.trim()
 
                 if (!userMajor.isNullOrBlank()) {
-                    // Smjer postoji -> auto popuni i onemogući promjenu
+
                     etStudy.setText(userMajor)
                     etStudy.isEnabled = false
                     etStudy.isClickable = false
                     etStudy.setOnClickListener(null)
                 } else {
-                    // Nema smjera -> korisnik ne može unositi, ali na klik dobije toast
+
                     etStudy.setText("")
                     setToastOnClickIfMissing()
                 }
