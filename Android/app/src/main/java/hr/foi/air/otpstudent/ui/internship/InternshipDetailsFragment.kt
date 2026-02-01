@@ -67,11 +67,9 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val tvUserRole = view.findViewById<TextView>(R.id.tvUserRole)
         tvUserRole.text = getString(R.string.internship_details_user_role)
-        loadUserNameInto(tvUserName)
 
         //AVATAR iz profila
         val imgAvatar = view.findViewById<ShapeableImageView>(R.id.imgAvatar)
-        loadUserAvatarInto(imgAvatar)
 
         // TITLE + FAVORITE
         val ivFavorite = view.findViewById<ImageView>(R.id.ivFavorite)
@@ -81,7 +79,8 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         val tvDescriptionValue = view.findViewById<TextView>(R.id.tvDescriptionValue)
 
         val tvStudyDirection = view.findViewById<TextView>(R.id.tvStudyDirectionValue)
-        loadUserMajorInto(tvStudyDirection)
+
+        loadUserProfileInto(tvUserName, tvStudyDirection, imgAvatar)
 
         val tvMentor = view.findViewById<TextView>(R.id.tvMentorValue)
         val tvMentorEmail = view.findViewById<TextView>(R.id.tvMentorEmailValue)
@@ -116,16 +115,9 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
 
         // Apply / Odjavi i toastovi
         btnApplyOrDetails.setOnClickListener {
-            val trenutno = btnApplyOrDetails.text?.toString().orEmpty()
-
-            if (trenutno == getString(R.string.internship_details_button_apply)) {
-                btnApplyOrDetails.text = "Odjavi praksu"
-                Toast.makeText(requireContext(), "Praksa je prijavljena", Toast.LENGTH_SHORT).show()
-            } else {
-                btnApplyOrDetails.text = getString(R.string.internship_details_button_apply)
-                Toast.makeText(requireContext(), "Praksa odjavljena", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.onApplyOrDetailsClicked(::openUrl)
         }
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { s ->
@@ -151,6 +143,9 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
 
                 updateFavoriteIcon(ivFavorite, s.isFavorite)
 
+                btnApplyOrDetails.text =
+                    if (s.isApplied) "Detalji" else getString(R.string.internship_details_button_apply)
+
                 val cv = s.cvDocument
                 if (cv == null) {
                     itemCv.visibility = View.GONE
@@ -172,10 +167,15 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         viewModel.load(internshipId)
     }
 
-    private fun loadUserMajorInto(tv: TextView) {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            tv.text = getString(R.string.placeholder_dash)
+    private fun loadUserProfileInto(
+        tvUserName: TextView,
+        tvStudyDirection: TextView,
+        imgAvatar: ShapeableImageView
+    ) {
+        val user = FirebaseAuth.getInstance().currentUser ?: run {
+            tvUserName.text = getString(R.string.placeholder_user_name)
+            tvStudyDirection.text = getString(R.string.placeholder_dash)
+            imgAvatar.setImageResource(R.drawable.ic_profile_placeholder)
             return
         }
 
@@ -184,74 +184,36 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
             .document(user.uid)
             .get()
             .addOnSuccessListener { doc ->
+                val fullName = doc.getString("fullName")?.trim().orEmpty()
                 val major = doc.getString("major")?.trim().orEmpty()
-                tv.text = if (major.isBlank()) getString(R.string.placeholder_dash) else major
-            }
-            .addOnFailureListener {
-                tv.text = getString(R.string.placeholder_dash)
-            }
-    }
-
-    private fun loadUserNameInto(tv: TextView) {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            tv.text = getString(R.string.placeholder_user_name)
-            return
-        }
-
-        val uid = user.uid
-        FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(uid)
-            .get()
-            .addOnSuccessListener { doc ->
-                val fullName = doc.getString("fullName")
-                val fallback = user.email
-                    ?.substringBefore("@")
-                    ?.replaceFirstChar { it.uppercase() }
-                    ?: getString(R.string.placeholder_user_name)
-
-                tv.text = if (!fullName.isNullOrBlank()) fullName else fallback
-            }
-            .addOnFailureListener {
-                val fallback = user.email
-                    ?.substringBefore("@")
-                    ?.replaceFirstChar { it.uppercase() }
-                    ?: getString(R.string.placeholder_user_name)
-                tv.text = fallback
-            }
-    }
-
-    private fun loadUserAvatarInto(img: ShapeableImageView) {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            img.setImageResource(R.drawable.ic_profile_placeholder)
-            return
-        }
-
-        FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(user.uid)
-            .get()
-            .addOnSuccessListener { doc ->
                 val avatarUrl = doc.getString("avatarUrl")?.trim().orEmpty()
 
-                if (avatarUrl.isBlank()) {
-                    img.setImageResource(R.drawable.ic_profile_placeholder)
-                    return@addOnSuccessListener
-                }
+                val fallback = user.email
+                    ?.substringBefore("@")
+                    ?.replaceFirstChar { it.uppercase() }
+                    ?: getString(R.string.placeholder_user_name)
 
-                Glide.with(this)
-                    .load(avatarUrl)
-                    .circleCrop()
-                    .placeholder(R.drawable.ic_profile_placeholder)
-                    .error(R.drawable.ic_profile_placeholder)
-                    .into(img)
+                tvUserName.text = fullName.ifBlank { fallback }
+                tvStudyDirection.text = major.ifBlank { getString(R.string.placeholder_dash) }
+
+                if (avatarUrl.isBlank()) {
+                    imgAvatar.setImageResource(R.drawable.ic_profile_placeholder)
+                } else {
+                    Glide.with(this)
+                        .load(avatarUrl)
+                        .circleCrop()
+                        .placeholder(R.drawable.ic_profile_placeholder)
+                        .error(R.drawable.ic_profile_placeholder)
+                        .into(imgAvatar)
+                }
             }
             .addOnFailureListener {
-                img.setImageResource(R.drawable.ic_profile_placeholder)
+                tvUserName.text = getString(R.string.placeholder_user_name)
+                tvStudyDirection.text = getString(R.string.placeholder_dash)
+                imgAvatar.setImageResource(R.drawable.ic_profile_placeholder)
             }
     }
+
 
     private fun formatDate(ts: Timestamp?): String? {
         ts ?: return null
