@@ -62,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val LOCK_THRESHOLD_MS = 5_000L
+
     override fun onStart() {
         super.onStart()
 
@@ -71,6 +73,16 @@ class MainActivity : AppCompatActivity() {
         val user = auth.currentUser
 
         if (user == null) {
+            startActivity(
+                Intent(this, StartActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                }
+            )
+            finish()
+            return
+        }
+
+        if (AppLockStore.shouldLock(this, LOCK_THRESHOLD_MS)) {
             startActivity(
                 Intent(this, StartActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
