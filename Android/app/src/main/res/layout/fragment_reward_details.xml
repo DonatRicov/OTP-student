@@ -90,7 +90,9 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="8dp">
+                    android:paddingTop="0dp"
+                    android:paddingBottom="8dp"
+                    >
 
                     <ImageView
                         android:id="@+id/ivRewardImage"
@@ -152,7 +154,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <!-- Chips row -->
                     <LinearLayout
                         android:id="@+id/chipsRow"
                         android:layout_width="0dp"
@@ -193,7 +194,6 @@
                             android:text="" />
                     </LinearLayout>
 
-                    <!-- Points panel -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardPoints"
                         android:layout_width="0dp"
@@ -314,7 +314,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Instructions card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardInstructions"
                 style="@style/SettingsCard"
@@ -362,7 +361,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Sticky -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomCta"
         android:layout_width="0dp"
