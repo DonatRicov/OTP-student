@@ -7,29 +7,15 @@
     android:padding="24dp"
     android:background="@android:color/white">
 
-    <!-- Back button -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_back"
-        app:tint="@color/otp_green_dark"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <!-- Lock icon -->
     <ImageView
         android:id="@+id/ivLock"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ic_lock"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Title -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -42,7 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- PIN dots -->
     <LinearLayout
         android:id="@+id/pinContainer"
         android:layout_width="wrap_content"
@@ -61,7 +46,6 @@
         <View android:id="@+id/pin6" style="@style/PinBox"/>
     </LinearLayout>
 
-    <!-- Forgot PIN -->
     <TextView
         android:id="@+id/tvForgotPin"
         android:layout_width="wrap_content"
@@ -74,7 +58,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Other login -->
     <TextView
         android:id="@+id/tvOtherLogin"
         android:layout_width="wrap_content"
@@ -88,7 +71,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Keypad -->
     <GridLayout
         android:id="@+id/keypadGrid"
         android:layout_width="0dp"
