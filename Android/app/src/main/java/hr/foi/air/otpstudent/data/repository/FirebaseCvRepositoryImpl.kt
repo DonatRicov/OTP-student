@@ -9,6 +9,7 @@ import hr.foi.air.otpstudent.domain.repository.CvRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import com.google.firebase.firestore.Query
 
 class FirebaseCvRepositoryImpl(
     private val userId: String
@@ -72,4 +73,18 @@ class FirebaseCvRepositoryImpl(
             e.printStackTrace()
         }
     }
+
+    override suspend fun getLatestCv(): CvDocument? {
+        val snap = firestore.collection("users")
+            .document(userId)
+            .collection("cvs")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .await()
+
+        return snap.toObjects(CvDocument::class.java).firstOrNull()
+    }
+
+
 }
