@@ -40,22 +40,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingBottom="16dp"
+                android:paddingBottom="0dp"
                 tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:id="@+id/tvWelcome"
+                    style="@style/Naslov"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/welcome_text"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:text="@string/welcome_text" />
 
                 <ImageView
                     android:id="@+id/imgWelcomeHand"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/waving_hand_icon"
                     android:contentDescription="@string/cd_waving_hand" />
@@ -64,19 +62,17 @@
             <!-- NOVOSTI -->
             <TextView
                 android:id="@+id/tvNewsTitle"
+                style="@style/Podnaslov"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/news_title"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/newsPager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
@@ -86,18 +82,17 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="8dp" />
 
             <!-- ZA TEBE -->
             <TextView
                 android:id="@+id/tvForYou"
+                style="@style/Podnaslov"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Za tebe"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"
                 android:layout_marginBottom="8dp" />
+
 
             <!-- RANDOM POSAO -->
             <FrameLayout
