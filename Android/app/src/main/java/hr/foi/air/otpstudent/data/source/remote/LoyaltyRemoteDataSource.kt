@@ -23,7 +23,6 @@ interface LoyaltyRemoteDataSource {
     suspend fun fetchActiveRewards(): List<Reward>
     suspend fun fetchActiveRewards(filter: RewardsFilter?, pointsBalance: Long? = null): List<Reward>
 
-    // reward tracking (maxPerUser iz baze)
     suspend fun fetchRedeemedRewardIds(uid: String): Set<String>
     suspend fun markRewardRedeemed(uid: String, rewardId: String, redemptionId: String)
 
@@ -31,5 +30,7 @@ interface LoyaltyRemoteDataSource {
 
     suspend fun fetchRedeemedRewards(uid: String): List<RedeemedRewardEntry>
     suspend fun fetchRewardById(rewardId: String): Reward?
+
+    suspend fun fetchRewardsByIds(rewardIds: List<String>): List<Reward>
 
 }
