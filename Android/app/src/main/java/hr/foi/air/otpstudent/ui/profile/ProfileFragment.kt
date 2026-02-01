@@ -23,6 +23,8 @@ import hr.foi.air.otpstudent.ui.cv.MyCvActivity
 import java.io.File
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
+import hr.foi.air.otpstudent.data.auth.QuickLoginManager
+
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private lateinit var auth: FirebaseAuth
@@ -32,7 +34,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var cameraImageUri: Uri? = null
 
-    // referencirani view-ovi
     private lateinit var tvName: TextView
     private lateinit var tvSubtitle: TextView
     private lateinit var imgAvatar: ImageView
@@ -59,9 +60,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val user = auth.currentUser
         if (user == null) {
-            // mozemo tu satavit da ga bacimo na login but ovako je ok za sad
+            val ctx = requireActivity()
+            val i = Intent(ctx, StartActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+            startActivity(i)
+            ctx.finish()
             return
         }
+
         currentUid = user.uid
 
         tvName     = view.findViewById(R.id.tvProfileName)
@@ -84,6 +91,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         // Odjava
         view.findViewById<LinearLayout>(R.id.rowLogout).setOnClickListener {
+            QuickLoginManager.resetQuickLogin(requireContext())
+
             auth.signOut()
 
             val ctx = requireActivity()
@@ -95,6 +104,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
 
+
         view.findViewById<LinearLayout>(R.id.rowCv).setOnClickListener {
             val intent = Intent(requireContext(), MyCvActivity::class.java)
             startActivity(intent)
@@ -102,7 +112,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
-            // TO DO: Odradener prakse
         }
 
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
@@ -143,10 +152,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     else -> nameFromEmail
                 }
 
-                // ovo promjeniti ovisi o tome sto kaze Frane
                 tvSubtitle.text = "FOI student"
 
-                // profilna iz baze ako ju ima
                 doc.getString("avatarUrl")
                     ?.takeIf { it.isNotEmpty() }
                     ?.let { url ->
@@ -222,7 +229,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     .set(mapOf("avatarUrl" to url), SetOptions.merge())
             }
             .addOnFailureListener { _ ->
-                // fallaback mozda toast dodamo kansije
             }
     }
 }
