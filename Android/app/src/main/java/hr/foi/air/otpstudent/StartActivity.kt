@@ -29,7 +29,7 @@ import java.time.LocalDate
 
 class StartActivity : AppCompatActivity() {
 
-    private val LOCK_THRESHOLD_MS = 5_000L
+    private val LOCK_THRESHOLD_MS = 30_000L
 
     private val pinUnlockLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -63,12 +63,12 @@ class StartActivity : AppCompatActivity() {
             return
         }
 
-        val shouldLock = AppLockStore.shouldLock(this, LOCK_THRESHOLD_MS)
-        if (shouldLock) {
-            launchUnlockFlow(user.uid)
-        } else {
-            refreshSessionThenOpenMain()
+        if (!isTaskRoot) {
+            finish()
+            return
         }
+
+        launchUnlockFlow(user.uid)
     }
 
     private fun launchUnlockFlow(uid: String) {
@@ -115,20 +115,6 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun fallbackToPinOrStart(uid: String) {
-        val pinReady = PinStore.isEnabled(this, uid) && PinStore.hasPin(this, uid)
-        if (pinReady) {
-            val i = Intent(this, PinUnlockActivity::class.java).apply {
-                putExtra(PinUnlockActivity.EXTRA_UID, uid)
-                putExtra(PinUnlockActivity.EXTRA_USER_LABEL, PinStore.getLastUserLabel(this@StartActivity))
-            }
-            pinUnlockLauncher.launch(i)
-        } else {
-            showStartScreen()
-        }
-    }
-
     private fun showStartScreen() {
         setContentView(R.layout.activity_start)
 
@@ -144,10 +130,12 @@ class StartActivity : AppCompatActivity() {
 
         btnRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            overridePendingTransition(0, 0)
         }
 
         tvLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            overridePendingTransition(0, 0)
         }
     }
 
@@ -156,6 +144,7 @@ class StartActivity : AppCompatActivity() {
         val user = auth.currentUser
         if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
+            overridePendingTransition(0, 0)
             finish()
             return
         }
@@ -169,12 +158,14 @@ class StartActivity : AppCompatActivity() {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     }
                 )
+                overridePendingTransition(0, 0)
                 finish()
             }
             .addOnFailureListener {
                 auth.signOut()
                 QuickLoginManager.resetQuickLogin(this)
                 startActivity(Intent(this, LoginActivity::class.java))
+                overridePendingTransition(0, 0)
                 finish()
             }
     }
