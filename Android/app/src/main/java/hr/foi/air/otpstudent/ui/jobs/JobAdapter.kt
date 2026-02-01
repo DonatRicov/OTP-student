@@ -13,7 +13,9 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.domain.model.Job
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 class JobAdapter(
     private val onItemClick: (Job) -> Unit
@@ -34,23 +36,23 @@ class JobAdapter(
         private val card: MaterialCardView = itemView.findViewById(R.id.cardJob)
         private val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
 
+        private val expiresSdf = SimpleDateFormat("d.M.yyyy", Locale.getDefault())
+
         fun bind(job: Job) {
             tvTitle.text = job.title
             tvLocation.text = job.location
 
-            tvApplicants.text = itemView.context.getString(
-                R.string.jobs_applicants_count,
-                job.applicantsCount
-            )
+            // datum isteka
+            val expiresDate = job.expiresAt?.toDate()
+            val expiresText = expiresDate?.let { expiresSdf.format(it) } ?: "-"
+            tvApplicants.text = "Do " + expiresText
 
             imgLogo.setImageResource(R.drawable.ic_otp_logo_circle)
-
 
             ivFavorite.setImageResource(R.drawable.ic_favorite_filled)
             ivFavorite.visibility = if (job.isFavorite) View.VISIBLE else View.GONE
 
             val now = Date()
-            val expiresDate = job.expiresAt?.toDate()
             val soonMillis = 3L * 24 * 60 * 60 * 1000
             val isSoonExpiring = expiresDate != null && (expiresDate.time - now.time) in 1..soonMillis
 
@@ -61,7 +63,6 @@ class JobAdapter(
                     btnApplied.backgroundTintList =
                         ColorStateList.valueOf(itemView.context.getColor(R.color.otp_green_dark))
 
-
                     card.setCardBackgroundColor(itemView.context.getColor(R.color.jobs_card_applied_bg))
                 }
 
@@ -69,17 +70,14 @@ class JobAdapter(
                     btnApplied.visibility = View.VISIBLE
                     btnApplied.setText(R.string.jobs_status_soon_expiring)
 
-
                     btnApplied.backgroundTintList =
                         ColorStateList.valueOf(itemView.context.getColor(R.color.jobs_status_soon_bg))
-
 
                     card.setCardBackgroundColor(itemView.context.getColor(R.color.jobs_status_soon_bg))
                 }
 
                 else -> {
                     btnApplied.visibility = View.GONE
-
                     card.setCardBackgroundColor(itemView.context.getColor(R.color.white))
                 }
             }

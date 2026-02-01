@@ -23,11 +23,11 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_otp_logo_circle"
+            android:src="@drawable/ic_internship"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- FAVORITE zvjezdica gore desno (prikazuje se samo kad je favorit) -->
+        <!-- FAVORITE zvjezdica gore desno  -->
         <ImageView
             android:id="@+id/ivFavorite"
             android:layout_width="24dp"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
-            android:textColor="@color/otp_grey"
+            android:textColor="@color/otp_grey_dark"
             android:textSize="13sp"
             tools:text="Zadar / Split / Zagreb"
             app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
@@ -82,7 +82,7 @@
                 android:layout_height="16dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_people"
-                app:tint="@color/otp_grey" />
+                app:tint="@color/otp_grey_dark" />
 
             <TextView
                 android:id="@+id/tvApplicants"

@@ -59,21 +59,21 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:text="Zagreb / Zadar / Split"
-            android:textColor="@color/otp_grey"
+            android:textColor="@color/otp_grey_dark"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
             app:layout_constraintEnd_toStartOf="@id/ivFavorite"
             app:layout_constraintTop_toBottomOf="@id/tvJobTitle" />
 
         <ImageView
-            android:id="@+id/iconPeople"
+            android:id="@+id/iconTime"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_people"
-            app:tint="@color/otp_grey"
+            android:src="@drawable/ic_time"
+            app:tint="@color/otp_green_dark"
             app:layout_constraintStart_toEndOf="@id/imgCompanyLogo"
             app:layout_constraintTop_toBottomOf="@id/tvJobLocation"
             app:layout_constraintBottom_toBottomOf="@id/btnApplied" />
@@ -86,9 +86,9 @@
             android:text="5 studenata"
             android:textColor="@color/otp_green_dark"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@id/iconPeople"
-            app:layout_constraintTop_toTopOf="@id/iconPeople"
-            app:layout_constraintBottom_toBottomOf="@id/iconPeople" />
+            app:layout_constraintStart_toEndOf="@id/iconTime"
+            app:layout_constraintTop_toTopOf="@id/iconTime"
+            app:layout_constraintBottom_toBottomOf="@id/iconTime" />
 
         <!-- STATUS (uvijek dolje desno kad je vidljiv) -->
         <com.google.android.material.button.MaterialButton

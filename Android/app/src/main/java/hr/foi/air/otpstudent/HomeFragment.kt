@@ -24,6 +24,10 @@ import hr.foi.air.otpstudent.ui.jobs.JobDetailsActivity
 import kotlinx.coroutines.launch
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var pager: ViewPager2
@@ -35,6 +39,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val internshipRepo = AppModule.internshipRepository
     private val jobRepo = AppModule.jobRepository
+
+    // Format datuma: d.M.yyyy
+    private val expiresSdf = SimpleDateFormat("d.M.yyyy", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,7 +91,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             ?.split("\\s+".toRegex())
                             ?.firstOrNull()
 
-
                 val displayName = when {
                     !firstNameFromDb.isNullOrEmpty() -> firstNameFromDb
                     emailFallback.isNotEmpty() -> emailFallback
@@ -94,14 +100,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 tvWelcome.text =
                     if (displayName.isNotEmpty()) "Dobrodošli $displayName!"
                     else "Dobrodošli!"
-
             }
-
             .addOnFailureListener { e ->
                 Log.e("HomeFragment", "Failed to read users/$uid", e)
                 tvWelcome.text = if (emailFallback.isNotEmpty()) "Dobrodošli $emailFallback!" else "Dobrodošli!"
             }
-
     }
 
     private fun setupNewsCarousel() {
@@ -131,7 +134,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
     }
 
-
     private fun loadRandomJobAndInternship(view: View) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -159,8 +161,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         intent.putExtra("JOB_ID", randomJob.id)
                         startActivity(intent)
                     }
-
-
                 }
             } catch (e: Exception) {
                 Log.e("HomeFragment", "Job load error", e)
@@ -187,7 +187,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                             bundleOf("internshipId" to randomInternship.id)
                         )
                     }
-
                 }
             } catch (e: Exception) {
                 Log.e("HomeFragment", "Internship load error", e)
@@ -202,20 +201,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         root.findViewById<TextView>(R.id.tvApplicants).text = "${item.applicantsCount} studenata"
 
         root.findViewById<MaterialButton>(R.id.btnApplied).visibility = View.GONE
-
         root.findViewById<View>(R.id.metaRow)?.visibility = View.VISIBLE
     }
+
 
     private fun bindJob(root: View, item: Job) {
         root.findViewById<TextView>(R.id.tvJobTitle).text = item.title
         root.findViewById<TextView>(R.id.tvJobLocation).text = item.location
 
         root.findViewById<View>(R.id.metaRow)?.visibility = View.VISIBLE
-        root.findViewById<TextView>(R.id.tvApplicants).text = "${item.applicantsCount} studenata"
+
+        // umjesto "${item.applicantsCount} studenata" - datum iz expiresAt (d.M.yyyy)
+        val expiresDate = item.expiresAt?.toDate()
+        val expiresText = expiresDate?.let { expiresSdf.format(it) } ?: "-"
+        root.findViewById<TextView>(R.id.tvApplicants).text = expiresText
 
         root.findViewById<MaterialButton>(R.id.btnApplied).visibility = View.GONE
     }
-
 
     private fun setupIndicators(count: Int) {
         indicatorLayout.removeAllViews()

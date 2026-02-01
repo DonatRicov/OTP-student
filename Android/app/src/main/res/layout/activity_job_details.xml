@@ -25,64 +25,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <FrameLayout
+                android:id="@+id/headerContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/header"
+                android:id="@+id/jobHeaderInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="14dp"
-                android:paddingTop="20dp"
+                android:paddingTop="14dp"
                 android:paddingEnd="14dp"
-                android:paddingBottom="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingBottom="20dp"
+                app:layout_constraintTop_toBottomOf="@id/headerContainer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:contentDescription="@string/back_button"
-                    android:src="@drawable/ic_back"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/otp_green_dark" />
-
-                <ImageView
-                    android:id="@+id/btnFavorite"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/jobs_favourite"
-                    android:focusable="true"
-                    android:src="@drawable/ic_favorite_outline"
-                    app:layout_constraintBottom_toBottomOf="@id/btnBack"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/btnBack"
-                    app:tint="@color/otp_green_dark" />
-
-                <TextView
-                    android:id="@+id/tvHeaderTitle"
-                    style="@style/Podnaslov"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/job_details_screen_title"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toBottomOf="@id/btnBack"
-                    app:layout_constraintEnd_toStartOf="@id/btnFavorite"
-                    app:layout_constraintStart_toEndOf="@id/btnBack"
-                    app:layout_constraintTop_toTopOf="@id/btnBack" />
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardLogo"
                     android:layout_width="84dp"
                     android:layout_height="84dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="6dp"
                     app:cardBackgroundColor="@android:color/white"
                     app:cardElevation="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnBack"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:strokeColor="#33FFFFFF"
                     app:strokeWidth="1dp">
 
@@ -103,9 +75,9 @@
                     android:layout_marginTop="12dp"
                     android:gravity="center"
                     android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardLogo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:text="Viši / Specijalist za poslovnu analizu (domena digitalnog)" />
 
                 <TextView
@@ -114,13 +86,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="6dp"
                     android:gravity="center"
                     android:textAlignment="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_job_title_details"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     tools:text="OTP Banka" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,7 +106,7 @@
                 android:layout_marginEnd="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/header">
+                app:layout_constraintTop_toBottomOf="@id/jobHeaderInfo">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardHourly"
@@ -172,7 +144,7 @@
                             android:gravity="center"
                             android:text="Satnica"
                             android:textAlignment="center"
-                            android:textColor="@color/otp_grey" />
+                            android:textColor="@color/otp_grey_dark" />
 
                         <TextView
                             android:id="@+id/tvHourlyRate"
@@ -224,7 +196,7 @@
                             android:gravity="center"
                             android:text="Lokacija"
                             android:textAlignment="center"
-                            android:textColor="@color/otp_grey" />
+                            android:textColor="@color/otp_grey_dark" />
 
                         <TextView
                             android:id="@+id/tvLocation"
@@ -274,7 +246,7 @@
                             android:gravity="center"
                             android:text="Traje do"
                             android:textAlignment="center"
-                            android:textColor="@color/otp_grey" />
+                            android:textColor="@color/otp_grey_dark" />
 
                         <TextView
                             android:id="@+id/tvExpires"
@@ -327,7 +299,7 @@
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
                         android:text="Opis posla ide ovdje..."
-                        android:textColor="@color/otp_grey" />
+                        android:textColor="@color/otp_grey_dark" />
 
                     <TextView
                         style="@style/Podnaslov"
@@ -345,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="4dp"
-                        android:textColor="@color/otp_grey"
+                        android:textColor="@color/otp_grey_dark"
                         tools:text="• IT\n• Financije\n• Analitika" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -370,7 +342,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_apply"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/job_details_apply"
             android:textAllCaps="false"
@@ -382,7 +354,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_favorite_toggle"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="12dp"
             android:text="@string/job_details_add_favorite"

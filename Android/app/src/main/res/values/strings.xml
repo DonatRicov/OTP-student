@@ -249,5 +249,8 @@
 
     <string name="internship_description">Opis prakse</string>
 
+    <string name="jobs_expires_at_inline">Traje do %1$s</string>
+
+
 
 </resources>

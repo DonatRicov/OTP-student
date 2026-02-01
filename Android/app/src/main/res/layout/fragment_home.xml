@@ -119,7 +119,7 @@
 
                 <include
                     android:id="@+id/includeRandomInternship"
-                    layout="@layout/item_job" />
+                    layout="@layout/item_internship" />
             </FrameLayout>
 
         </LinearLayout>
