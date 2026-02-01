@@ -13,13 +13,13 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Dinamički header (view_header.xml) u container
+        // Dinamicki header (view_header.xml)
         val headerContainer = view.findViewById<FrameLayout>(R.id.headerContainer)
         headerContainer.removeAllViews()
         val headerView = layoutInflater.inflate(R.layout.view_header, headerContainer, false)
         headerContainer.addView(headerView)
 
-        // Chatbot (ako postoji)
+        // Chatbot
         headerView.findViewById<View>(R.id.btnChatbot)?.setOnClickListener {
             findNavController().navigate(R.id.chatbotFragment)
         }
@@ -30,7 +30,6 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
         }
 
         view.findViewById<View>(R.id.cardOtpInternship).setOnClickListener {
-            // Ako želiš otvarati listu praksi:
             val hasListDestination =
                 runCatching { findNavController().graph.findNode(R.id.internshipListFragment) }.getOrNull() != null
 

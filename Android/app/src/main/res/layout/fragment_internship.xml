@@ -110,6 +110,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:strokeWidth="0.2dp">
 
+                <!-- Card 2: praksa -->
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -157,7 +159,7 @@
             </com.google.android.material.card.MaterialCardView>
 
 
-            <!-- Row: Obavljena praksa / Moje prijave (+ history ikona) -->
+            <!-- Row: Obavljena praksa / Moje prijave -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rowSection"
                 android:layout_width="0dp"

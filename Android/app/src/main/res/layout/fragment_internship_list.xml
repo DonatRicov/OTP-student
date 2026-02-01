@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     tools:context="ui.internship.InternshipListFragment">
 
-    <!-- HEADER (dinamički se ubacuje view_header.xml) -->
+    <!-- HEADER -->
     <FrameLayout
         android:id="@+id/headerContainer"
         android:layout_width="0dp"

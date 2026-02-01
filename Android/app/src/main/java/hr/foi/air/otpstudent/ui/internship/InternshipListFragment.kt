@@ -40,15 +40,22 @@ class InternshipListFragment : Fragment(R.layout.fragment_internship_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Dinamički header (view_header.xml) u container
+        // Dinamicki header (view_header_secondary.xml)
         val headerContainer = view.findViewById<FrameLayout>(R.id.headerContainer)
         headerContainer.removeAllViews()
-        val headerView = layoutInflater.inflate(R.layout.view_header, headerContainer, false)
+        val headerView = layoutInflater.inflate(R.layout.view_header_secondary, headerContainer, false)
         headerContainer.addView(headerView)
 
-        // ✅ Chatbot je u headeru, zato ga tražimo na headerView
+        // Back
+        headerView.findViewById<View>(R.id.btnBack)?.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        // Chatbot
         headerView.findViewById<View>(R.id.btnChatbot)?.setOnClickListener {
-            findNavController().navigate(R.id.chatbotFragment)
+            if (findNavController().currentDestination?.id != R.id.chatbotFragment) {
+                findNavController().navigate(R.id.chatbotFragment)
+            }
         }
 
         rv = view.findViewById(R.id.rvInternships)
