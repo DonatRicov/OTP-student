@@ -26,17 +26,26 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
-            bottomNav.visibility = if (destination.id == R.id.chatbotFragment) View.GONE else View.VISIBLE
+            val hideBottomNavDestinations = setOf(
+                R.id.chatbotFragment,
+                R.id.redeemedRewardsFragment,
+                R.id.redeemedRewardDetailsFragment,
+                R.id.rewardDetailsFragment,
+                R.id.rewardRedeemedFragment
+            )
+
+            bottomNav.visibility =
+                if (destination.id in hideBottomNavDestinations) View.GONE else View.VISIBLE
 
             if (destination.id == R.id.nav_jobs_favorites || destination.id == R.id.nav_jobs_add_favorites) {
                 bottomNav.menu.findItem(R.id.nav_poslovi)?.isChecked = true
             }
 
-
             if (destination.id == R.id.internshipDetailsFragment) {
                 bottomNav.menu.findItem(R.id.nav_praksa)?.isChecked = true
             }
         }
+
 
         bottomNav.setOnItemReselectedListener { item ->
             if (item.itemId == R.id.nav_poslovi) {
