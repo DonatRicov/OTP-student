@@ -78,7 +78,7 @@ class RedeemedRewardsAdapter(
             }
 
             itemView.setOnClickListener {
-                onOpen(r.id, item.redemptionId)
+                onOpen(item.rewardId, item.redemptionId)
             }
         }
     }
