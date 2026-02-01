@@ -66,7 +66,6 @@ class FirebaseLoyaltyRepositoryImpl(
         val uid = auth.currentUser?.uid ?: throw IllegalStateException("Not logged in")
         val redemptionId = remote.redeemReward(rewardId)
 
-        // u bazu da je korisnik preuzeo reward (za maxPerUser: 1)
         runCatching {
             remote.markRewardRedeemed(uid, rewardId, redemptionId)
         }.onFailure { e ->
@@ -80,14 +79,21 @@ class FirebaseLoyaltyRepositoryImpl(
         val uid = auth.currentUser?.uid ?: return emptyList()
 
         val entries = remote.fetchRedeemedRewards(uid)
+        if (entries.isEmpty()) return emptyList()
 
-        // dovuci reward docove (jedan po jedan; kasnije možeš optimizirati batchom/cache)
-        val rewards = entries.mapNotNull { e ->
-            val reward = remote.fetchRewardById(e.rewardId) ?: return@mapNotNull null
-            RedeemedReward(reward = reward, redemptionId = e.redemptionId)
+        val rewards = remote.fetchRewardsByIds(entries.map { it.rewardId })
+        val rewardsById = rewards.associateBy { it.id }
+
+        return entries.mapNotNull { e ->
+            val reward = rewardsById[e.rewardId] ?: return@mapNotNull null
+            RedeemedReward(
+                rewardId = e.rewardId,
+                reward = reward,
+                redemptionId = e.redemptionId
+            )
         }
-
-        return rewards
     }
+
+
 
 }
