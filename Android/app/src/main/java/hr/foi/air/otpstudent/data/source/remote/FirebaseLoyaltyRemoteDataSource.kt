@@ -15,6 +15,7 @@ import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import hr.foi.air.otpstudent.domain.model.RedeemedRewardEntry
+import com.google.firebase.firestore.FieldPath
 
 class FirebaseLoyaltyRemoteDataSource(
     private val db: FirebaseFirestore
@@ -191,7 +192,6 @@ class FirebaseLoyaltyRemoteDataSource(
             .get()
             .await()
 
-        // doc id = rewardId
         return snap.documents.map { it.id }.toSet()
     }
 
@@ -261,5 +261,40 @@ class FirebaseLoyaltyRemoteDataSource(
             }
         )
     }
+
+    override suspend fun fetchRewardsByIds(rewardIds: List<String>): List<Reward> {
+        if (rewardIds.isEmpty()) return emptyList()
+
+        val out = mutableListOf<Reward>()
+
+        rewardIds.distinct().chunked(10).forEach { chunk ->
+            val snap = db.collection("rewards")
+                .whereIn(FieldPath.documentId(), chunk)
+                .get()
+                .await()
+
+            out += snap.documents.map { doc ->
+                Reward(
+                    id = doc.id,
+                    title = doc.getString("title") ?: "",
+                    description = doc.getString("description") ?: "",
+                    costPoints = doc.getLong("costPoints") ?: 0L,
+                    active = doc.getBoolean("active") ?: true,
+                    validDays = doc.getLong("validDays") ?: 7L,
+                    channel = doc.getString("channel") ?: "BOTH",
+                    barcodeFormat = doc.getString("barcodeFormat") ?: "QR",
+                    imageUrl = doc.getString("imageUrl"),
+                    maxPerUser = (doc.get("maxPerUser") as? Number)?.toLong() ?: 0L,
+                    category = run {
+                        val raw = doc.getString("category") ?: RewardsFilter.OPT_REWARDS.name
+                        try { RewardsFilter.valueOf(raw) } catch (_: Exception) { RewardsFilter.OPT_REWARDS }
+                    }
+                )
+            }
+        }
+
+        return out
+    }
+
 
 }
