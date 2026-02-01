@@ -6,21 +6,22 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include
-        android:id="@+id/includeHeader"
-        layout="@layout/view_header_chatbot"
+    <!-- HEADER -->
+    <FrameLayout
+        android:id="@+id/headerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/includeHeader"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -43,7 +44,8 @@
                 app:cardBackgroundColor="@color/otp_green_light"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:strokeWidth="0.2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -52,9 +54,9 @@
 
                     <ImageView
                         android:id="@+id/ivMentorshipIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_people"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_mentor"
                         android:contentDescription="@null"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -62,30 +64,37 @@
 
                     <TextView
                         android:id="@+id/tvMentorshipTitle"
+                        style="@style/Podnaslov"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
+                        android:maxLines="2"
                         android:text="@string/mentorship_card_title"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textColor="@color/otp_green_dark"
+                        android:textFontWeight="1000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivMentorshipIcon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                     <TextView
                         android:id="@+id/tvMentorshipMore"
+                        style="@style/MaliTekst"
+                        android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/learn_more"
-                        android:textColor="@color/otp_grey"
-                        android:textSize="12sp"
+                        android:textColor="@color/otp_grey_dark"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tvMentorshipTitle" />
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Card 2: Praksa u OTP banci -->
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOtpInternship"
                 android:layout_width="0dp"
@@ -95,21 +104,22 @@
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/otp_internship_orange"
+                app:cardBackgroundColor="@color/otp_orange_10"
                 app:layout_constraintTop_toBottomOf="@id/cardMentorship"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:strokeWidth="0.2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:padding="16dp">
 
                     <ImageView
                         android:id="@+id/ivOtpIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_people"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_internship"
                         android:contentDescription="@null"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -117,44 +127,86 @@
 
                     <TextView
                         android:id="@+id/tvOtpTitle"
+                        style="@style/Podnaslov"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
+                        android:maxLines="2"
                         android:text="@string/otp_internship_card_title"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textColor="@color/otp_orange_dark"
+                        android:textFontWeight="1000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivOtpIcon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                     <TextView
                         android:id="@+id/tvOtpMore"
+                        style="@style/MaliTekst"
+                        android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/learn_more"
-                        android:textColor="@color/otp_grey"
-                        android:textSize="12sp"
+                        android:textColor="@color/otp_grey_dark"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tvOtpTitle" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Header row -->
-            <TextView
-                android:id="@+id/tvSectionTitle"
+
+            <!-- Row: Obavljena praksa / Moje prijave (+ history ikona) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rowSection"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="24dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/internship_completed_title"
-                android:textColor="@color/otp_grey"
-                android:textStyle="bold"
-                android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/cardOtpInternship"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tvSectionTitle"
+                    style="@style/Tekst"
+                    android:textFontWeight="1000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/internship_completed_title"
+                    android:textColor="@color/otp_grey_dark"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+                <ImageView
+                    android:id="@+id/ivMyApplications"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_history"
+                    app:tint="@color/otp_grey_dark"
+                    android:contentDescription="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvMyApplications"
+                    style="@style/Tekst"
+                    android:textFontWeight="1000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:text="@string/internship_my_applications"
+                    android:textColor="@color/otp_grey_dark"
+                    app:layout_constraintEnd_toStartOf="@id/ivMyApplications"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tvEmpty"
@@ -166,7 +218,7 @@
                 android:text="@string/empty_list"
                 android:textColor="@color/otp_grey"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
+                app:layout_constraintTop_toBottomOf="@id/rowSection"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -177,7 +229,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/tvSectionTitle"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toBottomOf="@id/rowSection"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

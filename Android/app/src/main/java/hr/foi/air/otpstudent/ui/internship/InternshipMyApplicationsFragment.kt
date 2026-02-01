@@ -2,6 +2,7 @@ package hr.foi.air.otpstudent.ui.internship
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -32,16 +33,24 @@ class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Dinamički header (view_header.xml)
+        val headerContainer = view.findViewById<FrameLayout>(R.id.headerContainer)
+        headerContainer.removeAllViews()
+        val headerView = layoutInflater.inflate(R.layout.view_header, headerContainer, false)
+        headerContainer.addView(headerView)
 
-        val header = view.findViewById<View>(R.id.includeHeader)
-        header.findViewById<View>(R.id.btnBack).setOnClickListener {
+        // Back/Home u headeru (ako postoje)
+        headerView.findViewById<View>(R.id.btnBack)?.setOnClickListener {
             findNavController().popBackStack()
         }
-        header.findViewById<View>(R.id.btnHome).setOnClickListener {
+        headerView.findViewById<View>(R.id.btnHome)?.setOnClickListener {
             findNavController().navigate(R.id.nav_home)
         }
+        headerView.findViewById<View>(R.id.btnChatbot)?.setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
 
-
+        // Clickovi na kartice (ako želiš da postoje i tu)
         view.findViewById<View>(R.id.cardMentorship).setOnClickListener {
             findNavController().navigate(R.id.mentorshipDetailsFragment)
         }
@@ -62,7 +71,6 @@ class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) 
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { s ->
                 val now = Date()
@@ -75,7 +83,6 @@ class InternshipMyApplicationsFragment : Fragment(R.layout.fragment_internship) 
                 rv.visibility = if (empty) View.GONE else View.VISIBLE
             }
         }
-
 
         viewModel.setFilter(InternshipFilter.APPLIED, true)
         viewModel.applyFilters()

@@ -11,11 +11,11 @@
         android:name="hr.foi.air.otpstudent.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
-    <!-- PRAKSA -->
+    <!-- PRAKSA (SADA HOME EKRAN) -->
     <fragment
         android:id="@+id/nav_praksa"
         android:name="hr.foi.air.otpstudent.ui.internship.InternshipFragment"
-        tools:layout="@layout/fragment_internship_list" />
+        tools:layout="@layout/fragment_internship" />
 
     <!-- POSLOVI -->
     <fragment
@@ -131,9 +131,10 @@
         android:name="hr.foi.air.otpstudent.ui.internship.MentorshipDetailsFragment"
         android:label="@string/mentorship_request_title" />
 
-
-
-
-
+    <!-- (OPCIONALNO) LISTA PRAKSI kao zasebna destinacija -->
+    <fragment
+        android:id="@+id/internshipListFragment"
+        android:name="hr.foi.air.otpstudent.ui.internship.InternshipListFragment"
+        tools:layout="@layout/fragment_internship_list" />
 
 </navigation>

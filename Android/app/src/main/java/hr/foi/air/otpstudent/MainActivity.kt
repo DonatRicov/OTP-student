@@ -27,11 +27,16 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             val hideBottomNavDestinations = setOf(
+                // već postojeće
                 R.id.chatbotFragment,
                 R.id.redeemedRewardsFragment,
                 R.id.redeemedRewardDetailsFragment,
                 R.id.rewardDetailsFragment,
-                R.id.rewardRedeemedFragment
+                R.id.rewardRedeemedFragment,
+
+                // ✅ dodano: sakrij bottom nav na listi praksi i mentorship details
+                R.id.internshipListFragment,
+                R.id.mentorshipDetailsFragment
             )
 
             bottomNav.visibility =
@@ -45,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 bottomNav.menu.findItem(R.id.nav_praksa)?.isChecked = true
             }
         }
-
 
         bottomNav.setOnItemReselectedListener { item ->
             if (item.itemId == R.id.nav_poslovi) {
