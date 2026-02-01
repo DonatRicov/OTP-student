@@ -7,6 +7,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import hr.foi.air.otpstudent.data.auth.AppLockStore
+import android.content.ComponentCallbacks2
+
 class OtpStudentApp : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -20,4 +22,12 @@ class OtpStudentApp : Application() {
             }
         })
     }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            AppLockStore.markBackgrounded(this)
+        }
+    }
+
 }
