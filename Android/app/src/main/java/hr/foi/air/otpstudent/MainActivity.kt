@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val LOCK_THRESHOLD_MS = 5_000L
+    private val LOCK_THRESHOLD_MS = 30_000L
 
     override fun onStart() {
         super.onStart()
