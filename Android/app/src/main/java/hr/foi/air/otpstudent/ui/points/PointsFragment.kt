@@ -26,6 +26,11 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val header = view.findViewById<View>(R.id.header)
+        header.findViewById<View>(R.id.btnChatbot)?.setOnClickListener {
+            findNavController().navigate(R.id.chatbotFragment)
+        }
+
         tabChallenges = view.findViewById(R.id.tabChallenges)
         tabRewards = view.findViewById(R.id.tabRewards)
         tvPoints = view.findViewById(R.id.tvPoints)
@@ -39,7 +44,7 @@ class PointsFragment : Fragment(R.layout.fragment_points) {
                 showChallenges()
                 setSelectedTab(isChallenges = true)
             }
-            handle.remove<String>("openTab") // da se ne ponavlja
+            handle.remove<String>("openTab")
         }
 
 
