@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
                     if (!uid.isNullOrBlank()) {
                         PinStore.setLastUid(this, uid)
                         PinStore.setLastUserLabel(this, e)
-                        
+
                     }
                 }
             )
