@@ -22,6 +22,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.FileProvider
+import java.io.File
+import java.io.IOException
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -94,21 +97,18 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-
-
-
-
-
-
-        // Privacy policy
         findViewById<android.view.View>(R.id.rowPrivacyPolicy).setOnClickListener {
-            // TODO: otvori WebView ili ekran s tekstom
+            openPdfFromRaw(R.raw.privacy_policy, "privacy_policy.pdf")
         }
 
-        // Delete account
-        findViewById<android.view.View>(R.id.rowDeleteAccount).setOnClickListener {
-            // TODO: dialog + delete acc flow
+        findViewById<android.view.View>(R.id.rowChangePassword).setOnClickListener {
+            Toast.makeText(this, "Ova funkcionalnost dolazi uskoro!", Toast.LENGTH_SHORT).show()
         }
+
+        findViewById<android.view.View>(R.id.rowAboutApp).setOnClickListener {
+            Toast.makeText(this, "OTP Student (verzija 1.0.0.)", Toast.LENGTH_SHORT).show()
+        }
+
 
         val switchBiometric = findViewById<SwitchMaterial>(R.id.switchBiometric)
         val bio = bioPlugin()
@@ -238,4 +238,31 @@ class SettingsActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun openPdfFromRaw(rawResId: Int, fileName: String) {
+        try {
+            val outFile = File(cacheDir, fileName)
+            resources.openRawResource(rawResId).use { input ->
+                outFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            val uri = FileProvider.getUriForFile(
+                this,
+                "${packageName}.fileprovider",
+                outFile
+            )
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            startActivity(Intent.createChooser(intent, "Otvori Politiku privatnosti"))
+        } catch (e: Exception) {
+            Toast.makeText(this, "Ne mogu otvoriti PDF: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
 }
