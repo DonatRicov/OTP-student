@@ -29,7 +29,7 @@ import java.time.LocalDate
 
 class StartActivity : AppCompatActivity() {
 
-    private val LOCK_THRESHOLD_MS = 30_000L
+    private val LOCK_THRESHOLD_MS = 5_000L
 
     private val pinUnlockLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -84,30 +84,37 @@ class StartActivity : AppCompatActivity() {
         val pinReady = PinStore.isEnabled(this, uid) && PinStore.hasPin(this, uid)
 
         when {
+            pinReady -> {
+                val i = Intent(this, PinUnlockActivity::class.java).apply {
+                    putExtra(PinUnlockActivity.EXTRA_UID, uid)
+                    putExtra(
+                        PinUnlockActivity.EXTRA_USER_LABEL,
+                        PinStore.getLastUserLabel(this@StartActivity)
+                    )
+                    putExtra(PinUnlockActivity.EXTRA_TRY_BIO_FIRST, bioReady)
+                }
+                pinUnlockLauncher.launch(i)
+            }
+
             bioReady && bioPlugin != null -> {
                 bioPlugin.authenticate(this, AuthRequest()) { result ->
                     runOnUiThread {
                         when (result) {
                             is AuthResult.Success -> refreshSessionThenOpenMain()
-                            is AuthResult.Error, AuthResult.Cancelled -> fallbackToPinOrStart(uid)
+                            is AuthResult.Error -> {
+                                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                                showStartScreen()
+                            }
+                            AuthResult.Cancelled -> showStartScreen()
                         }
                     }
                 }
             }
 
-            pinReady -> {
-                val i = Intent(this, PinUnlockActivity::class.java).apply {
-                    putExtra(PinUnlockActivity.EXTRA_UID, uid)
-                    putExtra(PinUnlockActivity.EXTRA_USER_LABEL, PinStore.getLastUserLabel(this@StartActivity))
-                }
-                pinUnlockLauncher.launch(i)
-            }
-
-            else -> {
-                refreshSessionThenOpenMain()
-            }
+            else -> refreshSessionThenOpenMain()
         }
     }
+
 
     private fun fallbackToPinOrStart(uid: String) {
         val pinReady = PinStore.isEnabled(this, uid) && PinStore.hasPin(this, uid)
