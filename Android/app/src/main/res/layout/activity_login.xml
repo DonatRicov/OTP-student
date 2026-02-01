@@ -54,7 +54,7 @@
         <LinearLayout
             android:id="@+id/emailPassContainer"
             android:layout_width="0dp"
-            android:layout_height="182dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -127,56 +127,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/emailPassContainer"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.90"
-            app:layout_constraintBottom_toTopOf="@id/dividerLayout"/>
-
-        <!-- DIVDER -->
-        <LinearLayout
-            android:id="@+id/dividerLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/authMethodsContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnLogin">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#33000000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="@string/or_login_other"
-                android:textSize="14sp"
-                android:textColor="@color/otp_grey_dark"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#33000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/authMethodsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginVertical="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dividerLayout"
-            app:layout_constraintBottom_toTopOf="@id/progress"/>
+            app:layout_constraintWidth_percent="0.90"/>
 
         <!-- PROGRESS BAR -->
         <ProgressBar
@@ -185,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/authMethodsContainer"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin"
             app:layout_constraintBottom_toTopOf="@id/registerLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
