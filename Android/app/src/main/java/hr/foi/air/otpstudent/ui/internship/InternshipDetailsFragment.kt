@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -12,7 +13,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +33,11 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         ViewModelProvider(this, VmFactory())[InternshipDetailsViewModel::class.java]
     }
 
+    companion object {
+        const val ARG_INTERNSHIP_ID = "internshipId"
+        private const val FOI_PRAKSA_URL = "https://strucnapraksa.foi.hr/hr/"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,54 +48,82 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
             return
         }
 
+        //header secondary
+        val headerContainer = view.findViewById<FrameLayout>(R.id.headerContainer)
+        headerContainer.removeAllViews()
+        val headerView = layoutInflater.inflate(R.layout.view_header_secondary, headerContainer, false)
+        headerContainer.addView(headerView)
 
-        val header = view.findViewById<View>(R.id.includeHeader)
-
-        header.findViewById<View>(R.id.btnBack).setOnClickListener {
-            findNavController().popBackStack()
+        headerView.findViewById<View>(R.id.btnBack)?.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        headerView.findViewById<View>(R.id.btnChatbot)?.setOnClickListener {
+            if (findNavController().currentDestination?.id != R.id.chatbotFragment) {
+                findNavController().navigate(R.id.chatbotFragment)
+            }
         }
 
-        header.findViewById<View>(R.id.btnHome).setOnClickListener {
-
-            findNavController().navigate(R.id.nav_home)
-        }
-
-
+        //USER
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val tvUserRole = view.findViewById<TextView>(R.id.tvUserRole)
         tvUserRole.text = getString(R.string.internship_details_user_role)
         loadUserNameInto(tvUserName)
 
+        //AVATAR iz profila
+        val imgAvatar = view.findViewById<ShapeableImageView>(R.id.imgAvatar)
+        loadUserAvatarInto(imgAvatar)
 
+        // TITLE + FAVORITE
         val ivFavorite = view.findViewById<ImageView>(R.id.ivFavorite)
         val tvTitle = view.findViewById<TextView>(R.id.tvInternshipTitle)
 
+        // VALUES
+        val tvDescriptionValue = view.findViewById<TextView>(R.id.tvDescriptionValue)
+
         val tvStudyDirection = view.findViewById<TextView>(R.id.tvStudyDirectionValue)
+        loadUserMajorInto(tvStudyDirection)
+
         val tvMentor = view.findViewById<TextView>(R.id.tvMentorValue)
         val tvMentorEmail = view.findViewById<TextView>(R.id.tvMentorEmailValue)
         val tvStartDate = view.findViewById<TextView>(R.id.tvStartDateValue)
         val tvEndDate = view.findViewById<TextView>(R.id.tvEndDateValue)
 
+        // BUTTONS
         val btnApplyOrDetails = view.findViewById<MaterialButton>(R.id.btnApplyOrDetails)
-        val btnToggleFavorite = view.findViewById<MaterialButton>(R.id.btnToggleFavorite)
+        val btnGoToFoi = view.findViewById<MaterialButton>(R.id.btnToggleFavorite)
 
+        // CV include
+        val itemCv = view.findViewById<View>(R.id.itemCv)
+        val tvCvFileName = itemCv.findViewById<TextView>(R.id.tvFileName)
+        val tvCvUploaderName = itemCv.findViewById<TextView>(R.id.tvUploaderName)
+        val btnCvOverflow = itemCv.findViewById<ImageView>(R.id.btnDelete)
 
-        val cvCard = view.findViewById<View>(R.id.cvCard)
-        val tvCvFileName = view.findViewById<TextView>(R.id.tvCvFileName)
-        val tvCvUploaderName = view.findViewById<TextView>(R.id.tvCvUploaderName)
-        val btnCvOverflow = view.findViewById<ImageView>(R.id.btnCvOverflow)
+        // FAVORITE toggle na zvjezdici i toast (dodaj/ukloni)
+        ivFavorite.setOnClickListener {
+            val wasFavorite = viewModel.state.value.isFavorite
+            viewModel.toggleFavorite()
 
-        ivFavorite.setOnClickListener { viewModel.toggleFavorite() }
-        btnToggleFavorite.setOnClickListener { viewModel.toggleFavorite() }
+            Toast.makeText(
+                requireContext(),
+                if (wasFavorite) "Praksa uklonjena iz favorita" else "Praksa dodana u favorite",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
+        //FOI button
+        btnGoToFoi.text = getString(R.string.internship_go_to_foi)
+        btnGoToFoi.setOnClickListener { openUrl(FOI_PRAKSA_URL) }
 
+        // Apply / Odjavi i toastovi
         btnApplyOrDetails.setOnClickListener {
-            if (viewModel.state.value.isApplied) {
-                openUrl(PRAKSA_DETAILS_URL)
+            val trenutno = btnApplyOrDetails.text?.toString().orEmpty()
+
+            if (trenutno == getString(R.string.internship_details_button_apply)) {
+                btnApplyOrDetails.text = "Odjavi praksu"
+                Toast.makeText(requireContext(), "Praksa je prijavljena", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.onApplyOrDetailsClicked { url ->
-                    openUrl(url)
-                }
+                btnApplyOrDetails.text = getString(R.string.internship_details_button_apply)
+                Toast.makeText(requireContext(), "Praksa odjavljena", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -103,7 +139,9 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
                 if (internship != null) {
                     tvTitle.text = internship.title.ifBlank { getString(R.string.placeholder_dash) }
 
-                    tvStudyDirection.text = internship.description.ifBlank { getString(R.string.placeholder_dash) }
+                    tvDescriptionValue.text =
+                        internship.description.ifBlank { getString(R.string.placeholder_dash) }
+
                     tvMentor.text = internship.company.ifBlank { getString(R.string.placeholder_dash) }
                     tvMentorEmail.text = internship.location.ifBlank { getString(R.string.placeholder_dash) }
 
@@ -111,31 +149,47 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
                     tvEndDate.text = formatDate(internship.expiresAt) ?: getString(R.string.placeholder_dash)
                 }
 
-                btnApplyOrDetails.text =
-                    if (s.isApplied) getString(R.string.internship_details_button_details)
-                    else getString(R.string.internship_details_button_apply)
-
                 updateFavoriteIcon(ivFavorite, s.isFavorite)
-
-                btnToggleFavorite.text =
-                    if (s.isFavorite) getString(R.string.internship_remove_favorite)
-                    else getString(R.string.internship_add_favorite)
 
                 val cv = s.cvDocument
                 if (cv == null) {
-                    cvCard.visibility = View.GONE
+                    itemCv.visibility = View.GONE
                 } else {
-                    cvCard.visibility = View.VISIBLE
-                    tvCvFileName.text = cv.fileName.ifBlank { getString(R.string.placeholder_dash) }
-                    tvCvUploaderName.text = cv.uploaderName.ifBlank { getString(R.string.cv_uploader_default) }
+                    itemCv.visibility = View.VISIBLE
 
-                    cvCard.setOnClickListener { openUrl(cv.fileUrl) }
+                    tvCvFileName.text = cv.fileName.ifBlank { getString(R.string.placeholder_dash) }
+                    tvCvUploaderName.text = cv.uploaderName.ifBlank { getString(R.string.placeholder_dash) }
+
+                    // ikona download
+                    btnCvOverflow.setImageResource(R.drawable.ic_download)
+
+                    itemCv.setOnClickListener { openUrl(cv.fileUrl) }
                     btnCvOverflow.setOnClickListener { openUrl(cv.fileUrl) }
                 }
             }
         }
 
         viewModel.load(internshipId)
+    }
+
+    private fun loadUserMajorInto(tv: TextView) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            tv.text = getString(R.string.placeholder_dash)
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val major = doc.getString("major")?.trim().orEmpty()
+                tv.text = if (major.isBlank()) getString(R.string.placeholder_dash) else major
+            }
+            .addOnFailureListener {
+                tv.text = getString(R.string.placeholder_dash)
+            }
     }
 
     private fun loadUserNameInto(tv: TextView) {
@@ -152,19 +206,50 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
             .get()
             .addOnSuccessListener { doc ->
                 val fullName = doc.getString("fullName")
-                val nameFromEmail = user.email
+                val fallback = user.email
                     ?.substringBefore("@")
                     ?.replaceFirstChar { it.uppercase() }
                     ?: getString(R.string.placeholder_user_name)
 
-                tv.text = if (!fullName.isNullOrBlank()) fullName else nameFromEmail
+                tv.text = if (!fullName.isNullOrBlank()) fullName else fallback
             }
             .addOnFailureListener {
-                val nameFromEmail = user.email
+                val fallback = user.email
                     ?.substringBefore("@")
                     ?.replaceFirstChar { it.uppercase() }
                     ?: getString(R.string.placeholder_user_name)
-                tv.text = nameFromEmail
+                tv.text = fallback
+            }
+    }
+
+    private fun loadUserAvatarInto(img: ShapeableImageView) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            img.setImageResource(R.drawable.ic_profile_placeholder)
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val avatarUrl = doc.getString("avatarUrl")?.trim().orEmpty()
+
+                if (avatarUrl.isBlank()) {
+                    img.setImageResource(R.drawable.ic_profile_placeholder)
+                    return@addOnSuccessListener
+                }
+
+                Glide.with(this)
+                    .load(avatarUrl)
+                    .circleCrop()
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .error(R.drawable.ic_profile_placeholder)
+                    .into(img)
+            }
+            .addOnFailureListener {
+                img.setImageResource(R.drawable.ic_profile_placeholder)
             }
     }
 
@@ -188,7 +273,7 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl))
         try {
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(requireContext(), getString(R.string.error_cannot_open_link), Toast.LENGTH_LONG).show()
         }
     }
@@ -205,7 +290,7 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
         )
     }
 
-    private inner class VmFactory : ViewModelProvider.Factory {
+    private class VmFactory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(InternshipDetailsViewModel::class.java)) {
                 val internshipRepo = AppModule.internshipRepository
@@ -217,12 +302,5 @@ class InternshipDetailsFragment : Fragment(R.layout.fragment_internship_details)
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-    }
-
-    companion object {
-        const val ARG_INTERNSHIP_ID = "internshipId"
-
-
-        private const val PRAKSA_DETAILS_URL = "https://strucnapraksa.foi.hr/hr/"
     }
 }

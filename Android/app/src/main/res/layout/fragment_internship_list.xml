@@ -109,7 +109,6 @@
                 style="@style/FilterButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:drawableLeft="@drawable/ic_filter"
                 android:drawablePadding="5dp"
                 android:gravity="center"

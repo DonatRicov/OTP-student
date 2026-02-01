@@ -245,4 +245,9 @@
     <string name="mentorship_topic_description">Opis teme</string>
 
 
+    <string name="internship_go_to_foi">Odvedi me na FOI prakse</string>
+
+    <string name="internship_description">Opis prakse</string>
+
+
 </resources>

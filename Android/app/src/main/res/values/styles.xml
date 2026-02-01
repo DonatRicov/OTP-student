@@ -96,6 +96,15 @@
         <item name="cardBackgroundColor">@color/white</item>
     </style>
 
+    <style name="Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">#ababab</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
     <style name="AccentCard">
         <item name="cardBackgroundColor">@color/otp_green_light</item>
         <item name="cardElevation">0dp</item>

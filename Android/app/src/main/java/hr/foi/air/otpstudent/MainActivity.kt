@@ -33,8 +33,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.rewardDetailsFragment,
                 R.id.rewardRedeemedFragment,
                 R.id.internshipListFragment,
-                R.id.mentorshipDetailsFragment
+                R.id.mentorshipDetailsFragment,
+                R.id.internshipDetailsFragment
             )
+
 
             bottomNav.visibility =
                 if (destination.id in hideBottomNavDestinations) View.GONE else View.VISIBLE
