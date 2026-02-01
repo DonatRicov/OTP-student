@@ -7,6 +7,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
+import android.content.Intent
+import com.google.firebase.auth.FirebaseAuth
+import hr.foi.air.otpstudent.data.auth.QuickLoginManager
+import hr.foi.air.otpstudent.data.auth.AppLockStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,5 +60,36 @@ class MainActivity : AppCompatActivity() {
                 navController.popBackStack(R.id.nav_praksa, false)
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        QuickLoginManager.enforceUserScope(this)
+
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
+        if (user == null) {
+            startActivity(
+                Intent(this, StartActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                }
+            )
+            finish()
+            return
+        }
+
+        user.getIdToken(true)
+            .addOnFailureListener {
+                auth.signOut()
+                QuickLoginManager.resetQuickLogin(this)
+                startActivity(
+                    Intent(this, StartActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    }
+                )
+                finish()
+            }
     }
 }
