@@ -3,31 +3,33 @@ package hr.foi.air.otpstudent
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import hr.foi.air.auth.bio.BioStore
+import hr.foi.air.auth.pin.PinStore
 import hr.foi.air.auth.pin.PinUnlockActivity
 import hr.foi.air.auth.pin.PinUnlockContract
 import hr.foi.air.core.auth.AuthRegistry
 import hr.foi.air.core.auth.AuthRequest
 import hr.foi.air.core.auth.AuthResult
-import hr.foi.air.core.auth.SecureCreds
-import hr.foi.air.otpstudent.di.AppModule
+import hr.foi.air.otpstudent.data.auth.AppLockStore
+import hr.foi.air.otpstudent.data.auth.QuickLoginManager
 import hr.foi.air.otpstudent.ui.auth.LoginActivity
 import hr.foi.air.otpstudent.ui.auth.RegisterActivity
-import kotlinx.coroutines.launch
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
-import android.util.Log
-import com.google.firebase.FirebaseApp
 
 class StartActivity : AppCompatActivity() {
+
+    private val LOCK_THRESHOLD_MS = 5_000L
 
     private val pinUnlockLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -38,9 +40,10 @@ class StartActivity : AppCompatActivity() {
         }
 
         when (res.data?.getStringExtra(PinUnlockContract.EXTRA_RESULT)) {
-            PinUnlockContract.RESULT_OK -> autoLoginWithSavedCreds()
+            PinUnlockContract.RESULT_OK -> refreshSessionThenOpenMain()
             PinUnlockContract.RESULT_NOT_YOU -> {
-                SecureCreds.clear(this)
+                FirebaseAuth.getInstance().signOut()
+                QuickLoginManager.resetQuickLogin(this)
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
@@ -48,69 +51,83 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    private fun launchUnlockFlow() {
-        val hasCreds =
-            !SecureCreds.getEmail(this).isNullOrBlank() &&
-                    !SecureCreds.getPass(this).isNullOrBlank()
-        if (!hasCreds) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+
+        QuickLoginManager.enforceUserScope(this)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            showStartScreen()
+            return
+        }
+
+        val shouldLock = AppLockStore.shouldLock(this, LOCK_THRESHOLD_MS)
+        if (shouldLock) {
+            launchUnlockFlow(user.uid)
+        } else {
+            refreshSessionThenOpenMain()
+        }
+    }
+
+    private fun launchUnlockFlow(uid: String) {
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
             showStartScreen()
             return
         }
 
         val bioPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "bio" }
-        val bioReady = bioPlugin?.isEnabled(this) == true && bioPlugin.isConfigured(this)
+        val bioReady = BioStore.isEnabled(this) && (bioPlugin?.isConfigured(this) == true)
 
-        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
-        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
+        val pinReady = PinStore.isEnabled(this, uid) && PinStore.hasPin(this, uid)
 
         when {
-            bioReady -> {
+            pinReady -> {
+                val i = Intent(this, PinUnlockActivity::class.java).apply {
+                    putExtra(PinUnlockActivity.EXTRA_UID, uid)
+                    putExtra(
+                        PinUnlockActivity.EXTRA_USER_LABEL,
+                        PinStore.getLastUserLabel(this@StartActivity)
+                    )
+                    putExtra(PinUnlockActivity.EXTRA_TRY_BIO_FIRST, bioReady)
+                }
+                pinUnlockLauncher.launch(i)
+            }
+
+            bioReady && bioPlugin != null -> {
                 bioPlugin.authenticate(this, AuthRequest()) { result ->
                     runOnUiThread {
                         when (result) {
-                            is AuthResult.Success -> {
-                                autoLoginWithSavedCreds()
-                            }
-
+                            is AuthResult.Success -> refreshSessionThenOpenMain()
                             is AuthResult.Error -> {
                                 Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
-                                fallbackToPinOrStart()
+                                showStartScreen()
                             }
-
-                            AuthResult.Cancelled -> {
-                                fallbackToPinOrStart()
-                            }
+                            AuthResult.Cancelled -> showStartScreen()
                         }
                     }
                 }
-
             }
 
-            pinReady -> {
-                pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
-            }
-
-            else -> showStartScreen()
+            else -> refreshSessionThenOpenMain()
         }
     }
-    private fun fallbackToPinOrStart() {
-        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
-        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
 
+
+    private fun fallbackToPinOrStart(uid: String) {
+        val pinReady = PinStore.isEnabled(this, uid) && PinStore.hasPin(this, uid)
         if (pinReady) {
-            pinUnlockLauncher.launch(Intent(this, PinUnlockActivity::class.java))
+            val i = Intent(this, PinUnlockActivity::class.java).apply {
+                putExtra(PinUnlockActivity.EXTRA_UID, uid)
+                putExtra(PinUnlockActivity.EXTRA_USER_LABEL, PinStore.getLastUserLabel(this@StartActivity))
+            }
+            pinUnlockLauncher.launch(i)
         } else {
             showStartScreen()
         }
     }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
-        launchUnlockFlow()
-    }
-
 
     private fun showStartScreen() {
         setContentView(R.layout.activity_start)
@@ -134,20 +151,18 @@ class StartActivity : AppCompatActivity() {
         }
     }
 
-    private fun autoLoginWithSavedCreds() {
-        val email = SecureCreds.getEmail(this).orEmpty()
-        val pass = SecureCreds.getPass(this).orEmpty()
-
-        if (email.isBlank() || pass.isBlank()) {
+    private fun refreshSessionThenOpenMain() {
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        if (user == null) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
 
-        lifecycleScope.launch {
-            try {
-                AppModule.authRepository.login(email, pass)
-                logDailyLoginEvent()
+        user.getIdToken(true)
+            .addOnSuccessListener {
+                AppLockStore.clear(this)
 
                 startActivity(
                     Intent(this@StartActivity, MainActivity::class.java).apply {
@@ -155,16 +170,13 @@ class StartActivity : AppCompatActivity() {
                     }
                 )
                 finish()
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@StartActivity,
-                    e.message ?: "Prijava nije uspjela",
-                    Toast.LENGTH_LONG
-                ).show()
-                startActivity(Intent(this@StartActivity, LoginActivity::class.java))
+            }
+            .addOnFailureListener {
+                auth.signOut()
+                QuickLoginManager.resetQuickLogin(this)
+                startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
-        }
     }
 
     private suspend fun logDailyLoginEvent() {
@@ -185,21 +197,5 @@ class StartActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("StartActivity", "Failed to log loginEvent", e)
         }
-    }
-
-    private fun shouldUsePinUnlock(): Boolean {
-        val hasCreds =
-            !SecureCreds.getEmail(this).isNullOrBlank() &&
-                    !SecureCreds.getPass(this).isNullOrBlank()
-
-        if (!hasCreds) return false
-
-        val pinPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "pin" }
-        val pinReady = pinPlugin?.isEnabled(this) == true && pinPlugin.isConfigured(this)
-
-        val bioPlugin = AuthRegistry.available().firstOrNull { it.uiSpec().id == "bio" }
-        val bioReady = bioPlugin?.isEnabled(this) == true && bioPlugin.isConfigured(this)
-
-        return pinReady || bioReady
     }
 }

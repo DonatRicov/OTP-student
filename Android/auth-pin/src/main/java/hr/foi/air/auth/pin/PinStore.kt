@@ -8,11 +8,9 @@ object PinStore {
 
     private const val PREFS = "pin_secure_prefs"
 
-    // legacy global keys (stari nacin
     private const val LEGACY_KEY_PIN = "pin"
     private const val LEGACY_KEY_ENABLED = "enabled"
 
-    // global info o zadnjem korisniku
     private const val KEY_LAST_UID = "pin_last_uid"
     private const val KEY_LAST_USER_LABEL = "pin_last_user_label"
 
@@ -27,7 +25,6 @@ object PinStore {
     private fun pinKey(uid: String) = "pin_$uid"
     private fun enabledKey(uid: String) = "enabled_$uid"
 
-    //Migracija ako postoje legacy pin il enabled prebaci ih na prvi uid koji se traži
     private fun migrateIfNeeded(context: Context, uid: String) {
         val p = prefs(context)
 
@@ -39,7 +36,6 @@ object PinStore {
         val hasNewPin = p.contains(newPinKey)
         val hasNewEnabled = p.contains(newEnabledKey)
 
-        // Nema legacy podataka ili vec postoje novi podaci pa nema migracije
         if ((!hasLegacyPin && !hasLegacyEnabled) || (hasNewPin || hasNewEnabled)) return
 
         val legacyPin = p.getString(LEGACY_KEY_PIN, null)
@@ -99,5 +95,34 @@ object PinStore {
     fun hasAnyEnabledPin(context: Context): Boolean {
         val all = prefs(context).all
         return all.any { (k, v) -> k.startsWith("enabled_") && v is Boolean && v }
+    }
+
+    fun clearPin(context: Context, uid: String) {
+        migrateIfNeeded(context, uid)
+        prefs(context).edit()
+            .remove(pinKey(uid))
+            .apply()
+    }
+
+    fun resetForUid(context: Context, uid: String) {
+        migrateIfNeeded(context, uid)
+        prefs(context).edit()
+            .remove(pinKey(uid))
+            .remove(enabledKey(uid))
+            .apply()
+
+        if (getLastUid(context) == uid) {
+            prefs(context).edit()
+                .remove(KEY_LAST_UID)
+                .remove(KEY_LAST_USER_LABEL)
+                .apply()
+        }
+    }
+
+    fun clearLastUser(context: Context) {
+        prefs(context).edit()
+            .remove(KEY_LAST_UID)
+            .remove(KEY_LAST_USER_LABEL)
+            .apply()
     }
 }

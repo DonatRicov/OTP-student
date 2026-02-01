@@ -53,8 +53,8 @@ class LoginSuccessActivity : AppCompatActivity() {
 
         handler.postDelayed({
             val prefs = getSharedPreferences("otp_prefs", MODE_PRIVATE)
-            prefs.edit().remove("quick_login_offer_shown").apply()
             val shown = prefs.getBoolean("quick_login_offer_shown", false)
+
 
 
             val next = if (!shown) {
