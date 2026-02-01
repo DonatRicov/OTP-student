@@ -27,5 +27,6 @@
     <color name="otp_grey_dark">#4B5563</color>
     <color name="otp_white">#EFF7EA</color>
 
+    <color name="otp_grey_transparent">#AA707070</color>
 
 </resources>
