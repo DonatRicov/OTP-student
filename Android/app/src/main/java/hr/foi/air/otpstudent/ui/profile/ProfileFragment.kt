@@ -24,6 +24,7 @@ import java.io.File
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 import hr.foi.air.otpstudent.data.auth.QuickLoginManager
+import android.widget.Toast
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -86,10 +87,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             findNavController().navigate(R.id.chatbotFragment)
         }
 
-        // učitaj podatke
         loadProfileData()
 
-        // Odjava
         view.findViewById<LinearLayout>(R.id.rowLogout).setOnClickListener {
             QuickLoginManager.resetQuickLogin(requireContext())
 
@@ -112,7 +111,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
 
         view.findViewById<LinearLayout>(R.id.rowPractice).setOnClickListener {
+            Toast.makeText(requireContext(), "Ova funkcionalnost dolazi uskoro!", Toast.LENGTH_SHORT).show()
         }
+
 
         view.findViewById<LinearLayout>(R.id.rowJobs).setOnClickListener {
             findNavController().navigate(R.id.redeemedRewardsFragment)
