@@ -26,10 +26,6 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
 
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
-    // hide/show bottom nav
-    private fun setBottomNavVisible(visible: Boolean) {
-        activity?.findViewById<View>(R.id.bottomNavigationView)?.isVisible = visible
-    }
 
     // za redeem bodova
     private val vm: LoyaltyViewModel by activityViewModels {
@@ -39,15 +35,6 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
     private lateinit var btnRedeem: View
     private var currentRewardId: String = ""
 
-    override fun onResume() {
-        super.onResume()
-        setBottomNavVisible(false)
-    }
-
-    override fun onDestroyView() {
-        setBottomNavVisible(true)
-        super.onDestroyView()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -100,7 +87,6 @@ class RewardDetailsFragment : Fragment(R.layout.fragment_reward_details) {
                 }
 
                 is RedeemUiState.Success -> {
-                    // osvjezi listu i redeemed stanje
                     vm.loadRewards()
 
                     vm.clearRedeemState()
