@@ -263,6 +263,14 @@
     <style name="Widget.OTPStudent" />
     <style name="Widget" />
 
+    <style name="Theme.OtpStudent.Gate" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+
 
 </resources>
 
