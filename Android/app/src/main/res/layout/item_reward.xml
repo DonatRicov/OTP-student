@@ -32,7 +32,7 @@
             android:id="@+id/btnRedeem"
             android:layout_width="0dp"
             android:layout_height="64dp"
-            android:background="@color/otp_grey"
+            android:background="@color/otp_grey_transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -43,14 +43,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="90dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="Male stvari"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@id/btnRedeem"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/cardBadge" />
+
 
         <TextView
             android:id="@+id/tvDesc"
@@ -58,15 +61,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:layout_marginEnd="90dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginEnd="12dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="15% popusta"
             android:textColor="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintBottom_toBottomOf="@id/btnRedeem"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/cardBadge" />
+
 
 
         <!-- narančasti badge 300 -->
@@ -88,7 +94,17 @@
                 android:gravity="center"
                 android:text="300"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="8sp"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeStepGranularity="1sp" />
+
         </com.google.android.material.card.MaterialCardView>
 
         <!-->android:background="@drawable/bg_badge_orange"<-->
