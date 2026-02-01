@@ -172,12 +172,13 @@
                             android:id="@+id/ivLocation"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:src="@drawable/ic_location"
+                            android:src="@drawable/ic_history"
                             app:tint="@color/otp_green_dark"
                             android:contentDescription="@null"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
+
 
                         <TextView
                             android:id="@+id/tvLocation"
@@ -291,6 +292,7 @@
             <!-- Online code card  -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOnline"
+                android:visibility="gone"
                 style="@style/SettingsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
