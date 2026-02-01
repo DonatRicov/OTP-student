@@ -87,6 +87,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-
+    implementation("androidx.lifecycle:lifecycle-process:2.6.2")
 
 }
