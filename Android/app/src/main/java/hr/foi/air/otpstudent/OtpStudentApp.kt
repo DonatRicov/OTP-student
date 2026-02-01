@@ -22,12 +22,4 @@ class OtpStudentApp : Application() {
             }
         })
     }
-
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
-            AppLockStore.markBackgrounded(this)
-        }
-    }
-
 }
