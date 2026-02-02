@@ -121,14 +121,23 @@ class RewardRedeemedFragment : Fragment(R.layout.fragment_reward_redeemed) {
 
                 if (!img.isNullOrBlank() && img.startsWith("gs://")) {
                     val ref = FirebaseStorage.getInstance().getReferenceFromUrl(img)
-                    Glide.with(this)
-                        .load(ref)
-                        .centerCrop()
-                        .placeholder(R.drawable.placeholder_reward)
-                        .error(R.drawable.placeholder_reward)
-                        .into(ivReward)
+                    ivReward.setImageResource(R.drawable.placeholder_reward)
+
+                    ref.downloadUrl
+                        .addOnSuccessListener { uri ->
+                            if (!isAdded) return@addOnSuccessListener
+                            Glide.with(this@RewardRedeemedFragment)
+                                .load(uri)
+                                .centerCrop()
+                                .placeholder(R.drawable.placeholder_reward)
+                                .error(R.drawable.placeholder_reward)
+                                .into(ivReward)
+                        }
+                        .addOnFailureListener {
+                            ivReward.setImageResource(R.drawable.placeholder_reward)
+                        }
                 } else {
-                    Glide.with(this)
+                    Glide.with(this@RewardRedeemedFragment)
                         .load(img)
                         .centerCrop()
                         .placeholder(R.drawable.placeholder_reward)
