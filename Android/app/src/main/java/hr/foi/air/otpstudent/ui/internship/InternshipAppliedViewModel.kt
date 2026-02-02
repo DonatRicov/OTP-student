@@ -17,16 +17,33 @@ class InternshipAppliedViewModel(
     private val _state = MutableStateFlow(InternshipAppliedUiState(isLoading = true))
     val state: StateFlow<InternshipAppliedUiState> = _state
 
+    fun setSection(section: InternshipSection) {
+        if (_state.value.section == section) return
+        _state.update { it.copy(section = section) }
+        load()
+    }
+
     fun load() {
         val uid = userIdProvider() ?: run {
-            _state.update { it.copy(isLoading = false, all = emptyList(), visible = emptyList(), error = "Morate biti prijavljeni.") }
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    all = emptyList(),
+                    visible = emptyList(),
+                    error = "Morate biti prijavljeni."
+                )
+            }
             return
         }
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                val list = repo.getAppliedInternshipsForUser(uid)
+                val list: List<Internship> = when (_state.value.section) {
+                    InternshipSection.APPLICATIONS -> repo.getAppliedInternshipsForUser(uid)
+                    InternshipSection.FAVORITES -> repo.getInternshipsForUser(uid).filter { it.isFavorite }
+                }
+
                 _state.update { s ->
                     val ns = s.copy(isLoading = false, all = list)
                     ns.copy(visible = applySearch(ns.all, ns.query))

@@ -1,23 +1,22 @@
 package hr.foi.air.otpstudent.ui.points
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import hr.foi.air.otpstudent.R
 import hr.foi.air.otpstudent.di.AppModule
 import hr.foi.air.otpstudent.domain.model.QuizQuestion
-import android.view.LayoutInflater
-import android.widget.ImageView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class QuizFragment : Fragment(R.layout.fragment_quiz) {
 
-    private val vm: LoyaltyViewModel by viewModels(
-        ownerProducer = { requireParentFragment() }
-    ) {
+    private val vm: LoyaltyViewModel by activityViewModels {
         LoyaltyViewModelFactory(AppModule.loyaltyRepository)
     }
 
@@ -34,42 +33,44 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         super.onViewCreated(view, savedInstanceState)
 
         val tvQuestion = view.findViewById<TextView>(R.id.tvQuestion)
-        val btnAnswer1 = view.findViewById<Button>(R.id.btnAnswer1)
-        val btnAnswer2 = view.findViewById<Button>(R.id.btnAnswer2)
-        val btnAnswer3 = view.findViewById<Button>(R.id.btnAnswer3)
-        val btnAnswer4 = view.findViewById<Button>(R.id.btnAnswer4)
+
+        val cardAnswer1 = view.findViewById<MaterialCardView>(R.id.btnAnswer1)
+        val cardAnswer2 = view.findViewById<MaterialCardView>(R.id.btnAnswer2)
+        val cardAnswer3 = view.findViewById<MaterialCardView>(R.id.btnAnswer3)
+        val cardAnswer4 = view.findViewById<MaterialCardView>(R.id.btnAnswer4)
 
         val btnClose = view.findViewById<Button>(R.id.btnClose)
-
         btnClose.setOnClickListener { parentFragmentManager.popBackStack() }
 
-        setButtonsEnabled(false, btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
+        setViewsEnabled(false, cardAnswer1, cardAnswer2, cardAnswer3, cardAnswer4)
 
         vm.quizQuestion.observe(viewLifecycleOwner) { q ->
             loadedQuestion = q
 
             if (q == null) {
                 tvQuestion.text = "Kviz trenutno nije dostupan."
-                btnAnswer1.visibility = View.GONE
-                btnAnswer2.visibility = View.GONE
-                btnAnswer3.visibility = View.GONE
+                cardAnswer1.visibility = View.GONE
+                cardAnswer2.visibility = View.GONE
+                cardAnswer3.visibility = View.GONE
+                cardAnswer4.visibility = View.GONE
                 return@observe
             }
 
             tvQuestion.text = q.text
 
             val options = q.options
-            applyOption(btnAnswer1, options, 0)
-            applyOption(btnAnswer2, options, 1)
-            applyOption(btnAnswer3, options, 2)
-            applyOption(btnAnswer4, options, 3)
 
-            btnAnswer1.setOnClickListener { submitAnswer(selectedIndex = 0) }
-            btnAnswer2.setOnClickListener { submitAnswer(selectedIndex = 1) }
-            btnAnswer3.setOnClickListener { submitAnswer(selectedIndex = 2) }
-            btnAnswer4.setOnClickListener { submitAnswer(selectedIndex = 3) }
+            applyOption(cardAnswer1, R.id.tvAnswer1, options, 0)
+            applyOption(cardAnswer2, R.id.tvAnswer2, options, 1)
+            applyOption(cardAnswer3, R.id.tvAnswer3, options, 2)
+            applyOption(cardAnswer4, R.id.tvAnswer4, options, 3)
 
-            setButtonsEnabled(true, btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4)
+            cardAnswer1.setOnClickListener { submitAnswer(selectedIndex = 0) }
+            cardAnswer2.setOnClickListener { submitAnswer(selectedIndex = 1) }
+            cardAnswer3.setOnClickListener { submitAnswer(selectedIndex = 2) }
+            cardAnswer4.setOnClickListener { submitAnswer(selectedIndex = 3) }
+
+            setViewsEnabled(true, cardAnswer1, cardAnswer2, cardAnswer3, cardAnswer4)
         }
 
         vm.quizSubmitResult.observe(viewLifecycleOwner) { result ->
@@ -84,11 +85,11 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
             val btnOk = dialogView.findViewById<Button>(R.id.btnOk)
 
             if (result.correct) {
-                ivIcon.setImageResource(R.drawable.ic_challenge_default) // stavi neki "check" ako imaš
+                ivIcon.setImageResource(R.drawable.ic_challenge_default)
                 tvTitle.text = "Točno!"
                 tvMessage.text = "Osvojio si ${result.pointsAwarded} bodova!"
             } else {
-                ivIcon.setImageResource(R.drawable.ic_challenge_default) // stavi neki "x" ako imaš
+                ivIcon.setImageResource(R.drawable.ic_challenge_default)
                 tvTitle.text = "Ups!"
                 tvMessage.text = "Krivi odgovor."
             }
@@ -107,7 +108,6 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
             dialog.show()
         }
 
-
         vm.loadQuizQuestion(challengeId)
     }
 
@@ -115,20 +115,24 @@ class QuizFragment : Fragment(R.layout.fragment_quiz) {
         vm.submitQuizAnswer(challengeId, selectedIndex)
     }
 
-
-
-    private fun applyOption(btn: Button, options: List<String>, index: Int) {
+    private fun applyOption(
+        card: MaterialCardView,
+        textViewId: Int,
+        options: List<String>,
+        index: Int
+    ) {
         val text = options.getOrNull(index)
         if (text.isNullOrBlank()) {
-            btn.visibility = View.GONE
+            card.visibility = View.GONE
         } else {
-            btn.visibility = View.VISIBLE
-            btn.text = text
+            card.visibility = View.VISIBLE
+            val tv = card.findViewById<TextView>(textViewId)
+            tv.text = text
         }
     }
 
-    private fun setButtonsEnabled(enabled: Boolean, vararg buttons: Button) {
-        buttons.forEach { it.isEnabled = enabled }
+    private fun setViewsEnabled(enabled: Boolean, vararg views: View) {
+        views.forEach { it.isEnabled = enabled }
     }
 
     companion object {

@@ -7,5 +7,11 @@ data class InternshipAppliedUiState(
     val all: List<Internship> = emptyList(),
     val visible: List<Internship> = emptyList(),
     val query: String = "",
-    val error: String? = null
+    val error: String? = null,
+    val section: InternshipSection = InternshipSection.APPLICATIONS
 )
+
+enum class InternshipSection {
+    APPLICATIONS,
+    FAVORITES
+}

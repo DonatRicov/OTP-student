@@ -188,7 +188,7 @@
 
     <string name="internship_list_title">Praksa u IT sektoru</string>
     <string name="internship_filter">Filtriraj</string>
-    <string name="internship_my_applications"><u>Moje prijave</u></string>
+    <string name="internship_my_applications">Moje prijave</string>
     <string name="internship_search_hint">Pretraži prakse...</string>
     <string name="internship_details_user_role">FOI student</string>
 
@@ -240,10 +240,8 @@
     <!--image description-->
     <string name="search_icon">Ikona pretraživanja</string>
 
-
     <string name="mentorship_topic_description_hint">Opis teme...</string>
     <string name="mentorship_topic_description">Opis teme</string>
-
 
     <string name="internship_go_to_foi">Odvedi me na FOI prakse</string>
 
@@ -251,6 +249,7 @@
 
     <string name="jobs_expires_at_inline">Traje do %1$s</string>
 
-
+    <string name="internship_favorites">Favoriti</string>
+    <string name="internship_applications_short">Prijave</string>
 
 </resources>

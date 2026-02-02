@@ -56,8 +56,8 @@
                         android:id="@+id/ivMentorshipIcon"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_mentor"
                         android:contentDescription="@null"
+                        android:src="@drawable/ic_mentor"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -77,24 +77,22 @@
                         app:layout_constraintStart_toEndOf="@id/ivMentorshipIcon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <TextView
                         android:id="@+id/tvMentorshipMore"
                         style="@style/MaliTekst"
-                        android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/learn_more"
                         android:textColor="@color/otp_grey_dark"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvMentorshipTitle" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
+            <!-- Card 2: praksa -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOtpInternship"
                 android:layout_width="0dp"
@@ -110,8 +108,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:strokeWidth="0.2dp">
 
-                <!-- Card 2: praksa -->
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -121,8 +117,8 @@
                         android:id="@+id/ivOtpIcon"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_internship"
                         android:contentDescription="@null"
+                        android:src="@drawable/ic_internship"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -142,13 +138,12 @@
                         app:layout_constraintStart_toEndOf="@id/ivOtpIcon"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <TextView
                         android:id="@+id/tvOtpMore"
                         style="@style/MaliTekst"
-                        android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="@string/learn_more"
                         android:textColor="@color/otp_grey_dark"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -158,8 +153,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
-            <!-- Row: Moje prijave (bez gumba) -->
+            <!-- Row: Moje prijave + Favoriti -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rowSection"
                 android:layout_width="0dp"
@@ -174,17 +168,33 @@
                 <TextView
                     android:id="@+id/tvSectionTitle"
                     style="@style/Tekst"
-                    android:textFontWeight="1000"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/internship_my_applications"
-                    android:textColor="@color/otp_grey_dark"
+                    android:textColor="@color/black"
+                    android:textFontWeight="1000"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnFavourites"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/btnFavourites"
+                    style="@style/TekstInterakcija"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_favorite_filled"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Favoriti"
+                    app:drawableTint="@color/otp_green_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tvEmpty"

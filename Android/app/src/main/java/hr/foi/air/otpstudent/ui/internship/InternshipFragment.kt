@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,9 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     private lateinit var rvInternships: RecyclerView
     private lateinit var tvEmpty: TextView
     private lateinit var adapter: InternshipAdapter
+
+    private lateinit var tvSectionTitle: TextView
+    private lateinit var btnFavourites: TextView
 
     private val viewModel: InternshipAppliedViewModel by lazy {
         ViewModelProvider(this, VmFactory())[InternshipAppliedViewModel::class.java]
@@ -58,6 +62,19 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
             }
         }
 
+        // Section header row
+        tvSectionTitle = view.findViewById(R.id.tvSectionTitle)
+        btnFavourites = view.findViewById(R.id.btnFavourites)
+
+        btnFavourites.setOnClickListener {
+            val next = if (viewModel.state.value.section == InternshipSection.APPLICATIONS) {
+                InternshipSection.FAVORITES
+            } else {
+                InternshipSection.APPLICATIONS
+            }
+            viewModel.setSection(next)
+        }
+
         // Lista
         rvInternships = view.findViewById(R.id.rvInternships)
         tvEmpty = view.findViewById(R.id.tvEmpty)
@@ -74,11 +91,15 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collectLatest { s ->
+                // List
                 adapter.submitList(s.visible)
 
                 val empty = !s.isLoading && s.visible.isEmpty()
                 tvEmpty.visibility = if (empty) View.VISIBLE else View.GONE
                 rvInternships.visibility = if (empty) View.GONE else View.VISIBLE
+
+                // Toggle UI text + icon
+                updateSectionUi(s.section)
 
                 if (s.error != null) {
                     Toast.makeText(requireContext(), s.error, Toast.LENGTH_LONG).show()
@@ -93,6 +114,38 @@ class InternshipFragment : Fragment(R.layout.fragment_internship) {
     override fun onResume() {
         super.onResume()
         viewModel.load()
+    }
+
+    private fun updateSectionUi(section: InternshipSection) {
+        // tint kao na Jobs
+        val tint = ContextCompat.getColor(requireContext(), R.color.otp_green_dark)
+
+        when (section) {
+            InternshipSection.APPLICATIONS -> {
+                // lijevo: Moje prijave
+                tvSectionTitle.setText(R.string.internship_my_applications)
+
+                // desno: Favoriti
+                btnFavourites.text = getString(R.string.internship_favorites)
+                btnFavourites.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_favorite_filled, 0, 0, 0
+                )
+            }
+
+            InternshipSection.FAVORITES -> {
+                // lijevo: Favoriti
+                tvSectionTitle.setText(R.string.internship_favorites)
+
+                // desno: Prijave i ikona prijava
+                btnFavourites.text = getString(R.string.internship_applications_short)
+                btnFavourites.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_applications, 0, 0, 0
+                )
+            }
+        }
+
+        // tint drawableLeft
+        btnFavourites.compoundDrawables.firstOrNull()?.setTint(tint)
     }
 
     private inner class VmFactory : ViewModelProvider.Factory {

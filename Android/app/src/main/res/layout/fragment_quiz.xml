@@ -1,71 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tvQuestion"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pitanje..."
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:padding="20dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAnswer1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Odgovor 1"
-        app:layout_constraintTop_toBottomOf="@id/tvQuestion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        <TextView
+            android:id="@+id/tvQuestion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pitanje..."
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAnswer2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Odgovor 2"
-        app:layout_constraintTop_toBottomOf="@id/btnAnswer1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        <!-- ODGOVOR 1 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnAnswer1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#1A000000"
+            app:layout_constraintTop_toBottomOf="@id/tvQuestion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAnswer3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Odgovor 3"
-        app:layout_constraintTop_toBottomOf="@id/btnAnswer2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+            <TextView
+                android:id="@+id/tvAnswer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Odgovor 1"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="16dp" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAnswer4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Odgovor 4"
-        app:layout_constraintTop_toBottomOf="@id/btnAnswer3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        <!-- ODGOVOR 2 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnAnswer2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#1A000000"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <TextView
+                android:id="@+id/tvAnswer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Odgovor 2"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="16dp" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnClose"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="ZATVORI"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="24dp"/>
+        <!-- ODGOVOR 3 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnAnswer3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#1A000000"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvAnswer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Odgovor 3"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="16dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ODGOVOR 4 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnAnswer4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#1A000000"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/tvAnswer4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Odgovor 4"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:padding="16dp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ZATVORI -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClose"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="ZATVORI"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -9,7 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -45,7 +47,11 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val tvUserRole = view.findViewById<TextView>(R.id.tvUserRole)
         tvUserRole.text = getString(R.string.internship_details_user_role)
+
+        val imgAvatar = view.findViewById<ShapeableImageView>(R.id.imgAvatar)
+
         loadUserName(tvUserName)
+        loadUserAvatar(imgAvatar)
 
         val etStudy = view.findViewById<TextInputEditText>(R.id.etStudy)
         val acMentor = view.findViewById<MaterialAutoCompleteTextView>(R.id.acMentor)
@@ -95,7 +101,6 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
     private fun fetchAndApplyMajor(etStudy: TextInputEditText) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-
         fun lockEditing() {
             etStudy.apply {
                 inputType = InputType.TYPE_NULL
@@ -137,13 +142,11 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
                 userMajor = doc.getString("major")?.trim()
 
                 if (!userMajor.isNullOrBlank()) {
-
                     etStudy.setText(userMajor)
                     etStudy.isEnabled = false
                     etStudy.isClickable = false
                     etStudy.setOnClickListener(null)
                 } else {
-
                     etStudy.setText("")
                     setToastOnClickIfMissing()
                 }
@@ -177,21 +180,54 @@ class MentorshipDetailsFragment : Fragment(R.layout.fragment_mentorship_details)
             return
         }
 
-        val uid = user.uid
         FirebaseFirestore.getInstance()
             .collection("users")
-            .document(uid)
+            .document(user.uid)
             .get()
             .addOnSuccessListener { doc ->
-                val fullName = doc.getString("fullName")
-                val fallback = user.email?.substringBefore("@")?.replaceFirstChar { it.uppercase() }
-                    ?: getString(R.string.placeholder_user_name)
-                tv.text = if (!fullName.isNullOrBlank()) fullName else fallback
+                val fullName = doc.getString("fullName")?.trim().orEmpty()
+                val email = user.email?.trim().orEmpty()
+
+                tv.text = when {
+                    fullName.isNotBlank() -> fullName
+                    email.isNotBlank() -> email
+                    else -> getString(R.string.placeholder_user_name)
+                }
             }
             .addOnFailureListener {
-                val fallback = user.email?.substringBefore("@")?.replaceFirstChar { it.uppercase() }
-                    ?: getString(R.string.placeholder_user_name)
-                tv.text = fallback
+                val email = user.email?.trim().orEmpty()
+                tv.text = if (email.isNotBlank()) email else getString(R.string.placeholder_user_name)
+            }
+    }
+
+    private fun loadUserAvatar(img: ShapeableImageView) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            img.setImageResource(R.drawable.ic_profile_placeholder)
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val avatarUrl = doc.getString("avatarUrl")?.trim().orEmpty()
+
+                if (avatarUrl.isBlank()) {
+                    img.setImageResource(R.drawable.ic_profile_placeholder)
+                    return@addOnSuccessListener
+                }
+
+                Glide.with(this)
+                    .load(avatarUrl)
+                    .circleCrop()
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .error(R.drawable.ic_profile_placeholder)
+                    .into(img)
+            }
+            .addOnFailureListener {
+                img.setImageResource(R.drawable.ic_profile_placeholder)
             }
     }
 }

@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- HEADER CONTAINER (dinamički: view_header_secondary) -->
+    <!-- HEADER -->
     <FrameLayout
         android:id="@+id/headerContainer"
         android:layout_width="0dp"
@@ -31,16 +32,14 @@
             android:paddingBottom="24dp">
 
             <!-- USER CARD -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardUser"
+                style="@style/Card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -52,37 +51,47 @@
 
                     <TextView
                         android:id="@+id/tvUserName"
-                        style="@style/Tekst"
+                        style="@style/Podnaslov"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:text="@string/placeholder_user_name"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ivAvatar"
+                        app:layout_constraintEnd_toStartOf="@id/frameLayout"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvUserRole"
-                        style="@style/MaliTekst"
+                        style="@style/Tekst"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/internship_details_user_role"
-                        android:textColor="@color/otp_grey"
                         app:layout_constraintStart_toStartOf="@id/tvUserName"
                         app:layout_constraintEnd_toEndOf="@id/tvUserName"
                         app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
-                    <ImageView
-                        android:id="@+id/ivAvatar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_person"
-                        android:contentDescription="@null"
+                    <FrameLayout
+                        android:id="@+id/frameLayout"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/imgAvatar"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_profile_placeholder"
+                            app:shapeAppearanceOverlay="@style/CircleImageView" />
+
+                    </FrameLayout>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- TITLE -->
             <TextView
@@ -176,7 +185,7 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Dates -->
+            <!-- DATE -->
             <TextView
                 android:id="@+id/tvStartLabel"
                 style="@style/Tekst"
@@ -192,7 +201,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- START DATE FIELD: icon + text (no overlap) -->
+            <!-- START DATE FIELD -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/startDateField"
                 android:layout_width="0dp"
@@ -260,7 +269,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/startDateField" />
 
-            <!-- END DATE FIELD: icon + text (no overlap) -->
+            <!-- END DATE FIELD-->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/endDateField"
                 android:layout_width="0dp"
@@ -313,7 +322,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- OPIS TEME -->
+            <!-- DESCRIPTION -->
             <TextView
                 android:id="@+id/tvTopicDescriptionLabel"
                 style="@style/Tekst"
@@ -354,7 +363,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <!-- Button -->
+            <!-- BUTTON -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendRequest"
                 android:layout_width="0dp"

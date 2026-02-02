@@ -90,13 +90,15 @@ class MyCvActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
 
+        val email = FirebaseAuth.getInstance().currentUser?.email.orEmpty()
+
         findViewById<TextView>(R.id.tvUserName).text =
-            state.fullName.ifBlank { "Korisnik" }
+            email.ifBlank { "Korisnik" }
+
 
         findViewById<TextView>(R.id.tvUserEmail).text =
             state.email.ifBlank { "—" }
 
-        // ovo je value desno; label lijevo ćemo promijeniti u "Smjer"
         findViewById<TextView>(R.id.tvUserPosition).text =
             state.major.ifBlank { "—" }
 
