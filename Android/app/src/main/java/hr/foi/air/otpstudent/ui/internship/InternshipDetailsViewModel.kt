@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 
 class InternshipDetailsViewModel(
     private val repo: InternshipRepository,
@@ -26,35 +27,43 @@ class InternshipDetailsViewModel(
             _state.update { it.copy(isLoading = true, error = null) }
 
             val uid = userIdProvider()
-            if (!uid.isNullOrBlank()) {
-                try {
-                    repo.markViewed(uid, id)
-                } catch (_: Exception) { }
-            }
 
             try {
-                val internship = repo.getInternshipById(id)
+                val internshipDeferred = async { repo.getInternshipById(id) }
+
+                val favDeferred = async {
+                    if (!uid.isNullOrBlank()) repo.isFavorite(uid, id) else false
+                }
+
+                val appliedDeferred = async {
+                    if (!uid.isNullOrBlank()) repo.isApplied(uid, id) else false
+                }
+
+                val latestCvDeferred = async {
+                    if (!uid.isNullOrBlank()) cvRepoProvider(uid).getLatestCv()
+                    else null
+                }
+
+                val internship = internshipDeferred.await()
                 if (internship == null) {
                     _state.update { it.copy(isLoading = false, error = "Praksa nije pronađena.") }
                     return@launch
                 }
 
-                val latestCv = if (!uid.isNullOrBlank()) {
-                    cvRepoProvider(uid).getAllCvs().maxByOrNull { it.timestamp }
-                } else null
-
-                val fav = if (!uid.isNullOrBlank()) repo.isFavorite(uid, id) else false
-                val applied = if (!uid.isNullOrBlank()) repo.isApplied(uid, id) else false
-
                 _state.update {
                     it.copy(
                         isLoading = false,
                         internship = internship,
-                        isFavorite = fav,
-                        isApplied = applied,
-                        cvDocument = latestCv
+                        isFavorite = favDeferred.await(),
+                        isApplied = appliedDeferred.await(),
+                        cvDocument = latestCvDeferred.await()
                     )
                 }
+
+                if (!uid.isNullOrBlank()) {
+                    launch { runCatching { repo.markViewed(uid, id) } }
+                }
+
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.message ?: "Greška") }
             }

@@ -31,15 +31,14 @@ class JobDetailsViewModel(
 
             val uid = userIdProvider()
 
-            // 🔒 VIEW EVENT NE SMIJE BLOKIRATI UI
             if (uid != null) {
-                try {
-                    repo.markViewed(uid, jobId)
-                } catch (e: Exception) {
-                    // samo log, NIKAD crash
-                    e.printStackTrace()
+                viewModelScope.launch {
+                    try {
+                        repo.markViewed(uid, jobId)
+                    } catch (_: Exception) { }
                 }
             }
+
 
             try {
                 val job = repo.getJobDetailsForUser(uid, jobId)

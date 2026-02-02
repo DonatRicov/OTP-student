@@ -8,4 +8,7 @@ interface CvRepository {
     suspend fun addCv(cv: CvDocument)
     suspend fun getAllCvs(): List<CvDocument>
     suspend fun deleteCv(cv: CvDocument)
+
+    suspend fun getLatestCv(): CvDocument?
+
 }
