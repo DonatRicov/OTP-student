@@ -7,12 +7,14 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/chat_message_spacing">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivBotAvatar"
         android:layout_width="@dimen/chat_avatar_size"
         android:layout_height="@dimen/chat_avatar_size"
-        android:background="@drawable/bg_bot_avatar"
+        android:src="@drawable/oto"
+        android:scaleType="centerCrop"
         android:contentDescription="@null"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tvBotMsg" />
 
